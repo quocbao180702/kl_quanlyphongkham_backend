@@ -1,0 +1,38 @@
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ThuocService } from './thuoc.service';
+import { Thuoc } from './schemas/thuoc.schema';
+import { NewThuocInput } from './dto/new-thuoc.input';
+import { UpdateThuocInput } from './dto/update-thuoc.input';
+
+@Resolver()
+export class ThuocResolver {
+
+    constructor(private readonly thuocService: ThuocService){}
+
+
+    @Query(() => [Thuoc])
+    async getAllThuoc(): Promise<Thuoc[]> {
+        return await this.thuocService.getAllThuoc();
+    }
+
+    @Mutation(() => Thuoc)
+    async createThuoc(@Args('newThuocInput') newThuocInput: NewThuocInput): Promise<Thuoc> {
+        const thuoc = await this.thuocService.createThuoc(newThuocInput);
+        return thuoc;
+    }
+
+    @Mutation(() => Thuoc)
+    async updateThuoc( @Args('input') input: UpdateThuocInput): Promise<Thuoc> {
+        const update = await this.thuocService.updateThuoc(input);
+        if (!update) {
+            throw new Error(`Thuoc with ID ${input.id} not found.`);
+        }
+        return update;
+    }
+
+    @Mutation(() => Boolean)
+    async deleteThuoc(@Args('_id') _id: string): Promise<boolean> {
+        await this.thuocService.deleteThuoc(_id);
+        return true;
+    }
+}

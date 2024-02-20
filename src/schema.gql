@@ -1,0 +1,579 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Users {
+  _id: ID!
+  userId: String!
+  username: String!
+  email: String!
+  password: String!
+  role: Float!
+}
+
+type Dichvu {
+  _id: ID!
+  tendichvu: String!
+  gia: Float!
+  bhyt: Boolean!
+  soluong: Int!
+  dvt: String!
+  hoadons: [Hoadon!]!
+}
+
+type LoaiCanLamSang {
+  _id: ID!
+  tenxetnghiem: String!
+  gia: Float!
+  mota: String!
+  hoadons: [Hoadon!]!
+}
+
+type Benh {
+  _id: ID!
+  maICD: String!
+  chuongbenh: Int!
+  tenbenh: String!
+  motabenh: String!
+  toathuocs: [Toathuoc!]!
+}
+
+type Toathuoc {
+  _id: ID!
+  benhnhan: BenhNhan!
+  bacsi: BacSi!
+  thuocs: [Thuoc!]!
+  benhs: [Benh!]!
+  bhyt: Boolean!
+  ngaytaikham: DateTime!
+  ngaytao: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Thuoc {
+  _id: ID!
+  tenthuoc: String!
+  tenPhoBien: String!
+  dangthuoc: String!
+  donvi: String!
+  gia: Float!
+  hamluong: Float!
+  bhyt: Boolean!
+  nhasanxuat: String!
+  hansudung: String!
+  soluong: Int!
+  toathuocs: [Toathuoc!]!
+  hoadons: [Hoadon!]!
+}
+
+type Hoadon {
+  _id: ID!
+  benhnhan: BenhNhan!
+  thuocs: [Thuoc!]!
+  canlamsangs: [LoaiCanLamSang!]!
+  dichvus: [Dichvu!]!
+  thanhtien: Float!
+  ngaytao: DateTime!
+}
+
+type Phong {
+  _id: ID!
+  tenphong: String!
+  mota: String!
+  phieuxacnhan: [String!]!
+}
+
+type PhieuXacNhan {
+  _id: ID!
+  benhnhans: BenhNhan!
+  phongs: [Phong!]!
+  sothutu: Int!
+  ngaytao: DateTime!
+}
+
+type Sinhhieu {
+  _id: ID!
+  benhnhan: BenhNhan!
+  mach: Float!
+  nhietdo: Float!
+  ha: String!
+  chieucao: Float!
+  cannang: Float!
+  bmi: Float!
+  benhmangtinh: Boolean!
+}
+
+type Sobenh {
+  _id: ID!
+  benhnhan: BenhNhan!
+  ngaytao: DateTime!
+}
+
+type BenhNhan {
+  _id: ID!
+  hoten: String!
+  ngaysinh: String!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  sobenhId: String!
+  cccd: String!
+  bhyt: String!
+  phieuxacnhans: [PhieuXacNhan!]!
+  toathuocs: [Toathuoc!]!
+  hoadons: [Hoadon!]!
+  sobenhs: Sobenh!
+  sinhieu: Sinhhieu!
+  phieuchidinhcanlamsangs: [Phieuchidinhcanlamsang!]!
+}
+
+type Phieuchidinhcanlamsang {
+  _id: ID!
+  benhnhan: BenhNhan!
+  bacsi: BacSi!
+  loaicanlamsang: LoaiCanLamSang!
+  bhyt: Boolean!
+  hinhanh: String!
+  ketluan: String!
+  thietbi: String!
+}
+
+type BacSi {
+  _id: ID!
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+  chuyenkhoaId: String!
+  toathuocs: [Toathuoc!]!
+  phieuchidinhcanlamsangs: [Phieuchidinhcanlamsang!]!
+}
+
+type NhanVien {
+  _id: ID!
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+}
+
+type DatLich {
+  _id: ID!
+  benhnhans: BenhNhan!
+  motabenh: String!
+  ngaydat: DateTime!
+  ngaykham: DateTime!
+  bhyt: Boolean!
+}
+
+type ChuyenKhoa {
+  _id: ID!
+  tenkhoa: String!
+  mota: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: Users!
+}
+
+type Query {
+  getAllUsers: [Users!]!
+  getUserByUsername(username: String!): Users!
+  getUserByEmail(email: String!): Users!
+  getUserById(_id: String!): Users!
+  getAllBenhNhan: [BenhNhan!]!
+  getAllNhanVien: [NhanVien!]!
+  getAllBacSi: [BacSi!]!
+  getAllBenh: [Benh!]!
+  getAllDatLich: [DatLich!]!
+  findAll: [Hoadon!]!
+  getAllChuyenKhoa: [ChuyenKhoa!]!
+  getAllPhong: [Phong!]!
+  getAllThuoc: [Thuoc!]!
+  getAllPhieuXacNhan: [PhieuXacNhan!]!
+  getAllToaThuoc: [Toathuoc!]!
+  getAllDichVu: [Dichvu!]!
+  getAllSoBenh: [Sobenh!]!
+  getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
+  getAllSinhhieu: [Sinhhieu!]!
+}
+
+type Mutation {
+  createUser(newUserInput: NewUserInput!): Users!
+  updateUser(_id: String!, input: UpdateUserInput!): Users!
+  deleteUser(_id: String!): Boolean!
+  createBenhNhan(newBenhNhanInput: NewBenhNhanInput!): BenhNhan!
+  updateBenhNhan(input: UpdateBenhNhanInput!): BenhNhan!
+  deleteBenhNhan(_id: String!): Boolean!
+  createNhanVien(newNhanVienInput: NewNhanVienInput!): NhanVien!
+  updateNhanVien(_id: String!, input: UpdateNhanVienInput!): NhanVien!
+  deleteNhanVien(_id: String!): Boolean!
+  createBacSi(newBacSiInput: NewBacSiInput!): BacSi!
+  updateBacSi(_id: String!, input: UpdateBacSiInput!): BacSi!
+  deleteBacSi(_id: String!): Boolean!
+  createBenh(newBenhInput: NewBenhInput!): Benh!
+  updateBenh(input: UpdateBenhInput!): Benh!
+  deleteBenh(_id: String!): Boolean!
+  createDatLich(newDatLichInput: NewDatLichInput!): DatLich!
+  updateDatLich(input: UpdateDatLichInput!): DatLich!
+  deleteDatLich(_id: String!): Boolean!
+  createLoaicanlamsang(createLoaicanlamsangInput: NewLoaiCanLamSangInput!): LoaiCanLamSang!
+  updateLoaicanlamsang(updateLoaicanlamsangInput: UpdateLoaicanlamsangInput!): LoaiCanLamSang!
+  deleteLoaicanlamsang(id: String!): Boolean!
+  createChuyenKhoa(newChuyenKhoaInput: NewChuyenKhoaInput!): ChuyenKhoa!
+  updateChuyenKhoa(updateChuyenKhoaInput: UpdateChuyenKhoaInput!): ChuyenKhoa!
+  deleteChuyenKhoa(_id: String!): Boolean!
+  createPhong(newPhongInput: NewPhongInput!): Phong!
+  updatePhong(input: UpdatePhongInput!): Phong!
+  deletePhong(_id: String!): Boolean!
+  createThuoc(newThuocInput: NewThuocInput!): Thuoc!
+  updateThuoc(input: UpdateThuocInput!): Thuoc!
+  deleteThuoc(_id: String!): Boolean!
+  createPhieuXacNhan(newPhieuXacNhanInput: CreatePhieuXacNhanInput!): PhieuXacNhan!
+  updatePhieuXacNhan(input: UpdatePhieuXacNhanInput!): PhieuXacNhan!
+  deletePhieuXacNhan(_id: String!): Boolean!
+  createToathuoc(createToathuocInput: CreateToathuocInput!): Toathuoc!
+  updateToathuoc(updateToathuocInput: UpdateToathuocInput!): Toathuoc!
+  deleteToathuoc(id: String!): Toathuoc!
+  createDichvu(createDichvuInput: CreateDichvuInput!): Dichvu!
+  updateDichvu(updateDichvuInput: UpdateDichvuInput!): Dichvu!
+  deleteDichvu(id: String!): Dichvu!
+  createHoadon(createHoadonInput: CreateHoadonInput!): Hoadon!
+  updateHoadon(updateHoadonInput: UpdateHoadonInput!): Hoadon!
+  deleteHoadon(id: String!): Hoadon!
+  createSobenh(createSobenhInput: CreateSobenhInput!): Sobenh!
+  updateSobenh(updateSobenhInput: UpdateSobenhInput!): Sobenh!
+  deleteSobenh(id: String!): Sobenh!
+  createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
+  updatePhieuchidinhcanlamsang(updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
+  deletePhieuchidinhcanlamsang(id: String!): Phieuchidinhcanlamsang!
+  createSinhhieu(createSinhhieuInput: CreateSinhhieuInput!): Sinhhieu!
+  updateSinhhieu(updateSinhhieuInput: UpdateSinhhieuInput!): Sinhhieu!
+  deleteSinhhieu(id: String!): Sinhhieu!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  refreshToken(refreshToken: String!): LoginResponse!
+}
+
+input NewUserInput {
+  userId: String!
+  username: String!
+  email: String!
+  password: String!
+  role: Float!
+}
+
+input UpdateUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input NewBenhNhanInput {
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  sobenhId: String!
+  cccd: String!
+  bhyt: String!
+}
+
+input UpdateBenhNhanInput {
+  hoten: String
+  ngaysinh: DateTime
+  gioitinh: Boolean
+  diachi: String
+  sdt: String
+  sobenhId: String
+  cccd: String
+  bhyt: String
+  _id: ID!
+}
+
+input NewNhanVienInput {
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+}
+
+input UpdateNhanVienInput {
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+}
+
+input NewBacSiInput {
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+  chuyenkhoaId: String!
+}
+
+input UpdateBacSiInput {
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  sdt: String!
+  cccd: String!
+  phong: String!
+  ngayBD: DateTime!
+  chuyenkhoaId: String!
+}
+
+input NewBenhInput {
+  maICD: String!
+  chuongbenh: Int!
+  tenbenh: String!
+  motabenh: String!
+}
+
+input UpdateBenhInput {
+  maICD: String
+  chuongbenh: Int
+  tenbenh: String
+  motabenh: String
+  id: String!
+}
+
+input NewDatLichInput {
+  benhnhans: String!
+  motabenh: String!
+  ngaydat: DateTime!
+  ngaykham: DateTime!
+  bhyt: Boolean!
+}
+
+input UpdateDatLichInput {
+  benhnhans: String
+  motabenh: String
+  ngaydat: DateTime
+  ngaykham: DateTime
+  bhyt: Boolean
+  id: String!
+}
+
+input NewLoaiCanLamSangInput {
+  tenxetnghiem: String!
+  gia: Float!
+  mota: String!
+}
+
+input UpdateLoaicanlamsangInput {
+  tenxetnghiem: String
+  gia: Float
+  mota: String
+  id: String!
+}
+
+input NewChuyenKhoaInput {
+  tenkhoa: String!
+  mota: String!
+}
+
+input UpdateChuyenKhoaInput {
+  tenkhoa: String
+  mota: String
+  id: String!
+}
+
+input NewPhongInput {
+  tenphong: String!
+  mota: String!
+  chuyenkhoaId: String!
+}
+
+input UpdatePhongInput {
+  tenphong: String
+  mota: String
+  chuyenkhoaId: String
+  id: String!
+}
+
+input NewThuocInput {
+  tenthuoc: String!
+  tenPhoBien: String!
+  dangthuoc: String!
+  donvi: String!
+  hamluong: Float!
+  gia: Float!
+  bhyt: Boolean!
+  nhasanxuat: String!
+  hansudung: String!
+  soluong: Int!
+}
+
+input UpdateThuocInput {
+  tenthuoc: String
+  tenPhoBien: String
+  dangthuoc: String
+  donvi: String
+  hamluong: Float
+  gia: Float
+  bhyt: Boolean
+  nhasanxuat: String
+  hansudung: String
+  soluong: Int
+  id: String!
+}
+
+input CreatePhieuXacNhanInput {
+  benhnhans: String!
+  phongs: [String!]!
+  sothutu: Int!
+  ngaytao: DateTime!
+}
+
+input UpdatePhieuXacNhanInput {
+  benhnhans: String
+  phongs: [String!]
+  sothutu: Int
+  ngaytao: DateTime
+  id: String!
+}
+
+input CreateToathuocInput {
+  benhnhan: String!
+  bacsi: String!
+  thuocs: [String!]!
+  benhs: [String!]!
+  bhyt: Boolean!
+  ngaytaikham: DateTime!
+  ngaytao: DateTime!
+}
+
+input UpdateToathuocInput {
+  benhnhan: String
+  bacsi: String
+  thuocs: [String!]
+  benhs: [String!]
+  bhyt: Boolean
+  ngaytaikham: DateTime
+  ngaytao: DateTime
+  id: String!
+}
+
+input CreateDichvuInput {
+  tendichvu: String!
+  gia: Float!
+  bhyt: Boolean!
+  soluong: Int!
+  dvt: String!
+}
+
+input UpdateDichvuInput {
+  tendichvu: String
+  gia: Float
+  bhyt: Boolean
+  soluong: Int
+  dvt: String
+  id: String!
+}
+
+input CreateHoadonInput {
+  benhnhan: String!
+  thuocs: [String!]!
+  canlamsangs: [String!]!
+  dichvus: [String!]!
+  thanhtien: Float!
+  ngaytao: DateTime!
+}
+
+input UpdateHoadonInput {
+  benhnhan: String
+  thuocs: [String!]
+  canlamsangs: [String!]
+  dichvus: [String!]
+  thanhtien: Float
+  ngaytao: DateTime
+  id: String!
+}
+
+input CreateSobenhInput {
+  benhnhan: String!
+  ngaytao: DateTime!
+}
+
+input UpdateSobenhInput {
+  benhnhan: String
+  ngaytao: DateTime
+  id: String!
+}
+
+input CreatePhieuchidinhcanlamsangInput {
+  benhnhan: String!
+  bacsi: String!
+  loaicanlamsang: String!
+  bhyt: Boolean!
+  hinhanh: String!
+  ketluan: String!
+  thietbi: String!
+}
+
+input UpdatePhieuchidinhcanlamsangInput {
+  benhnhan: String
+  bacsi: String
+  loaicanlamsang: String
+  bhyt: Boolean
+  hinhanh: String
+  ketluan: String
+  thietbi: String
+  id: String!
+}
+
+input CreateSinhhieuInput {
+  benhnhan: String!
+  mach: Float!
+  nhietdo: Float!
+  ha: String!
+  chieucao: Float!
+  cannang: Float!
+  bmi: Float!
+  benhmangtinh: Boolean!
+}
+
+input UpdateSinhhieuInput {
+  benhnhan: String
+  mach: Float
+  nhietdo: Float
+  ha: String
+  chieucao: Float
+  cannang: Float
+  bmi: Float
+  benhmangtinh: Boolean
+  id: Int!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}
