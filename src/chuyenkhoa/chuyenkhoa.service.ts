@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChuyenKhoa } from './schemas/chuyenkhoa.schema';
+import { ChuyenKhoa } from './entities/chuyenkhoa.entity';
 import { Model } from 'mongoose';
 import { CreateChuyenKhoa } from './dto/create-chuyenkhoa.dto';
 import { UpdateChuyenKhoaInput } from './dto/update-chuyenkhoa.input';

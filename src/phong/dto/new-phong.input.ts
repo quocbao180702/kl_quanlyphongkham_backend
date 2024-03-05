@@ -8,6 +8,6 @@ export class NewPhongInput{
     @Field()
 	mota: string;
 
-    @Field()
-	chuyenkhoaId: string;
+    @Field(() => String)
+	chuyenkhoa: string;
 }

@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ChuyenkhoaService } from './chuyenkhoa.service';
-import { ChuyenKhoa } from './schemas/chuyenkhoa.schema';
+import { ChuyenKhoa } from './entities/chuyenkhoa.entity';
 import { NewChuyenKhoaInput } from './dto/new-chuyenkhoa.input';
 import { UpdateChuyenKhoaInput } from './dto/update-chuyenkhoa.input';
 

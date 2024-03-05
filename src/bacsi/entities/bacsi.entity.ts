@@ -1,8 +1,11 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument, Schema as MongooSchema } from "mongoose";
+import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
 import { Phieuchidinhcanlamsang } from "src/phieuchidinhcanlamsang/entities/phieuchidinhcanlamsang.entity";
+import { Phong } from "src/phong/entities/phong.entity";
 import { Toathuoc } from "src/toathuoc/entities/toathuoc.entity";
+import { Users } from "src/users/schemas/user.schema";
 
 
 export type BacSiDocument = HydratedDocument<BacSi>;
@@ -13,7 +16,6 @@ export class BacSi {
 
     @Field(() => ID)
     _id: mongoose.Types.ObjectId;
-
 
     @Field()
     @Prop()
@@ -33,31 +35,32 @@ export class BacSi {
 
     @Field()
     @Prop()
-    sdt: string;
-
-    @Field()
-    @Prop()
     cccd: string;
 
-    @Field()
-    @Prop()
-    phong: string;
 
     @Field()
     @Prop()
     ngayBD: Date;
 
-    @Field()
-    @Prop()
-    chuyenkhoaId: string;
+    @Field(() => Users)
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
+    user: Users;
 
-    @Field(() => [Toathuoc])
+    @Field(() => [Phong])
+    @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Phong', required: true }])
+    phongs: Phong[];
+
+    @Field(() => ChuyenKhoa)
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ChuyenKhoa', required: true })
+    chuyenkhoa: ChuyenKhoa;
+
+    /* @Field(() => [Toathuoc])
     @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Toathuoc' }] })
     toathuocs: Toathuoc[];
 
     @Field(() => [Phieuchidinhcanlamsang])
     @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Phieuchidinhcanlamsang' }] })
-    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[];
+    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[]; */
 
 }
 

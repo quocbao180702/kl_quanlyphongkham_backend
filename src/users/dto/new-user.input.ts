@@ -1,12 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { MaxLength, IsEmail, IsInt } from 'class-validator';
+import { LinkImageInput } from 'src/types/LinkImage.input';
+import { LinkImage } from 'src/types/LinkImage.types';
+import { UserRole } from 'src/types/Users.types';
 
 @InputType()
 export class NewUserInput {
-
-    @Field()
-    userId: string;
-
     @Field()
     username: string;
 
@@ -19,7 +18,14 @@ export class NewUserInput {
     password: string;
 
     @Field()
-    @IsInt()
-    role: number;
+    phoneNumber: string
 
+    @Field(type => LinkImageInput)
+    avatar: LinkImageInput
+
+    @Field(type => UserRole)
+    role: UserRole;
+
+    @Field()
+    isLocked: boolean
 }

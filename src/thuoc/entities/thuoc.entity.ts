@@ -54,13 +54,13 @@ export class Thuoc{
     @Prop()
 	soluong: number;
 
-    @Field(() => [Toathuoc])
+   /*  @Field(() => [Toathuoc])
     @Prop({type: [{type: MongooSchemas.Types.ObjectId, ref: 'Toathuoc', require: true}] })
     toathuocs: Toathuoc[];
 
     @Field(() => [Hoadon])
     @Prop({type: [{type: MongooSchemas.Types.ObjectId, ref: 'Hoadon', require: true}] })
-    hoadons: Hoadon[];
+    hoadons: Hoadon[]; */
 }
 
 export const ThuocSchema = SchemaFactory.createForClass(Thuoc);

@@ -1,8 +1,8 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Schema as MongooSchemas } from 'mongoose';
-import { BacSi } from 'src/bacsi/schemas/bacsi.schema';
-import { BenhNhan } from 'src/benhnhan/schemas/benhnhan.schema';
+import { BacSi } from 'src/bacsi/entities/bacsi.entity';
+import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 import { LoaiCanLamSang } from 'src/loaicanlamsang/schemas/loaicanlamsang.entity';
 
 

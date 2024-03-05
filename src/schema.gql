@@ -2,98 +2,65 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type LinkImage {
+  url: String!
+  fileName: String!
+  type: TypeImage!
+}
+
+enum TypeImage {
+  LINK
+  FILE
+}
+
 type Users {
   _id: ID!
-  userId: String!
   username: String!
+  phoneNumber: String!
   email: String!
   password: String!
-  role: Float!
+  role: UserRole!
+  avatar: LinkImage!
+  isLocked: Boolean!
+  refreshToken: String!
 }
 
-type Dichvu {
-  _id: ID!
-  tendichvu: String!
-  gia: Float!
-  bhyt: Boolean!
-  soluong: Int!
-  dvt: String!
-  hoadons: [Hoadon!]!
+enum UserRole {
+  ADMIN
+  USER
+  STAFF
 }
 
-type LoaiCanLamSang {
+type ChuyenKhoa {
   _id: ID!
-  tenxetnghiem: String!
-  gia: Float!
+  tenkhoa: String!
   mota: String!
-  hoadons: [Hoadon!]!
-}
-
-type Benh {
-  _id: ID!
-  maICD: String!
-  chuongbenh: Int!
-  tenbenh: String!
-  motabenh: String!
-  toathuocs: [Toathuoc!]!
-}
-
-type Toathuoc {
-  _id: ID!
-  benhnhan: BenhNhan!
-  bacsi: BacSi!
-  thuocs: [Thuoc!]!
-  benhs: [Benh!]!
-  bhyt: Boolean!
-  ngaytaikham: DateTime!
-  ngaytao: DateTime!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Thuoc {
-  _id: ID!
-  tenthuoc: String!
-  tenPhoBien: String!
-  dangthuoc: String!
-  donvi: String!
-  gia: Float!
-  hamluong: Float!
-  bhyt: Boolean!
-  nhasanxuat: String!
-  hansudung: String!
-  soluong: Int!
-  toathuocs: [Toathuoc!]!
-  hoadons: [Hoadon!]!
-}
-
-type Hoadon {
-  _id: ID!
-  benhnhan: BenhNhan!
-  thuocs: [Thuoc!]!
-  canlamsangs: [LoaiCanLamSang!]!
-  dichvus: [Dichvu!]!
-  thanhtien: Float!
-  ngaytao: DateTime!
 }
 
 type Phong {
   _id: ID!
   tenphong: String!
   mota: String!
-  phieuxacnhan: [String!]!
+  chuyenkhoa: ChuyenKhoa!
 }
 
-type PhieuXacNhan {
+type BacSi {
   _id: ID!
-  benhnhans: BenhNhan!
+  hoten: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
+  diachi: String!
+  cccd: String!
+  ngayBD: DateTime!
+  user: Users!
   phongs: [Phong!]!
-  sothutu: Int!
-  ngaytao: DateTime!
+  chuyenkhoa: ChuyenKhoa!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Sinhhieu {
   _id: ID!
@@ -107,54 +74,16 @@ type Sinhhieu {
   benhmangtinh: Boolean!
 }
 
-type Sobenh {
-  _id: ID!
-  benhnhan: BenhNhan!
-  ngaytao: DateTime!
-}
-
 type BenhNhan {
   _id: ID!
   hoten: String!
   ngaysinh: String!
   gioitinh: Boolean!
   diachi: String!
-  sdt: String!
-  sobenhId: String!
   cccd: String!
   bhyt: String!
-  phieuxacnhans: [PhieuXacNhan!]!
-  toathuocs: [Toathuoc!]!
-  hoadons: [Hoadon!]!
-  sobenhs: Sobenh!
-  sinhieu: Sinhhieu!
-  phieuchidinhcanlamsangs: [Phieuchidinhcanlamsang!]!
-}
-
-type Phieuchidinhcanlamsang {
-  _id: ID!
-  benhnhan: BenhNhan!
-  bacsi: BacSi!
-  loaicanlamsang: LoaiCanLamSang!
-  bhyt: Boolean!
-  hinhanh: String!
-  ketluan: String!
-  thietbi: String!
-}
-
-type BacSi {
-  _id: ID!
-  hoten: String!
-  ngaysinh: DateTime!
-  gioitinh: Boolean!
-  diachi: String!
-  sdt: String!
-  cccd: String!
-  phong: String!
-  ngayBD: DateTime!
-  chuyenkhoaId: String!
-  toathuocs: [Toathuoc!]!
-  phieuchidinhcanlamsangs: [Phieuchidinhcanlamsang!]!
+  user: Users!
+  sinhhieu: Sinhhieu!
 }
 
 type NhanVien {
@@ -178,14 +107,97 @@ type DatLich {
   bhyt: Boolean!
 }
 
-type ChuyenKhoa {
+type Benh {
   _id: ID!
-  tenkhoa: String!
+  maICD: String!
+  chuongbenh: Int!
+  tenbenh: String!
+  motabenh: String!
+}
+
+type Thuoc {
+  _id: ID!
+  tenthuoc: String!
+  tenPhoBien: String!
+  dangthuoc: String!
+  donvi: String!
+  gia: Float!
+  hamluong: Float!
+  bhyt: Boolean!
+  nhasanxuat: String!
+  hansudung: String!
+  soluong: Int!
+}
+
+type Dichvu {
+  _id: ID!
+  tendichvu: String!
+  gia: Float!
+  bhyt: Boolean!
+  soluong: Int!
+  dvt: String!
+  hoadons: [Hoadon!]!
+}
+
+type Hoadon {
+  _id: ID!
+  benhnhan: BenhNhan!
+  thuocs: [Thuoc!]!
+  canlamsangs: [LoaiCanLamSang!]!
+  dichvus: [Dichvu!]!
+  thanhtien: Float!
+  ngaytao: DateTime!
+}
+
+type LoaiCanLamSang {
+  _id: ID!
+  tenxetnghiem: String!
+  gia: Float!
   mota: String!
+  hoadons: [Hoadon!]!
+}
+
+type PhieuXacNhan {
+  _id: ID!
+  benhnhan: BenhNhan!
+  phongs: [Phong!]!
+  trangthai: Boolean!
+  sothutu: Int!
+  ngaykham: DateTime!
+  ngaytao: DateTime!
+}
+
+type Toathuoc {
+  _id: ID!
+  benhnhan: BenhNhan!
+  bacsi: BacSi!
+  thuocs: [Thuoc!]!
+  benhs: [Benh!]!
+  bhyt: Boolean!
+  ngaytaikham: DateTime!
+  ngaytao: DateTime!
+}
+
+type Sobenh {
+  _id: ID!
+  benhnhan: BenhNhan!
+  ngaytao: DateTime!
+}
+
+type Phieuchidinhcanlamsang {
+  _id: ID!
+  benhnhan: BenhNhan!
+  bacsi: BacSi!
+  loaicanlamsang: LoaiCanLamSang!
+  bhyt: Boolean!
+  hinhanh: String!
+  ketluan: String!
+  thietbi: String!
 }
 
 type LoginResponse {
   access_token: String!
+  refresh_token: String!
   user: Users!
 }
 
@@ -195,6 +207,9 @@ type Query {
   getUserByEmail(email: String!): Users!
   getUserById(_id: String!): Users!
   getAllBenhNhan: [BenhNhan!]!
+  getBenhNhanbyId(id: String!): BenhNhan!
+  getAllSinhhieu: [Sinhhieu!]!
+  getAllSinhHieuByBenhNhan(benhnhanId: String!): Sinhhieu!
   getAllNhanVien: [NhanVien!]!
   getAllBacSi: [BacSi!]!
   getAllBenh: [Benh!]!
@@ -204,20 +219,24 @@ type Query {
   getAllPhong: [Phong!]!
   getAllThuoc: [Thuoc!]!
   getAllPhieuXacNhan: [PhieuXacNhan!]!
+  getAllByNgayVaPhong(ngaykham: DateTime!, phongIds: String!): [PhieuXacNhan!]!
   getAllToaThuoc: [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
   getAllSoBenh: [Sobenh!]!
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
-  getAllSinhhieu: [Sinhhieu!]!
+  logout: Boolean
 }
 
 type Mutation {
   createUser(newUserInput: NewUserInput!): Users!
-  updateUser(_id: String!, input: UpdateUserInput!): Users!
+  updateUser(input: UpdateUserInput!): Users!
   deleteUser(_id: String!): Boolean!
   createBenhNhan(newBenhNhanInput: NewBenhNhanInput!): BenhNhan!
   updateBenhNhan(input: UpdateBenhNhanInput!): BenhNhan!
   deleteBenhNhan(_id: String!): Boolean!
+  createSinhhieu(createSinhhieuInput: CreateSinhhieuInput!): Sinhhieu!
+  updateSinhhieu(updateSinhhieuInput: UpdateSinhhieuInput!): Sinhhieu!
+  deleteSinhhieu(id: String!): Sinhhieu!
   createNhanVien(newNhanVienInput: NewNhanVienInput!): NhanVien!
   updateNhanVien(_id: String!, input: UpdateNhanVienInput!): NhanVien!
   deleteNhanVien(_id: String!): Boolean!
@@ -260,25 +279,33 @@ type Mutation {
   createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
   updatePhieuchidinhcanlamsang(updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
   deletePhieuchidinhcanlamsang(id: String!): Phieuchidinhcanlamsang!
-  createSinhhieu(createSinhhieuInput: CreateSinhhieuInput!): Sinhhieu!
-  updateSinhhieu(updateSinhhieuInput: UpdateSinhhieuInput!): Sinhhieu!
-  deleteSinhhieu(id: String!): Sinhhieu!
   login(loginUserInput: LoginUserInput!): LoginResponse!
-  refreshToken(refreshToken: String!): LoginResponse!
 }
 
 input NewUserInput {
-  userId: String!
   username: String!
   email: String!
   password: String!
-  role: Float!
+  phoneNumber: String!
+  avatar: LinkImageInput!
+  role: UserRole!
+  isLocked: Boolean!
+}
+
+input LinkImageInput {
+  url: String!
+  fileName: String!
+  type: TypeImage!
 }
 
 input UpdateUserInput {
+  id: String!
   username: String!
   email: String!
   password: String!
+  phoneNumber: String!
+  avatar: LinkImageInput!
+  role: UserRole!
 }
 
 input NewBenhNhanInput {
@@ -286,10 +313,9 @@ input NewBenhNhanInput {
   ngaysinh: DateTime!
   gioitinh: Boolean!
   diachi: String!
-  sdt: String!
-  sobenhId: String!
   cccd: String!
   bhyt: String!
+  user: String!
 }
 
 input UpdateBenhNhanInput {
@@ -297,11 +323,33 @@ input UpdateBenhNhanInput {
   ngaysinh: DateTime
   gioitinh: Boolean
   diachi: String
-  sdt: String
-  sobenhId: String
   cccd: String
   bhyt: String
+  user: String
   _id: ID!
+}
+
+input CreateSinhhieuInput {
+  benhnhan: String!
+  mach: Float!
+  nhietdo: Float!
+  ha: String!
+  chieucao: Float!
+  cannang: Float!
+  bmi: Float!
+  benhmangtinh: Boolean!
+}
+
+input UpdateSinhhieuInput {
+  benhnhan: String
+  mach: Float
+  nhietdo: Float
+  ha: String
+  chieucao: Float
+  cannang: Float
+  bmi: Float
+  benhmangtinh: Boolean
+  id: Int!
 }
 
 input NewNhanVienInput {
@@ -331,11 +379,11 @@ input NewBacSiInput {
   ngaysinh: DateTime!
   gioitinh: Boolean!
   diachi: String!
-  sdt: String!
   cccd: String!
-  phong: String!
   ngayBD: DateTime!
-  chuyenkhoaId: String!
+  user: String!
+  phongs: [String!]!
+  chuyenkhoa: String!
 }
 
 input UpdateBacSiInput {
@@ -409,13 +457,13 @@ input UpdateChuyenKhoaInput {
 input NewPhongInput {
   tenphong: String!
   mota: String!
-  chuyenkhoaId: String!
+  chuyenkhoa: String!
 }
 
 input UpdatePhongInput {
   tenphong: String
   mota: String
-  chuyenkhoaId: String
+  chuyenkhoa: String
   id: String!
 }
 
@@ -447,16 +495,20 @@ input UpdateThuocInput {
 }
 
 input CreatePhieuXacNhanInput {
-  benhnhans: String!
+  benhnhan: String!
   phongs: [String!]!
+  trangthai: Boolean!
   sothutu: Int!
+  ngaykham: DateTime!
   ngaytao: DateTime!
 }
 
 input UpdatePhieuXacNhanInput {
-  benhnhans: String
+  benhnhan: String
   phongs: [String!]
+  trangthai: Boolean
   sothutu: Int
+  ngaykham: DateTime
   ngaytao: DateTime
   id: String!
 }
@@ -548,29 +600,6 @@ input UpdatePhieuchidinhcanlamsangInput {
   ketluan: String
   thietbi: String
   id: String!
-}
-
-input CreateSinhhieuInput {
-  benhnhan: String!
-  mach: Float!
-  nhietdo: Float!
-  ha: String!
-  chieucao: Float!
-  cannang: Float!
-  bmi: Float!
-  benhmangtinh: Boolean!
-}
-
-input UpdateSinhhieuInput {
-  benhnhan: String
-  mach: Float
-  nhietdo: Float
-  ha: String
-  chieucao: Float
-  cannang: Float
-  bmi: Float
-  benhmangtinh: Boolean
-  id: Int!
 }
 
 input LoginUserInput {

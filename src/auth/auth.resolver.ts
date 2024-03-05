@@ -1,12 +1,13 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginUserInput } from './dto/createLogin.input';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthGuard } from './guards/local-auth.guard';
-import { response } from 'express';
+import { Response } from 'express';
 import { retry } from 'rxjs';
+import { Users } from 'src/users/schemas/user.schema';
 
 @Resolver()
 export class AuthResolver {
@@ -14,18 +15,25 @@ export class AuthResolver {
 
     @Mutation(() => LoginResponse)
     @UseGuards(GqlAuthGuard)
-    login(@Args('loginUserInput') loginUserInput: LoginUserInput, @Context() context) {
-        return this.authService.login(context.user);
+    async login(@Args('loginUserInput') loginUserInput: LoginUserInput, @Context() ctx) {
+        if (!ctx.user) {
+            throw new Error('Request not found in context');
+        }
+
+        const loginResponse = await this.authService.login(ctx.user);
+
+        // Add cookie to JWT token and send it via header
+        ctx.res.cookie('refresh_token', loginResponse.refresh_token, {
+            httpOnly: true,
+        });
+
+        return loginResponse;
+        /* return this.authService.login(context.user); */
     }
 
-    /* @Mutation(() => LoginResponse)
-    async refreshToken(@Args('refreshToken') refreshToken: string) {
-        return await this.authService.refreshTokens();
-    } */
-
-    @Mutation()
-    async logout(): Promise<boolean> {
-        return this.authService.logout();
+    @Query(() => Boolean, { nullable: true })
+    async logout(@Context() context) {
+        return this.authService.logout(context);
     }
 
 }

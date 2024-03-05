@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { BacSi } from './schemas/bacsi.schema';
+import { BacSi } from './entities/bacsi.entity';
 import { Model } from 'mongoose';
 import { CreateBacSiDto } from './dto/create-bacsi.dto';
 import { UpdateBacSiInput } from './dto/update-bacsi.input';
@@ -10,11 +10,11 @@ export class BacsiService {
     constructor(@InjectModel(BacSi.name) private readonly bacsiModel: Model<BacSi>){}
 
     async getAllBacSi(): Promise<BacSi[]>{
-        return await this.bacsiModel.find().exec();
+        return await this.bacsiModel.find().populate('user').populate('phongs').populate('chuyenkhoa').exec();
     }
 
     async createBacSi(createBacSiDto: CreateBacSiDto): Promise<BacSi | null>{
-        const createBacSi = await this.bacsiModel.create(createBacSiDto);
+        const createBacSi = (await (await (await this.bacsiModel.create(createBacSiDto)).populate('user')).populate('phongs')).populate('chuyenkhoa');
         return createBacSi;
     }
 

@@ -5,6 +5,7 @@ import { access } from 'fs';
 import { Users } from 'src/users/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import { Context } from '@nestjs/graphql';
+import { comparePasswords } from 'src/HashPassword/hash';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
 
     async validateUser(username: string, password: string): Promise<any> {
         const user = await this.userService.getUserByUsername(username);
-        if (user && user.password === password) {
+        if (user && comparePasswords(user.password, password)) {
             const { password, ...result } = user;
             return user
         }
@@ -23,12 +24,13 @@ export class AuthService {
         return null;
     }
 
+
     async login(user: Users) {
 
         const payload = {
             username: user.username,
             sub: {
-                userId: user.userId,
+                _id: user._id,
             },
         };
 
@@ -39,13 +41,13 @@ export class AuthService {
         }
     };
 
-    /* async refreshTokens() {
-
-    } */
-
-    async logout(){
-        /* this.cookieService.delete('authToken'); */
-        return true
+    async logout(context) {
+        try{
+            context.res.cookie('refresh_token', '', {maxAge: 0 });
+            return true;
+        }catch (error) {
+            console.error('Error logout user:', error);
+        }
     }
 
 }

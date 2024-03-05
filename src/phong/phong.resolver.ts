@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectModel } from '@nestjs/mongoose';
 import { PhongService } from './phong.service';
-import { Phong } from './schemas/phong.schema';
+import { Phong } from './entities/phong.entity';
 import { NewPhongInput } from './dto/new-phong.input';
 import { UpdatePhongInput } from './dto/update-phong.input';
 import { Schema as MongooseSchema } from "mongoose";

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { BenhNhan } from './schemas/benhnhan.schema';
+import { BenhNhan } from './entities/benhnhan.entity';
 import { Model } from 'mongoose';
 import { CreateBenhNhanDto } from './dto/create-benhnhan.dto';
 import { UpdateBenhNhanInput } from './dto/update-benhnhan.input';
@@ -10,12 +10,16 @@ import { Schema as MongooseSchema } from "mongoose";
 export class BenhnhanService {
     constructor(@InjectModel(BenhNhan.name) private readonly benhnhanModel: Model<BenhNhan>){}
 
-    async getAllBenhNhan(): Promise<BenhNhan[]>{
-        return await this.benhnhanModel.find().exec();
+    async getAllBenhNhan(): Promise<BenhNhan[] | null>{
+        return await this.benhnhanModel.find().populate('user').exec();
+    }
+
+    async getBenhNhanbyId(_id: string): Promise<BenhNhan| null>{
+        return (await this.benhnhanModel.findOne({_id})).populate('user');
     }
 
     async createBenhNhan(createBenhNhanDto: CreateBenhNhanDto): Promise<BenhNhan | null>{
-        const createBenhNhan = await this.benhnhanModel.create(createBenhNhanDto);
+        const createBenhNhan = (await this.benhnhanModel.create(createBenhNhanDto)).populate('user');
         return createBenhNhan;
     }
 

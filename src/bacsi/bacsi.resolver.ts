@@ -1,14 +1,17 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BacsiService } from './bacsi.service';
-import { BacSi } from './schemas/bacsi.schema';
+import { BacSi } from './entities/bacsi.entity';
 import { NewBacSiInput } from './dto/new-bacsi.input';
 import { UpdateBacSiInput } from './dto/update-bacsi.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver()
 export class BacsiResolver {
 
     constructor(private readonly bacsiService: BacsiService) { }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => [BacSi])
     async getAllBacSi(): Promise<BacSi[]> {
         return await this.bacsiService.getAllBacSi();

@@ -30,9 +30,9 @@ export class Benh {
     @Prop()
     motabenh: string;
 
-    @Field(() => [Toathuoc])
+    /* @Field(() => [Toathuoc])
     @Prop({ type: [{ type: MongooSchemas.Types.ObjectId, ref: 'Toathuoc', require: true }] })
-    toathuocs: Toathuoc[];
+    toathuocs: Toathuoc[]; */
 }
 
 export const BenhSchema = SchemaFactory.createForClass(Benh);

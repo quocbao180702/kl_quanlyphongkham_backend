@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Thuoc } from './schemas/thuoc.schema';
+import { Thuoc } from './entities/thuoc.entity';
 import { Model } from 'mongoose';
 import { CreateThuocDto } from './dto/create-thuoc.dto';
 import { UpdateThuocInput } from './dto/update-thuoc.input';

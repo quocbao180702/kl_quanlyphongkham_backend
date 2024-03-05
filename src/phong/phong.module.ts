@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PhongResolver } from './phong.resolver';
 import { PhongService } from './phong.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Phong, PhongSchema } from './schemas/phong.schema';
+import { Phong, PhongSchema } from './entities/phong.entity';
 
 @Module({
   providers: [PhongResolver, PhongService],

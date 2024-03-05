@@ -1,7 +1,12 @@
+import { LinkImage } from "src/types/LinkImage.types";
+import { UserRole } from "src/types/Users.types";
+
 export class CreateUserDto {
-    userId: string;
     username: string;
     email: string;
     password: string;
-    role: number;
+    phoneNumber: string;
+    role: UserRole;
+    isLocked: boolean
+    avatar: LinkImage
   }

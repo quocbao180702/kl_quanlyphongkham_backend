@@ -1,10 +1,10 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Schema as MongooSchema } from 'mongoose';
-import { BacSi } from 'src/bacsi/schemas/bacsi.schema';
+import { BacSi } from 'src/bacsi/entities/bacsi.entity';
 import { Benh } from 'src/benh/schemas/benh.schema';
-import { BenhNhan } from 'src/benhnhan/schemas/benhnhan.schema';
-import { Thuoc } from 'src/thuoc/schemas/thuoc.schema';
+import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
+import { Thuoc } from 'src/thuoc/entities/thuoc.entity';
 
 
 export type ToathuocDocument = HydratedDocument<Toathuoc>;

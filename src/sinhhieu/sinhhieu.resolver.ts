@@ -18,6 +18,11 @@ export class SinhhieuResolver {
     return this.sinhhieuService.getAllSinhhieu();
   }
 
+  @Query(() => Sinhhieu)
+  getAllSinhHieuByBenhNhan(@Args('benhnhanId') benhnhanId: string) {
+    return this.sinhhieuService.getAllSinhHieuByBenhNhan(benhnhanId);
+  }
+
   /* @Query(() => Sinhhieu)
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.sinhhieuService.findOne(id);

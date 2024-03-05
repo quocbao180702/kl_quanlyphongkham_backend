@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChuyenkhoaResolver } from './chuyenkhoa.resolver';
 import { ChuyenkhoaService } from './chuyenkhoa.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ChuyenKhoa, ChuyenKhoaSchema } from './schemas/chuyenkhoa.schema';
+import { ChuyenKhoa, ChuyenKhoaSchema } from './entities/chuyenkhoa.entity';
 
 @Module({
   providers: [ChuyenkhoaResolver, ChuyenkhoaService],

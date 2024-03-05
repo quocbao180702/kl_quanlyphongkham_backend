@@ -23,6 +23,7 @@ import { HoadonModule } from './hoadon/hoadon.module';
 import { SobenhModule } from './sobenh/sobenh.module';
 import { PhieuchidinhcanlamsangModule } from './phieuchidinhcanlamsang/phieuchidinhcanlamsang.module';
 import { AuthModule } from './auth/auth.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 @Module({
   controllers: [AppController,],
@@ -34,6 +35,7 @@ import { AuthModule } from './auth/auth.module';
     NhanvienModule,
     BacsiModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
+      context: ({ req, res }) => ({ req, res }),
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
@@ -51,6 +53,7 @@ import { AuthModule } from './auth/auth.module';
     PhieuchidinhcanlamsangModule,
     SinhhieuModule,
     AuthModule,
+    FileUploadModule,
   ],
 })
 export class AppModule { }

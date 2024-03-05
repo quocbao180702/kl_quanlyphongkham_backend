@@ -1,11 +1,15 @@
+import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
+import { Phong } from "src/phong/entities/phong.entity";
+import { Users } from "src/users/schemas/user.schema";
+
 export class CreateBacSiDto{
 	hoten: string;
 	ngaysinh: Date;
 	gioitinh: boolean;
 	diachi: string;
-	sdt: string;
 	cccd: string;
-	phong: string;
 	ngayBD: Date;
-	chuyenkhoaId: string;
+	user: string;
+	phongs: string[];
+	chuyenkhoa: string;
 }

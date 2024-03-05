@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int, Float, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Schema as MongooSchemas } from 'mongoose';
-import { BenhNhan } from 'src/benhnhan/schemas/benhnhan.schema';
+import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 
 export type SinhhieuDocument = HydratedDocument<Sinhhieu>;
 
@@ -10,10 +10,10 @@ export type SinhhieuDocument = HydratedDocument<Sinhhieu>;
 export class Sinhhieu {
 
   @Field(() => ID)
-    _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 
-  @Prop({ type: MongooSchemas.Types.ObjectId, ref: 'BenhNhan' })
   @Field(() => BenhNhan)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'BenhNhan', required: true })
   benhnhan: BenhNhan;
 
   @Prop()

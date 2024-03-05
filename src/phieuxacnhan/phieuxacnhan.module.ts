@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PhieuXacNhan, PhieuXacNhanSchema } from './schemas/PhieuXacNhan.schema';
+import { PhieuXacNhan, PhieuXacNhanSchema } from './entities/phieuxacnhan.entity';
 import { PhieuXacNhanResolver } from './phieuxacnhan.resolver';
 import { PhieuXacNhanService } from './PhieuXacNhan.service';
 

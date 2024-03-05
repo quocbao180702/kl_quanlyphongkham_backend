@@ -1,10 +1,10 @@
 import { ObjectType, Field, Int, Float, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { BenhNhan } from 'src/benhnhan/schemas/benhnhan.schema';
+import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 import { Dichvu } from 'src/dichvu/entities/dichvu.entity';
 import { LoaiCanLamSang } from 'src/loaicanlamsang/schemas/loaicanlamsang.entity';
-import { Thuoc } from 'src/thuoc/schemas/thuoc.schema';
+import { Thuoc } from 'src/thuoc/entities/thuoc.entity';
 
 
 export type HoadonDocument = HydratedDocument<Hoadon>;

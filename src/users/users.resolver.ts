@@ -6,6 +6,7 @@ import { NewUserInput } from "./dto/new-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { LinkImage } from "src/types/LinkImage.types";
 
 
 @Resolver(() => Users)
@@ -42,10 +43,10 @@ export class UsersResolver {
     }
 
     @Mutation(() => Users)
-    async updateUser(@Args('_id') _id: string, @Args('input') input: UpdateUserInput): Promise<Users> {
-        const update = await this.userService.updateUser(_id, input);
+    async updateUser(@Args('input') input: UpdateUserInput): Promise<Users> {
+        const update = await this.userService.updateUser(input);
         if (!update) {
-            throw new Error(`User with ID ${_id} not found.`);
+            throw new Error(`User with ID ${input.id} not found.`);
         }
         return update;
     }
@@ -55,7 +56,6 @@ export class UsersResolver {
         await this.userService.deleteUser(_id);
         return true;
     }
-
 
 
 

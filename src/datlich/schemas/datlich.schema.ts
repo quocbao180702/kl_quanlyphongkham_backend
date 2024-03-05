@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument, Schema as MongooSchema } from "mongoose";
-import { BenhNhan } from "src/benhnhan/schemas/benhnhan.schema";
+import { BenhNhan } from "src/benhnhan/entities/benhnhan.entity";
 
 
 export type DatLichDocument = HydratedDocument<DatLich>;

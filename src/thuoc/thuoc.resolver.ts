@@ -1,8 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ThuocService } from './thuoc.service';
-import { Thuoc } from './schemas/thuoc.schema';
+import { Thuoc } from './entities/thuoc.entity';
 import { NewThuocInput } from './dto/new-thuoc.input';
 import { UpdateThuocInput } from './dto/update-thuoc.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver()
 export class ThuocResolver {
@@ -10,6 +12,7 @@ export class ThuocResolver {
     constructor(private readonly thuocService: ThuocService){}
 
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => [Thuoc])
     async getAllThuoc(): Promise<Thuoc[]> {
         return await this.thuocService.getAllThuoc();

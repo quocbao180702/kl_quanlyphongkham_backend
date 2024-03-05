@@ -3,7 +3,7 @@ import { CreatePhieuXacNhanInput } from './dto/create-phieuxacnhan.input';
 import { UpdatePhieuXacNhanInput } from './dto/update-phieuxacnhan.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PhieuXacNhan } from './schemas/PhieuXacNhan.schema';
+import { PhieuXacNhan } from './entities/phieuxacnhan.entity';
 import { Schema as MongooseSchema } from "mongoose";
 
 @Injectable()
@@ -14,13 +14,36 @@ export class PhieuXacNhanService {
 
   async getAllPhieuXacNhan(): Promise<PhieuXacNhan[] | null> {
     return await this.phieuxacnhanModel.find()
-                        .populate('benhnhans')
-                        .populate('phongs')
-                        .exec();
+      .populate({
+        path: 'benhnhan',
+        populate: {
+          path: 'user'
+        }
+      })
+      .populate('phongs')
+      .exec();
+  }
+
+  async getAllByNgayVaPhong(ngaykham: Date, phong: string): Promise<PhieuXacNhan[]> {
+    return this.phieuxacnhanModel
+      .find({ ngaykham, 'phongs': { $in: phong } })
+      .populate({
+        path: 'benhnhan',
+        populate: {
+          path: 'user'
+        }
+      })
+      .populate('phongs')
+      .exec();
   }
 
   async createPhieuXacNhan(createPhieuXacNhan: CreatePhieuXacNhanInput): Promise<PhieuXacNhan | null> {
-    const createdPhieuXacNhan = await this.phieuxacnhanModel.create(createPhieuXacNhan);
+    const createdPhieuXacNhan = (await (await this.phieuxacnhanModel.create(createPhieuXacNhan)).populate({
+      path: 'benhnhan',
+      populate: {
+        path: 'user'
+      }
+    })).populate('phongs');
     return createdPhieuXacNhan;
   }
 
@@ -36,7 +59,7 @@ export class PhieuXacNhanService {
     ).exec();
   }
 
-  async deletePhieuXacNhan(_id:string): Promise<void> {
+  async deletePhieuXacNhan(_id: string): Promise<void> {
     await this.phieuxacnhanModel.deleteOne({ _id });
   }
 }

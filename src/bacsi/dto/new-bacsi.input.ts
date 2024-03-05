@@ -1,33 +1,37 @@
 import { Field, InputType } from "@nestjs/graphql";
+import mongoose from "mongoose";
+import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
+import { Phong } from "src/phong/entities/phong.entity";
+import { Users } from "src/users/schemas/user.schema";
 
 @InputType()
-export class NewBacSiInput{
-    
+export class NewBacSiInput {
+
     @Field()
     hoten: string;
 
     @Field()
-	ngaysinh: Date;
+    ngaysinh: Date;
 
     @Field()
-	gioitinh: boolean;
+    gioitinh: boolean;
 
     @Field()
-	diachi: string;
+    diachi: string;
+
 
     @Field()
-	sdt: string;
+    cccd: string;
 
     @Field()
-	cccd: string;
+    ngayBD: Date;
 
-    @Field()
-	phong: string;
+    @Field(() => String)
+    user: string
 
-    @Field()
-	ngayBD: Date;
-    
-    @Field()
-	chuyenkhoaId: string;
+    @Field(() => [String])
+    phongs: string[];
 
+    @Field(() => String)
+    chuyenkhoa: string;
 }

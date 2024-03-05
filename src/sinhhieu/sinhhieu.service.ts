@@ -15,6 +15,10 @@ export class SinhhieuService {
                       .exec();
     }
 
+    async getAllSinhHieuByBenhNhan(benhnhanId: string): Promise<Sinhhieu>{
+        return await this.sinhhieuModel.findOne({benhnhan: benhnhanId}).exec();
+    }
+
     async createSinhhieu(createSinhhieuInput: CreateSinhhieuInput): Promise<Sinhhieu> {
         const createdSinhhieu = (await this.sinhhieuModel.create(createSinhhieuInput)).populate('benhnhan');
         return createdSinhhieu;

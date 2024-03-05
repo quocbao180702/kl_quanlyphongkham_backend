@@ -3,8 +3,8 @@ export class CreateBenhNhanDto{
     ngaysinh: Date;
     gioitinh: boolean;
     diachi: string;
-    sdt: string;
-    sobenhId: string;
     cccd: string;
     bhyt: string;
+    user: string;
 }
+

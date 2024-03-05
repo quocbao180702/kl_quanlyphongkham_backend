@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PhieuXacNhanService } from './PhieuXacNhan.service';
-import { PhieuXacNhan } from './schemas/PhieuXacNhan.schema';
+import { PhieuXacNhan } from './entities/phieuxacnhan.entity';
 import { CreatePhieuXacNhanInput } from './dto/create-PhieuXacNhan.input';
 import { UpdatePhieuXacNhanInput } from './dto/update-PhieuXacNhan.input';
 import { Schema as MongooseSchema } from "mongoose";
@@ -12,6 +12,14 @@ export class PhieuXacNhanResolver {
   @Query(() => [PhieuXacNhan])
   async getAllPhieuXacNhan(): Promise<PhieuXacNhan[]> {
     return await this.phieuxacnhanService.getAllPhieuXacNhan();
+  }
+
+  @Query(() => [PhieuXacNhan])
+  async getAllByNgayVaPhong(
+    @Args('ngaykham') ngaykham: Date,
+    @Args('phongIds') phongIds: string,
+  ): Promise<PhieuXacNhan[]> {
+    return await this.phieuxacnhanService.getAllByNgayVaPhong(ngaykham, phongIds);
   }
 
   @Mutation(() => PhieuXacNhan)

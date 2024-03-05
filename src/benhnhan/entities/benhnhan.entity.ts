@@ -3,10 +3,10 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument, Schema as MongooseSchema, SchemaTypes, Types } from "mongoose";
 import { Hoadon } from "src/hoadon/entities/hoadon.entity";
 import { Phieuchidinhcanlamsang } from "src/phieuchidinhcanlamsang/entities/phieuchidinhcanlamsang.entity";
-import { PhieuXacNhan } from "src/phieuxacnhan/schemas/PhieuXacNhan.schema";
 import { Sinhhieu } from "src/sinhhieu/entities/sinhhieu.entity";
 import { Sobenh } from "src/sobenh/entities/sobenh.entity";
 import { Toathuoc } from "src/toathuoc/entities/toathuoc.entity";
+import { Users } from "src/users/schemas/user.schema";
 
 
 export type BenhNhanDocument = HydratedDocument<BenhNhan>;
@@ -34,21 +34,22 @@ export class BenhNhan {
 
     @Prop()
     @Field()
-    sdt: string;
-
-    @Prop()
-    @Field()
-    sobenhId: string;
-
-    @Prop()
-    @Field()
     cccd: string;
 
     @Prop()
     @Field()
     bhyt: string;
 
-    @Field(() => [PhieuXacNhan])
+    @Field(() => Users)
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
+    user: Users;
+
+    @Field(() => Sinhhieu, {nullable: true})
+    sinhhieu: Sinhhieu;
+
+
+
+    /* @Field(() => [PhieuXacNhan])
     @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'PhieuXacNhan' }] })
     phieuxacnhans: PhieuXacNhan[];
 
@@ -70,7 +71,7 @@ export class BenhNhan {
 
     @Field(() => [Phieuchidinhcanlamsang])
     @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Phieuchidinhcanlamsang' }] })
-    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[];
+    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[]; */
 
 
 }
