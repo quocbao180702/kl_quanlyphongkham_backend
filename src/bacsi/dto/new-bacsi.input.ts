@@ -2,7 +2,7 @@ import { Field, InputType } from "@nestjs/graphql";
 import mongoose from "mongoose";
 import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
 import { Phong } from "src/phong/entities/phong.entity";
-import { Users } from "src/users/schemas/user.schema";
+import { Users } from "src/users/entities/user.entity";
 
 @InputType()
 export class NewBacSiInput {

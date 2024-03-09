@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
-import { Users } from "./schemas/user.schema";
+import { Users } from "./entities/user.entity";
 import { Query } from "@nestjs/graphql";
 import { UsersService } from "./users.service"
 import { NewUserInput } from "./dto/new-user.input";
@@ -49,6 +49,11 @@ export class UsersResolver {
             throw new Error(`User with ID ${input.id} not found.`);
         }
         return update;
+    }
+
+    @Mutation(() => Users)
+    async xulyKhoa(@Args('id') id: string): Promise<Users>{
+        return this.userService.xuly_Khoa(id);
     }
 
     @Mutation(() => Boolean)

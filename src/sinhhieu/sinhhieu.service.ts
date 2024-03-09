@@ -7,16 +7,21 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class SinhhieuService {
-  constructor(@InjectModel(Sinhhieu.name) private readonly sinhhieuModel: Model<Sinhhieu>) { }
+    constructor(@InjectModel(Sinhhieu.name) private readonly sinhhieuModel: Model<Sinhhieu>) { }
 
     async getAllSinhhieu(): Promise<Sinhhieu[]> {
         return await this.sinhhieuModel.find()
-                      .populate('benhnhan')  
-                      .exec();
+            .populate({
+                path: 'benhnhan',
+                populate: {
+                    path: 'user'
+                }
+            })
+            .exec();
     }
 
-    async getAllSinhHieuByBenhNhan(benhnhanId: string): Promise<Sinhhieu>{
-        return await this.sinhhieuModel.findOne({benhnhan: benhnhanId}).exec();
+    async getAllSinhHieuByBenhNhan(benhnhanId: string): Promise<Sinhhieu> {
+        return await this.sinhhieuModel.findOne({ benhnhan: benhnhanId }).exec();
     }
 
     async createSinhhieu(createSinhhieuInput: CreateSinhhieuInput): Promise<Sinhhieu> {

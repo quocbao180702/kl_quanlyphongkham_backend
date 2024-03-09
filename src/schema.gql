@@ -110,7 +110,7 @@ type DatLich {
 type Benh {
   _id: ID!
   maICD: String!
-  chuongbenh: Int!
+  chuongbenh: String!
   tenbenh: String!
   motabenh: String!
 }
@@ -230,6 +230,7 @@ type Query {
 type Mutation {
   createUser(newUserInput: NewUserInput!): Users!
   updateUser(input: UpdateUserInput!): Users!
+  xulyKhoa(id: String!): Users!
   deleteUser(_id: String!): Boolean!
   createBenhNhan(newBenhNhanInput: NewBenhNhanInput!): BenhNhan!
   updateBenhNhan(input: UpdateBenhNhanInput!): BenhNhan!
@@ -341,15 +342,14 @@ input CreateSinhhieuInput {
 }
 
 input UpdateSinhhieuInput {
-  benhnhan: String
-  mach: Float
-  nhietdo: Float
-  ha: String
-  chieucao: Float
-  cannang: Float
-  bmi: Float
-  benhmangtinh: Boolean
-  id: Int!
+  id: String!
+  mach: Float!
+  nhietdo: Float!
+  ha: String!
+  chieucao: Float!
+  cannang: Float!
+  bmi: Float!
+  benhmangtinh: Boolean!
 }
 
 input NewNhanVienInput {
@@ -400,14 +400,14 @@ input UpdateBacSiInput {
 
 input NewBenhInput {
   maICD: String!
-  chuongbenh: Int!
+  chuongbenh: String!
   tenbenh: String!
   motabenh: String!
 }
 
 input UpdateBenhInput {
   maICD: String
-  chuongbenh: Int
+  chuongbenh: String
   tenbenh: String
   motabenh: String
   id: String!

@@ -17,10 +17,9 @@ export class Benh {
     @Prop()
     maICD: string;
 
-    @Field(() => Int)
+    @Field(() => String)
     @Prop()
-    chuongbenh: number;
-
+    chuongbenh: string;
 
     @Field()
     @Prop()

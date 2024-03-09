@@ -6,7 +6,7 @@ import { Phieuchidinhcanlamsang } from "src/phieuchidinhcanlamsang/entities/phie
 import { Sinhhieu } from "src/sinhhieu/entities/sinhhieu.entity";
 import { Sobenh } from "src/sobenh/entities/sobenh.entity";
 import { Toathuoc } from "src/toathuoc/entities/toathuoc.entity";
-import { Users } from "src/users/schemas/user.schema";
+import { Users } from "src/users/entities/user.entity";
 
 
 export type BenhNhanDocument = HydratedDocument<BenhNhan>;

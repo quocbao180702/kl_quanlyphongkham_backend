@@ -1,6 +1,6 @@
 import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
 import { Phong } from "src/phong/entities/phong.entity";
-import { Users } from "src/users/schemas/user.schema";
+import { Users } from "src/users/entities/user.entity";
 
 export class CreateBacSiDto{
 	hoten: string;

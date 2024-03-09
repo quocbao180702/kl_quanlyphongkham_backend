@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Benh } from './schemas/benh.schema';
+import { Benh } from './entities/benh.entity';
 import { Model } from 'mongoose';
 import { CreateBenhInput } from './dto/create-benh.dto';
 import { UpdateBenhInput } from './dto/update-benh.input';

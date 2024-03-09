@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Users } from './schemas/user.schema';
+import { Users } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Args } from '@nestjs/graphql';
@@ -45,15 +45,28 @@ export class UsersService {
   }
 
   async updateUser(updateUser: UpdateUserInput): Promise<Users | null> {
-    try{
+    try {
       const password = await hashPassword(updateUser.password);
       return await this.userModel.findByIdAndUpdate(
         updateUser.id,
         { $set: { ...updateUser, password } },
         { new: true }
       ).exec();
-    }catch(error){
+    } catch (error) {
       throw new Error('Error update user: ' + error.message)
+    }
+  }
+
+  async xuly_Khoa(id: string): Promise<Users | null> {
+    try {
+      const user = await this.userModel.findById(id).exec();
+      if (!user) {
+        throw new Error('User not found');
+      }
+      user.isLocked = !user.isLocked;
+      return await user.save();
+    } catch (error) {
+      throw new Error('Error xử lý khóa bị lỗi: ' + error.message);
     }
   }
 

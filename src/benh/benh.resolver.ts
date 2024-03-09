@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BenhService } from './benh.service';
-import { Benh } from './schemas/benh.schema';
+import { Benh } from './entities/benh.entity';
 import { NewBenhInput } from './dto/new-benh.input';
 import { UpdateBenhInput } from './dto/update-benh.input';
 

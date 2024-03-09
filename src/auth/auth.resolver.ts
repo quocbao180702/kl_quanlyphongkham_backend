@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthGuard } from './guards/local-auth.guard';
 import { Response } from 'express';
 import { retry } from 'rxjs';
-import { Users } from 'src/users/schemas/user.schema';
+import { Users } from 'src/users/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {
