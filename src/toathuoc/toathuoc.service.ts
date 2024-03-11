@@ -4,10 +4,15 @@ import { UpdateToathuocInput } from './dto/update-toathuoc.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Toathuoc } from './entities/toathuoc.entity';
+import { Thuoc } from 'src/thuoc/entities/thuoc.entity';
+import { ThuocService } from 'src/thuoc/thuoc.service';
 
 @Injectable()
 export class ToathuocService {
-  constructor(@InjectModel(Toathuoc.name) private readonly toathuochModel: Model<Toathuoc>) { }
+  constructor(
+    @InjectModel(Toathuoc.name) private readonly toathuochModel: Model<Toathuoc>,
+    private readonly thuocService: ThuocService
+  ) { }
 
   async getAllToaThuoc(): Promise<Toathuoc[] | null> {
     return await this.toathuochModel.find()
@@ -19,8 +24,37 @@ export class ToathuocService {
   }
 
   async createToathuoc(createToathuoc: CreateToathuocInput): Promise<Toathuoc | null> {
-    const createdToathuoc = (await this.toathuochModel.create(createToathuoc)).populate('benhnhan');
-    return createdToathuoc;
+    try {
+      const thuocIds = createToathuoc.thuocs;
+      console.log(thuocIds);
+
+      const danhSachThuoc = await this.thuocService.getThuocbyIds(thuocIds);
+
+      danhSachThuoc.forEach(async (thuoc, index) => {
+        
+        await this.thuocService.updateSoluongThuoc(thuoc._id.toString(),createToathuoc.soluongs[index]);
+        /* console.log('id is', thuoc._id.toString());
+        console.log('quantity is',createToathuoc.soluongs[index]) */
+      });
+
+
+      const createdToathuoc = await this.toathuochModel.create(createToathuoc);
+
+      // Populate các trường tham chiếu
+      const populatedToathuoc = await this.toathuochModel
+        .findById(createdToathuoc._id)
+        .populate('benhnhan')
+        .populate('bacsi')
+        .populate('benhs')
+        .populate('thuocs')
+        .exec();
+
+      return populatedToathuoc;
+    } catch (error) {
+      // Xử lý lỗi
+      console.error("Error creating Toathuoc:", error);
+      return null;
+    }
   }
 
   async updateToathuoc(updateToathuoc: UpdateToathuocInput): Promise<Toathuoc | null> {

@@ -13,19 +13,23 @@ export type ToathuocDocument = HydratedDocument<Toathuoc>;
 export class Toathuoc {
 
   @Field(() => ID)
-    _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 
   @Prop({ type: MongooSchema.Types.ObjectId, ref: 'BenhNhan' })
   @Field(() => BenhNhan)
   benhnhan: BenhNhan;
 
-  @Prop({ type: MongooSchema.Types.ObjectId, ref: 'BacSi' })
+  @Prop({ type: MongooSchema.Types.ObjectId, ref: 'BacSi', required: true })
   @Field(() => BacSi)
   bacsi: BacSi;
 
   @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Thuoc', required: true }] })
   @Field(() => [Thuoc])
   thuocs: Thuoc[];
+
+  @Prop()
+  @Field(() => [Int])
+  soluongs: number[];
 
   @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Benh', required: true }] })
   @Field(() => [Benh])

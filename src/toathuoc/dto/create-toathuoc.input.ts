@@ -11,6 +11,9 @@ export class CreateToathuocInput {
   @Field(() => [String])
   thuocs: string[];
 
+  @Field(() => [Int])
+  soluongs: number[];
+
   @Field(() => [String])
   benhs: string[];
 

@@ -9,13 +9,18 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 @Resolver()
 export class ThuocResolver {
 
-    constructor(private readonly thuocService: ThuocService){}
+    constructor(private readonly thuocService: ThuocService) { }
 
 
     @UseGuards(JwtAuthGuard)
     @Query(() => [Thuoc])
     async getAllThuoc(): Promise<Thuoc[]> {
         return await this.thuocService.getAllThuoc();
+    }
+
+    @Query(() => [Thuoc])
+    async getThuocbyIds(@Args('ids', { type: () => [String] }) ids: string[]): Promise<Thuoc[]> {
+        return await this.thuocService.getThuocbyIds(ids);
     }
 
     @Mutation(() => Thuoc)
@@ -25,7 +30,12 @@ export class ThuocResolver {
     }
 
     @Mutation(() => Thuoc)
-    async updateThuoc( @Args('input') input: UpdateThuocInput): Promise<Thuoc> {
+    async updateSoluongThuoc(@Args('id')id: string, @Args('soluongdung')soluongdung: number): Promise<Thuoc> {
+        return await this.thuocService.updateSoluongThuoc(id, soluongdung);
+    }
+
+    @Mutation(() => Thuoc)
+    async updateThuoc(@Args('input') input: UpdateThuocInput): Promise<Thuoc> {
         const update = await this.thuocService.updateThuoc(input);
         if (!update) {
             throw new Error(`Thuoc with ID ${input.id} not found.`);

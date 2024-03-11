@@ -12,7 +12,7 @@ export type PhieuchidinhcanlamsangDocument = HydratedDocument<Phieuchidinhcanlam
 export class Phieuchidinhcanlamsang {
 
   @Field(() => ID)
-    _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 
   @Prop({ type: MongooSchemas.Types.ObjectId, ref: 'BenhNhan' })
   @Field(() => BenhNhan)

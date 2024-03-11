@@ -6,6 +6,7 @@ import { Thuoc, ThuocSchema } from './entities/thuoc.entity';
 
 @Module({
   providers: [ThuocResolver, ThuocService],
-  imports: [MongooseModule.forFeature([{name:Thuoc.name, schema: ThuocSchema}])]
+  imports: [MongooseModule.forFeature([{name:Thuoc.name, schema: ThuocSchema}])],
+  exports: [ThuocService]
 })
 export class ThuocModule {}

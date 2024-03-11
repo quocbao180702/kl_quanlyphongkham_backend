@@ -19,6 +19,21 @@ export class ThuocService {
         return createdThuoc;
     }
 
+    async getThuocbyIds(ids: string[]): Promise<Thuoc[]> {
+        const thuocs = await this.thuocModel.find({ _id: { $in: ids } });
+        return thuocs
+    }
+
+    async updateSoluongThuoc(id: string, soluongdung: number): Promise<Thuoc> {
+        try {
+           return await this.thuocModel.findByIdAndUpdate(id, { $inc: { soluong: -soluongdung } });
+        } catch (error) {
+            // Xử lý lỗi nếu cần thiết
+            console.error('Error updating thuoc quantity:', error);
+            throw error;
+        }
+    }
+
     async updateThuoc(updateThuoc: UpdateThuocInput): Promise<Thuoc | null> {
         return await this.thuocModel.findByIdAndUpdate(
             updateThuoc.id,

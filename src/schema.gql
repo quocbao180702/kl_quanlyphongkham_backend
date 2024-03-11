@@ -172,6 +172,7 @@ type Toathuoc {
   benhnhan: BenhNhan!
   bacsi: BacSi!
   thuocs: [Thuoc!]!
+  soluongs: [Int!]!
   benhs: [Benh!]!
   bhyt: Boolean!
   ngaytaikham: DateTime!
@@ -218,6 +219,7 @@ type Query {
   getAllChuyenKhoa: [ChuyenKhoa!]!
   getAllPhong: [Phong!]!
   getAllThuoc: [Thuoc!]!
+  getThuocbyIds(ids: [String!]!): [Thuoc!]!
   getAllPhieuXacNhan: [PhieuXacNhan!]!
   getAllByNgayVaPhong(ngaykham: DateTime!, phongIds: String!): [PhieuXacNhan!]!
   getAllToaThuoc: [Toathuoc!]!
@@ -260,6 +262,7 @@ type Mutation {
   updatePhong(input: UpdatePhongInput!): Phong!
   deletePhong(_id: String!): Boolean!
   createThuoc(newThuocInput: NewThuocInput!): Thuoc!
+  updateSoluongThuoc(id: String!, soluongdung: Float!): Thuoc!
   updateThuoc(input: UpdateThuocInput!): Thuoc!
   deleteThuoc(_id: String!): Boolean!
   createPhieuXacNhan(newPhieuXacNhanInput: CreatePhieuXacNhanInput!): PhieuXacNhan!
@@ -517,6 +520,7 @@ input CreateToathuocInput {
   benhnhan: String!
   bacsi: String!
   thuocs: [String!]!
+  soluongs: [Int!]!
   benhs: [String!]!
   bhyt: Boolean!
   ngaytaikham: DateTime!
@@ -527,6 +531,7 @@ input UpdateToathuocInput {
   benhnhan: String
   bacsi: String
   thuocs: [String!]
+  soluongs: [Int!]
   benhs: [String!]
   bhyt: Boolean
   ngaytaikham: DateTime
