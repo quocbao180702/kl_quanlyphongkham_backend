@@ -24,11 +24,18 @@ import { SobenhModule } from './sobenh/sobenh.module';
 import { PhieuchidinhcanlamsangModule } from './phieuchidinhcanlamsang/phieuchidinhcanlamsang.module';
 import { AuthModule } from './auth/auth.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
+import { KetquacanlamsangModule } from './ketquacanlamsang/ketquacanlamsang.module';
+/* import { ServeStaticModule } from '@nestjs/serve-static'; */
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   controllers: [AppController,],
   providers: [AppService],
   imports: [
+    /* ConfigModule.forRoot({
+      isGlobal: true
+    }), */
     MongooseModule.forRoot('mongodb://localhost:27017/QuanLyPhongKham'),
     UsersModule,
     BenhnhanModule,
@@ -54,6 +61,7 @@ import { FileUploadModule } from './file-upload/file-upload.module';
     SinhhieuModule,
     AuthModule,
     FileUploadModule,
+    KetquacanlamsangModule,
   ],
 })
 export class AppModule { }

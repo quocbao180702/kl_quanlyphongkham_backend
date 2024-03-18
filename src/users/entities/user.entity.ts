@@ -17,7 +17,7 @@ export class Users {
     _id: mongoose.Types.ObjectId;
 
     @Field()
-    @Prop({ unique: true })
+    @Prop({unique: true, sparse: true})
     username: string;
 
     @Field()

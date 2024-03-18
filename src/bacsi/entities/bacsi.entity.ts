@@ -37,12 +37,11 @@ export class BacSi {
     @Prop()
     cccd: string;
 
-
     @Field()
     @Prop()
     ngayBD: Date;
 
-    @Field(() => Users)
+    @Field(type => Users)
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
     user: Users;
 
@@ -53,15 +52,6 @@ export class BacSi {
     @Field(() => ChuyenKhoa)
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ChuyenKhoa', required: true })
     chuyenkhoa: ChuyenKhoa;
-
-    /* @Field(() => [Toathuoc])
-    @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Toathuoc' }] })
-    toathuocs: Toathuoc[];
-
-    @Field(() => [Phieuchidinhcanlamsang])
-    @Prop({ type: [{ type: MongooSchema.Types.ObjectId, ref: 'Phieuchidinhcanlamsang' }] })
-    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[]; */
-
 }
 
 export const BacSiSchema = SchemaFactory.createForClass(BacSi);

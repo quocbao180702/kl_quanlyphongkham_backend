@@ -1,32 +1,10 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType, PartialType } from "@nestjs/graphql";
+import { NewBacSiInput } from "./new-bacsi.input";
 
 @InputType()
-export class UpdateBacSiInput{
+export class UpdateBacSiInput extends PartialType(NewBacSiInput){
 
     @Field()
-    hoten: string;
-
-    @Field()
-	ngaysinh: Date;
-
-    @Field()
-	gioitinh: boolean;
-
-    @Field()
-	diachi: string;
-
-    @Field()
-	sdt: string;
-
-    @Field()
-	cccd: string;
-
-    @Field()
-	phong: string;
-
-    @Field()
-	ngayBD: Date;
+    id: string;
     
-    @Field()
-	chuyenkhoaId: string;
 }

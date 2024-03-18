@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { LoaicanlamsangService } from './loaicanlamsang.service';
-import { LoaiCanLamSang } from './schemas/loaicanlamsang.entity';
+import { LoaiCanLamSang } from './entities/loaicanlamsang.entity';
 import { UpdateLoaicanlamsangInput } from './dto/update-loaicanlamsang.input';
 import { NewLoaiCanLamSangInput } from './dto/new-loaicanlamsang.input';
 
@@ -15,7 +15,7 @@ export class LoaicanlamsangResolver {
   }
 
   @Query(() => [LoaiCanLamSang])
-   async findAll(): Promise<LoaiCanLamSang[]|null> {
+   async getAllLoaiCLS(): Promise<LoaiCanLamSang[]|null> {
     return await this.loaicanlamsangService.getAllLoaiCLS();
   }
 

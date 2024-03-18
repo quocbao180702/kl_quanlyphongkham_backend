@@ -7,19 +7,10 @@ export class CreatePhieuchidinhcanlamsangInput {
 
   @Field(() => String)
   bacsi: string;
-
-  @Field(() => String)
-  loaicanlamsang: string;
-
+  
   @Field(() => Boolean)
   bhyt: boolean
 
   @Field()
-  hinhanh: string
-
-  @Field()
-  ketluan: string;
-
-  @Field()
-  thietbi: string
+  ngaytao: Date;
 }

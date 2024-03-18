@@ -10,7 +10,7 @@ export type LoaiCanLamSangDocument = HydratedDocument<LoaiCanLamSang>;
 export class LoaiCanLamSang {
 
   @Field(() => ID)
-    _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 
   @Prop()
   @Field()
@@ -23,10 +23,6 @@ export class LoaiCanLamSang {
   @Prop()
   @Field()
   mota: string;
-
-  @Field(() => [Hoadon])
-  @Prop({ type: [{ type: MongooSchemas.Types.ObjectId, ref: 'Hoadon', require: true }] })
-  hoadons: Hoadon[];
 }
 
 

@@ -18,16 +18,16 @@ export class BacsiResolver {
     }
 
     @Mutation(() => BacSi)
-    async createBacSi(@Args('newBacSiInput') newBacSiInput: NewBacSiInput): Promise<BacSi | null> {
-        const newBacsi = await this.bacsiService.createBacSi(newBacSiInput);
+    async createBacSi(@Args('newBacSiInput') newBacSiInput: NewBacSiInput/* , @Args('username') username: string */): Promise<BacSi | null> {
+        const newBacsi = await this.bacsiService.createBacSi(newBacSiInput/* , username */);
         return newBacsi;
     }
 
     @Mutation(() => BacSi)
-    async updateBacSi(@Args('_id') _id: string, @Args('input') input: UpdateBacSiInput): Promise<BacSi> {
-        const update = await this.bacsiService.updateBacSi(_id, input);
+    async updateBacSi(@Args('input') input: UpdateBacSiInput): Promise<BacSi> {
+        const update = await this.bacsiService.updateBacSi(input);
         if (!update) {
-            throw new Error(`User with ID ${_id} not found.`);
+            throw new Error(`User with ID ${input.id} not found.`);
         }
         return update;
     }

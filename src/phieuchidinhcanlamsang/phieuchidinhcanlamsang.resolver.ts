@@ -3,19 +3,29 @@ import { PhieuchidinhcanlamsangService } from './phieuchidinhcanlamsang.service'
 import { Phieuchidinhcanlamsang } from './entities/phieuchidinhcanlamsang.entity';
 import { CreatePhieuchidinhcanlamsangInput } from './dto/create-phieuchidinhcanlamsang.input';
 import { UpdatePhieuchidinhcanlamsangInput } from './dto/update-phieuchidinhcanlamsang.input';
+import { CreateKetquacanlamsangInput } from 'src/ketquacanlamsang/dto/create-ketquacanlamsang.input';
 
 @Resolver(() => Phieuchidinhcanlamsang)
 export class PhieuchidinhcanlamsangResolver {
-  constructor(private readonly phieuchidinhcanlamsangService: PhieuchidinhcanlamsangService) {}
+  constructor(private readonly phieuchidinhcanlamsangService: PhieuchidinhcanlamsangService) { }
 
   @Mutation(() => Phieuchidinhcanlamsang)
-  createPhieuchidinhcanlamsang(@Args('createPhieuchidinhcanlamsangInput') createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput) {
-    return this.phieuchidinhcanlamsangService.createPhieuCLS(createPhieuchidinhcanlamsangInput);
+  createPhieuchidinhcanlamsang(
+    @Args('createPhieuchidinhcanlamsangInput') createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput,
+    @Args('createKetQuaCLSList', { type: () => [CreateKetquacanlamsangInput] }) createKetQuaCLSList: CreateKetquacanlamsangInput[],
+  ) {
+    return this.phieuchidinhcanlamsangService.createPhieuCLS(createPhieuchidinhcanlamsangInput, createKetQuaCLSList);
   }
+
 
   @Query(() => [Phieuchidinhcanlamsang])
   getAllPhieuCLS() {
     return this.phieuchidinhcanlamsangService.getAllPhieuCLS();
+  }
+
+  @Query(() => [Phieuchidinhcanlamsang])
+  getAllPhieuCLSbyNgay( @Args('ngaytao') ngaytao: Date) {
+    return this.phieuchidinhcanlamsangService.getAllPhieuCLSbyNgay(ngaytao);
   }
 
   /* @Query(() => Phieuchidinhcanlamsang, { name: 'phieuchidinhcanlamsang' })

@@ -1,38 +1,57 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BacSi } from './entities/bacsi.entity';
-import { Model } from 'mongoose';
-import { CreateBacSiDto } from './dto/create-bacsi.dto';
+import { Model, MongooseError } from 'mongoose';
 import { UpdateBacSiInput } from './dto/update-bacsi.input';
+import { UsersService } from 'src/users/users.service';
+import { ObjectId } from 'mongodb';
+import { NewBacSiInput } from './dto/new-bacsi.input';
 
 @Injectable()
 export class BacsiService {
-    constructor(@InjectModel(BacSi.name) private readonly bacsiModel: Model<BacSi>){}
+    constructor(@InjectModel(BacSi.name) private readonly bacsiModel: Model<BacSi>,
+        private readonly usersService: UsersService) { }
 
-    async getAllBacSi(): Promise<BacSi[]>{
+    async getAllBacSi(): Promise<BacSi[]> {
         return await this.bacsiModel.find().populate('user').populate('phongs').populate('chuyenkhoa').exec();
     }
 
-    async createBacSi(createBacSiDto: CreateBacSiDto): Promise<BacSi | null>{
-        const createBacSi = (await (await (await this.bacsiModel.create(createBacSiDto)).populate('user')).populate('phongs')).populate('chuyenkhoa');
-        return createBacSi;
+    async createBacSi(createBacSiDto: NewBacSiInput): Promise<BacSi | null> {
+        try {
+            /* const user = await this.usersService.getUserByUsername(createBacSiDto.username);
+            if (!user) {
+                throw new Error('User with the provided username not found');
+            }
+            console.log(user._id.toString()) */
+            const newBacSi = await this.bacsiModel.create(createBacSiDto);
+            const createdBacSi = await this.bacsiModel
+                .findById(newBacSi._id)
+                .populate('user')
+                .populate('phongs')
+                .populate('chuyenkhoa')
+                .exec();
+            return createdBacSi;
+        } catch (error) {
+            throw error;
+        }
     }
 
 
-    async updateBacSi(_id: string, updateBacSi: UpdateBacSiInput): Promise<BacSi|null>{
+
+    async updateBacSi(updateBacSi: UpdateBacSiInput): Promise<BacSi | null> {
         return await this.bacsiModel.findByIdAndUpdate(
-            _id,
+            updateBacSi.id,
             {
                 $set: {
                     ...updateBacSi
                 }
             },
-            {new: true}
+            { new: true }
         ).exec();
     }
 
-    async deleteBacSi(_id: string): Promise<void>{
-        await this.bacsiModel.deleteOne({_id});
+    async deleteBacSi(_id: string): Promise<void> {
+        await this.bacsiModel.deleteOne({ _id });
     }
 
 

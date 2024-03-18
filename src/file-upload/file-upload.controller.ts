@@ -1,13 +1,17 @@
-import { Controller, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Get, UploadedFile, UploadedFiles, UseInterceptors, Param, Res, NotFoundException } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { storageConfig } from 'helper/config';
+/* import { storageConfig } from 'helper/config'; */
 import { v1 as uuidv1 } from 'uuid';
 import { diskStorage } from 'multer';
+import { get } from 'https';
+import path, { join } from 'path';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 
 const editFileName = (_, file, callback) => {
     callback(null, uuidv1() + '--' + file.originalname)
-  }
+}
 
 
 export const imageFilter = (_, file, callback) => {
@@ -24,19 +28,12 @@ export const imageFilter = (_, file, callback) => {
 
 @Controller('file-upload')
 export class FileUploadController {
-
-    /* @Post('upload')
-    @UseInterceptors(FileInterceptor('avatar',{storage: storageConfig('avatar')}))
-    uploadFile(@UploadedFile() file: Express.Multer.File) {
-        console.log(file);
-    } */
-
     // images
     @Post('PhongKhamImageUpload')
     @UseInterceptors(
         FilesInterceptor('file', 10, {
             storage: diskStorage({
-                destination: `${process.env.FILE_PATH || 'file'}/images`,
+                destination: `${process.env.FILE_PATH || 'files'}/images`,
                 filename: editFileName,
             }),
             fileFilter: imageFilter,

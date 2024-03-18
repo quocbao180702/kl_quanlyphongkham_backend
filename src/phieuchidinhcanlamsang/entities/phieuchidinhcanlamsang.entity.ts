@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Schema as MongooSchemas } from 'mongoose';
 import { BacSi } from 'src/bacsi/entities/bacsi.entity';
 import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
-import { LoaiCanLamSang } from 'src/loaicanlamsang/schemas/loaicanlamsang.entity';
+import { KetQuaCanLamSang } from 'src/ketquacanlamsang/entities/ketquacanlamsang.entity';
 
 
 export type PhieuchidinhcanlamsangDocument = HydratedDocument<Phieuchidinhcanlamsang>;
@@ -14,17 +14,13 @@ export class Phieuchidinhcanlamsang {
   @Field(() => ID)
   _id: mongoose.Types.ObjectId;
 
-  @Prop({ type: MongooSchemas.Types.ObjectId, ref: 'BenhNhan' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'BenhNhan' })
   @Field(() => BenhNhan)
   benhnhan: BenhNhan;
 
-  @Prop({ type: MongooSchemas.Types.ObjectId, ref: 'BacSi' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'BacSi' })
   @Field(() => BacSi)
   bacsi: BacSi;
-
-  @Prop({ type: MongooSchemas.Types.ObjectId, ref: 'LoaiCanLamSang' })
-  @Field(() => LoaiCanLamSang)
-  loaicanlamsang: LoaiCanLamSang;
 
   @Prop()
   @Field(() => Boolean)
@@ -32,16 +28,12 @@ export class Phieuchidinhcanlamsang {
 
   @Prop()
   @Field()
-  hinhanh: string
+  ngaytao: Date;
 
-  @Prop()
-  @Field()
-  ketluan: string;
-
-  @Prop()
-  @Field()
-  thietbi: string
-
+  @Field(() => [KetQuaCanLamSang])
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'KetQuaCanLamSang' }], required: true })
+  ketquacanlamsangs: KetQuaCanLamSang[];
 }
+
 
 export const PhieuchidinhcanlamsangSchema = SchemaFactory.createForClass(Phieuchidinhcanlamsang);

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateLoaicanlamsangInput } from './dto/update-loaicanlamsang.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { LoaiCanLamSang } from './schemas/loaicanlamsang.entity';
+import { LoaiCanLamSang } from './entities/loaicanlamsang.entity';
 import { Model } from 'mongoose';
 import { CreateLoaicanlamsangDto } from './dto/create-loaicanlamsang.dto';
 

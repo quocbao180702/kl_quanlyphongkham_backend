@@ -1,4 +1,4 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, ID, InputType } from "@nestjs/graphql";
 import mongoose from "mongoose";
 import { ChuyenKhoa } from "src/chuyenkhoa/entities/chuyenkhoa.entity";
 import { Phong } from "src/phong/entities/phong.entity";
@@ -29,9 +29,9 @@ export class NewBacSiInput {
     @Field(() => String)
     user: string
 
-    @Field(() => [String])
+    @Field(() => [ID])
     phongs: string[];
 
-    @Field(() => String)
+    @Field(() => ID)
     chuyenkhoa: string;
 }

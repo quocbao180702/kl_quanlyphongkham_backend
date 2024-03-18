@@ -129,32 +129,11 @@ type Thuoc {
   soluong: Int!
 }
 
-type Dichvu {
-  _id: ID!
-  tendichvu: String!
-  gia: Float!
-  bhyt: Boolean!
-  soluong: Int!
-  dvt: String!
-  hoadons: [Hoadon!]!
-}
-
-type Hoadon {
-  _id: ID!
-  benhnhan: BenhNhan!
-  thuocs: [Thuoc!]!
-  canlamsangs: [LoaiCanLamSang!]!
-  dichvus: [Dichvu!]!
-  thanhtien: Float!
-  ngaytao: DateTime!
-}
-
 type LoaiCanLamSang {
   _id: ID!
   tenxetnghiem: String!
   gia: Float!
   mota: String!
-  hoadons: [Hoadon!]!
 }
 
 type PhieuXacNhan {
@@ -179,21 +158,47 @@ type Toathuoc {
   ngaytao: DateTime!
 }
 
+type Hoadon {
+  _id: ID!
+  benhnhan: BenhNhan!
+  thuocs: [Thuoc!]!
+  canlamsangs: [LoaiCanLamSang!]!
+  dichvus: [Dichvu!]!
+  thanhtien: Float!
+  ngaytao: DateTime!
+}
+
+type Dichvu {
+  _id: ID!
+  tendichvu: String!
+  gia: Float!
+  bhyt: Boolean!
+  soluong: Int!
+  dvt: String!
+  hoadons: [Hoadon!]!
+}
+
 type Sobenh {
   _id: ID!
   benhnhan: BenhNhan!
   ngaytao: DateTime!
 }
 
+type KetQuaCanLamSang {
+  _id: ID!
+  loaicanlamsang: LoaiCanLamSang!
+  hinhanh: LinkImage
+  ketluan: String
+  thietbi: String
+}
+
 type Phieuchidinhcanlamsang {
   _id: ID!
   benhnhan: BenhNhan!
   bacsi: BacSi!
-  loaicanlamsang: LoaiCanLamSang!
   bhyt: Boolean!
-  hinhanh: String!
-  ketluan: String!
-  thietbi: String!
+  ngaytao: DateTime!
+  ketquacanlamsangs: [KetQuaCanLamSang!]!
 }
 
 type LoginResponse {
@@ -215,7 +220,7 @@ type Query {
   getAllBacSi: [BacSi!]!
   getAllBenh: [Benh!]!
   getAllDatLich: [DatLich!]!
-  findAll: [Hoadon!]!
+  getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
   getAllPhong: [Phong!]!
   getAllThuoc: [Thuoc!]!
@@ -224,8 +229,10 @@ type Query {
   getAllByNgayVaPhong(ngaykham: DateTime!, phongIds: String!): [PhieuXacNhan!]!
   getAllToaThuoc: [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
+  findAll: [Hoadon!]!
   getAllSoBenh: [Sobenh!]!
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
+  getAllPhieuCLSbyNgay(ngaytao: DateTime!): [Phieuchidinhcanlamsang!]!
   logout: Boolean
 }
 
@@ -244,7 +251,7 @@ type Mutation {
   updateNhanVien(_id: String!, input: UpdateNhanVienInput!): NhanVien!
   deleteNhanVien(_id: String!): Boolean!
   createBacSi(newBacSiInput: NewBacSiInput!): BacSi!
-  updateBacSi(_id: String!, input: UpdateBacSiInput!): BacSi!
+  updateBacSi(input: UpdateBacSiInput!): BacSi!
   deleteBacSi(_id: String!): Boolean!
   createBenh(newBenhInput: NewBenhInput!): Benh!
   updateBenh(input: UpdateBenhInput!): Benh!
@@ -280,9 +287,11 @@ type Mutation {
   createSobenh(createSobenhInput: CreateSobenhInput!): Sobenh!
   updateSobenh(updateSobenhInput: UpdateSobenhInput!): Sobenh!
   deleteSobenh(id: String!): Sobenh!
-  createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
+  createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!, createKetQuaCLSList: [CreateKetquacanlamsangInput!]!): Phieuchidinhcanlamsang!
   updatePhieuchidinhcanlamsang(updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
   deletePhieuchidinhcanlamsang(id: String!): Phieuchidinhcanlamsang!
+  createKetquacanlamsang(createKetquacanlamsangInput: CreateKetquacanlamsangInput!): KetQuaCanLamSang!
+  updateKetquacanlamsang(updateKetquacanlamsangInput: UpdateKetquacanlamsangInput!): KetQuaCanLamSang!
   login(loginUserInput: LoginUserInput!): LoginResponse!
 }
 
@@ -385,20 +394,21 @@ input NewBacSiInput {
   cccd: String!
   ngayBD: DateTime!
   user: String!
-  phongs: [String!]!
-  chuyenkhoa: String!
+  phongs: [ID!]!
+  chuyenkhoa: ID!
 }
 
 input UpdateBacSiInput {
-  hoten: String!
-  ngaysinh: DateTime!
-  gioitinh: Boolean!
-  diachi: String!
-  sdt: String!
-  cccd: String!
-  phong: String!
-  ngayBD: DateTime!
-  chuyenkhoaId: String!
+  hoten: String
+  ngaysinh: DateTime
+  gioitinh: Boolean
+  diachi: String
+  cccd: String
+  ngayBD: DateTime
+  user: String
+  phongs: [ID!]
+  chuyenkhoa: ID
+  id: String!
 }
 
 input NewBenhInput {
@@ -589,22 +599,28 @@ input UpdateSobenhInput {
 input CreatePhieuchidinhcanlamsangInput {
   benhnhan: String!
   bacsi: String!
-  loaicanlamsang: String!
   bhyt: Boolean!
-  hinhanh: String!
-  ketluan: String!
-  thietbi: String!
+  ngaytao: DateTime!
+}
+
+input CreateKetquacanlamsangInput {
+  loaicanlamsang: String!
 }
 
 input UpdatePhieuchidinhcanlamsangInput {
   benhnhan: String
   bacsi: String
-  loaicanlamsang: String
   bhyt: Boolean
-  hinhanh: String
-  ketluan: String
-  thietbi: String
+  ngaytao: DateTime
   id: String!
+}
+
+input UpdateKetquacanlamsangInput {
+  loaicanlamsang: String
+  id: String!
+  hinhanh: LinkImageInput!
+  ketluan: String!
+  thietbi: String!
 }
 
 input LoginUserInput {
