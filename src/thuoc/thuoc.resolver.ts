@@ -5,17 +5,28 @@ import { NewThuocInput } from './dto/new-thuoc.input';
 import { UpdateThuocInput } from './dto/update-thuoc.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Resolver()
 export class ThuocResolver {
 
     constructor(private readonly thuocService: ThuocService) { }
 
+    @Query(() => Number, {name: 'CountThuoc'})
+    async getCount(): Promise<number>{
+        return this.thuocService.getCount();
+    }
 
     @UseGuards(JwtAuthGuard)
     @Query(() => [Thuoc])
-    async getAllThuoc(): Promise<Thuoc[]> {
+    async getAllThuoc(): Promise<Thuoc[]>{
         return await this.thuocService.getAllThuoc();
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Query(() => [Thuoc])
+    async getThuocPagination(@Args('fetchPagination')fetchPagination: FetchPagination): Promise<Thuoc[]> {
+        return await this.thuocService.getThuocPagination(fetchPagination);
     }
 
     @Query(() => [Thuoc])

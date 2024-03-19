@@ -7,6 +7,7 @@ import { UpdateUserInput } from "./dto/update-user.input";
 import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { LinkImage } from "src/types/LinkImage.types";
+import { FetchUsersArgs } from "./dto/fetch_user.input";
 
 
 @Resolver(() => Users)
@@ -14,10 +15,16 @@ export class UsersResolver {
 
     constructor(private readonly userService: UsersService) { }
 
+
+    @Query(() => Number, {name: 'countUser'})
+    async getCount(): Promise<number>{
+        return this.userService.getCount();
+    }
+
     @Query(() => [Users])
     @UseGuards(JwtAuthGuard)
-    async getAllUsers(): Promise<Users[]> {
-        return await this.userService.getAllUsers();
+    async getAllUsers(@Args('fetchUsersArgs') fetchUsersArgs: FetchUsersArgs): Promise<Users[]> {
+        return await this.userService.getAllUsers(fetchUsersArgs);
     }
 
     @Query(() => Users)

@@ -208,22 +208,27 @@ type LoginResponse {
 }
 
 type Query {
-  getAllUsers: [Users!]!
+  countUser: Float!
+  getAllUsers(fetchUsersArgs: FetchUsersArgs!): [Users!]!
   getUserByUsername(username: String!): Users!
   getUserByEmail(email: String!): Users!
   getUserById(_id: String!): Users!
-  getAllBenhNhan: [BenhNhan!]!
+  CountBenhNhan: Float!
+  getAllBenhNhan(fetchPagination: FetchPagination!): [BenhNhan!]!
   getBenhNhanbyId(id: String!): BenhNhan!
   getAllSinhhieu: [Sinhhieu!]!
   getAllSinhHieuByBenhNhan(benhnhanId: String!): Sinhhieu!
   getAllNhanVien: [NhanVien!]!
-  getAllBacSi: [BacSi!]!
+  CountBacSi: Float!
+  getAllBacSi(fetchPagination: FetchPagination!): [BacSi!]!
   getAllBenh: [Benh!]!
   getAllDatLich: [DatLich!]!
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
   getAllPhong: [Phong!]!
+  CountThuoc: Float!
   getAllThuoc: [Thuoc!]!
+  getThuocPagination(fetchPagination: FetchPagination!): [Thuoc!]!
   getThuocbyIds(ids: [String!]!): [Thuoc!]!
   getAllPhieuXacNhan: [PhieuXacNhan!]!
   getAllByNgayVaPhong(ngaykham: DateTime!, phongIds: String!): [PhieuXacNhan!]!
@@ -234,6 +239,16 @@ type Query {
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
   getAllPhieuCLSbyNgay(ngaytao: DateTime!): [Phieuchidinhcanlamsang!]!
   logout: Boolean
+}
+
+input FetchUsersArgs {
+  skip: Int! = 0
+  take: Int! = 25
+}
+
+input FetchPagination {
+  skip: Int! = 0
+  take: Int! = 25
 }
 
 type Mutation {

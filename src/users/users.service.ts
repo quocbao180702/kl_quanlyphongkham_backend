@@ -8,14 +8,22 @@ import { Args } from '@nestjs/graphql';
 import { hashPassword } from 'src/HashPassword/hash';
 import { LinkImageInput } from 'src/types/LinkImage.input';
 import { LinkImage } from 'src/types/LinkImage.types';
+import { FetchUsersArgs } from './dto/fetch_user.input';
 
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(Users.name) private readonly userModel: Model<Users>) { }
 
-  async getAllUsers(): Promise<Users[] | null> {
-    return await this.userModel.find().exec();
+  async getCount(): Promise<number>{
+    const count = await this.userModel.countDocuments()
+    return count
+  }
+  async getAllUsers(fetchUserArgs: FetchUsersArgs): Promise<Users[] | null> {
+    return await this.userModel.find(null, null,{
+      limit: fetchUserArgs.take,
+      skip: fetchUserArgs.skip
+    }).exec() as Users[];
   }
 
   async getUserByUsername(@Args('username') username: string): Promise<Users | null> {

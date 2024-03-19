@@ -4,14 +4,27 @@ import { Thuoc } from './entities/thuoc.entity';
 import { Model } from 'mongoose';
 import { CreateThuocDto } from './dto/create-thuoc.dto';
 import { UpdateThuocInput } from './dto/update-thuoc.input';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Injectable()
 export class ThuocService {
 
     constructor(@InjectModel(Thuoc.name) private readonly thuocModel: Model<Thuoc>) { }
 
-    async getAllThuoc(): Promise<Thuoc[]> {
+    async getCount(): Promise<number> {
+        const count = await this.thuocModel.countDocuments();
+        return count
+    }
+
+    async getAllThuoc(): Promise<Thuoc[]>{
         return await this.thuocModel.find().exec();
+    }
+
+    async getThuocPagination(fetchPagination: FetchPagination): Promise<Thuoc[]> {
+        return await this.thuocModel.find(null, null,{
+            limit: fetchPagination.take,
+            skip: fetchPagination.skip
+        }).exec();
     }
 
     async createThuoc(createThuocDto: CreateThuocDto): Promise<Thuoc> {

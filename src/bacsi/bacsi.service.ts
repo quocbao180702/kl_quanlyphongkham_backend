@@ -6,14 +6,21 @@ import { UpdateBacSiInput } from './dto/update-bacsi.input';
 import { UsersService } from 'src/users/users.service';
 import { ObjectId } from 'mongodb';
 import { NewBacSiInput } from './dto/new-bacsi.input';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Injectable()
 export class BacsiService {
     constructor(@InjectModel(BacSi.name) private readonly bacsiModel: Model<BacSi>,
         private readonly usersService: UsersService) { }
 
-    async getAllBacSi(): Promise<BacSi[]> {
-        return await this.bacsiModel.find().populate('user').populate('phongs').populate('chuyenkhoa').exec();
+
+    async getCount(): Promise<number> {
+        const count = await this.bacsiModel.countDocuments();
+        return count
+    }
+
+    async getAllBacSi(fetchPagination: FetchPagination): Promise<BacSi[]> {
+        return await this.bacsiModel.find(null, null, { limit: fetchPagination.take, skip: fetchPagination.skip }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
     }
 
     async createBacSi(createBacSiDto: NewBacSiInput): Promise<BacSi | null> {

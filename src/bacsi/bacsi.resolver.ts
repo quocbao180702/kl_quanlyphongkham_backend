@@ -5,16 +5,22 @@ import { NewBacSiInput } from './dto/new-bacsi.input';
 import { UpdateBacSiInput } from './dto/update-bacsi.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Resolver()
 export class BacsiResolver {
 
     constructor(private readonly bacsiService: BacsiService) { }
 
+    @Query(() => Number, {name: 'CountBacSi'})
+    async getCount(): Promise<number>{
+        return this.bacsiService.getCount();
+    }
+
     @UseGuards(JwtAuthGuard)
     @Query(() => [BacSi])
-    async getAllBacSi(): Promise<BacSi[]> {
-        return await this.bacsiService.getAllBacSi();
+    async getAllBacSi(@Args('fetchPagination')fetchPagination: FetchPagination): Promise<BacSi[]> {
+        return await this.bacsiService.getAllBacSi(fetchPagination);
     }
 
     @Mutation(() => BacSi)

@@ -8,6 +8,7 @@ import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { Sinhhieu } from "src/sinhhieu/entities/sinhhieu.entity";
 import { SinhhieuService } from "src/sinhhieu/sinhhieu.service";
+import { FetchPagination } from "src/types/fetchPagination.input";
 
 @Resolver(() => BenhNhan)
 export class BenhNhanResolver {
@@ -16,10 +17,15 @@ export class BenhNhanResolver {
     ) { }
 
 
+    @Query(() => Number, {name: 'CountBenhNhan'})
+    async getCount(): Promise<number>{
+        return this.benhnhanService.getCount();
+    }
+
     /* @UseGuards(JwtAuthGuard) */
     @Query(() => [BenhNhan])
-    async getAllBenhNhan(): Promise<BenhNhan[] | null> {
-        return await this.benhnhanService.getAllBenhNhan();
+    async getAllBenhNhan(@Args('fetchPagination')fetchPagination: FetchPagination): Promise<BenhNhan[] | null> {
+        return await this.benhnhanService.getAllBenhNhan(fetchPagination);
     }
 
     /* @UseGuards(JwtAuthGuard) */
