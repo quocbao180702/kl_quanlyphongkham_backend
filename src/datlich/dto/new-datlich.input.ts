@@ -4,7 +4,7 @@ import { Field, InputType } from "@nestjs/graphql";
 export class NewDatLichInput{
 
     @Field()
-    benhnhans: string;
+    benhnhan: string;
 
     @Field()
     motabenh: string;

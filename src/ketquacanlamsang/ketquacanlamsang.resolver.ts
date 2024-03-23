@@ -6,7 +6,7 @@ import { UpdateKetquacanlamsangInput } from './dto/update-ketquacanlamsang.input
 
 @Resolver(() => KetQuaCanLamSang)
 export class KetquacanlamsangResolver {
-  constructor(private readonly ketquacanlamsangService: KetquacanlamsangService) {}
+  constructor(private readonly ketquacanlamsangService: KetquacanlamsangService) { }
 
   @Mutation(() => KetQuaCanLamSang)
   async createKetquacanlamsang(@Args('createKetquacanlamsangInput') createKetquacanlamsangInput: CreateKetquacanlamsangInput) {
@@ -16,6 +16,13 @@ export class KetquacanlamsangResolver {
   @Mutation(() => KetQuaCanLamSang)
   async updateKetquacanlamsang(@Args('updateKetquacanlamsangInput') updateKetquacanlamsangInput: UpdateKetquacanlamsangInput) {
     return await this.ketquacanlamsangService.updateKetQuaCLS(updateKetquacanlamsangInput);
+  }
+
+  @Query(() => [KetQuaCanLamSang], { nullable: true })
+  async findAllRelatedKetQuaCanLamSang(
+    @Args('ketQuaIds', { type: () => [String] }) ketQuaIds: string[],
+  ): Promise<KetQuaCanLamSang[] | null> {
+    return await this.ketquacanlamsangService.findAllRelatedKetQuaCanLamSang(ketQuaIds);
   }
 
 

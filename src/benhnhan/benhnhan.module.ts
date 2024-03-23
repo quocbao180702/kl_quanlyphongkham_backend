@@ -12,7 +12,8 @@ import { Sinhhieu } from 'src/sinhhieu/entities/sinhhieu.entity';
   imports: [
     SinhhieuModule,
     MongooseModule.forFeature([{name: BenhNhan.name, schema: BenhNhanSchema }])
-  ]
+  ],
+  exports: [BenhnhanService]
 
 })
 export class BenhnhanModule {}

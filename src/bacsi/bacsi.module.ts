@@ -10,6 +10,7 @@ import { UsersModule } from 'src/users/users.module';
   imports: [
     UsersModule,
     MongooseModule.forFeature([{name: BacSi.name, schema: BacSiSchema}])
-  ]
+  ],
+  exports: [BacsiService]
 })
 export class BacsiModule {}

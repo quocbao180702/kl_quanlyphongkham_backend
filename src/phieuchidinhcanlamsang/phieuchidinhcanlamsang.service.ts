@@ -61,7 +61,6 @@ export class PhieuchidinhcanlamsangService {
       .exec();
   }
 
-  
   async createPhieuCLS(
     createPhieuCanLamSang: CreatePhieuchidinhcanlamsangInput,
     createKetQuaCLSList: CreateKetquacanlamsangInput[],

@@ -1,17 +1,29 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginResponse } from './dto/login-response';
 import { LoginUserInput } from './dto/createLogin.input';
-import { Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlAuthGuard } from './guards/local-auth.guard';
 import { Response } from 'express';
-import { retry } from 'rxjs';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
+import { BacSi } from 'src/bacsi/entities/bacsi.entity';
+import { BacsiService } from 'src/bacsi/bacsi.service';
+import { NhanVien } from 'src/nhanvien/entities/nhanvien.entity';
+import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
+import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
+import { NhanvienService } from 'src/nhanvien/nhanvien.service';
+import { OnlyUserUnion } from 'src/types/unions.types';
 import { Users } from 'src/users/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService,
+        private userService: UsersService,
+        private benhnhanService: BenhnhanService,
+        private bacsiService: BacsiService,
+        private nhanvienService: NhanvienService) { }
 
     @Mutation(() => LoginResponse)
     @UseGuards(GqlAuthGuard)
@@ -22,18 +34,56 @@ export class AuthResolver {
 
         const loginResponse = await this.authService.login(ctx.user);
 
-        // Add cookie to JWT token and send it via header
-        ctx.res.cookie('refresh_token', loginResponse.refresh_token, {
+        if (loginResponse?.access_token) {
+            const refresh_token = await this.authService.createRefreshToken(ctx.user)
+
+            ctx.res.cookie('refresh_token', refresh_token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'lax',
+                path: '/refresh_token'
+            });
+        }
+
+        return {
+            access_token: loginResponse.access_token,
+            success: true,
+            code: 200
+        };
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Query(() => OnlyUserUnion, {nullable: true})
+    async onlyUser(@Context() ctx): Promise<typeof OnlyUserUnion | null> {
+
+        try {
+            switch (ctx.req.user?.roles) {
+                case "USER":
+                    return await this.benhnhanService.getBenhNhanbyUserId(ctx.req.user?.user?._id);
+                case "DOCTOR":
+                    return await this.bacsiService.getBacSibyUserId(ctx.req.user?.user?._id);
+                case "STAFF":
+                    return await this.nhanvienService.getNhanVienbyUserId(ctx.req.user?.user?._id);
+                case "ADMIN":
+                    return await this.userService.getUserByUsername(ctx.req.user?.username);
+                default:
+                    return null;
+            }
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+
+    @Mutation(() => Boolean, { nullable: true })
+    async logout(@Context('res') res: Response): Promise<boolean> {
+        res.clearCookie('refresh_token', {
             httpOnly: true,
+            secure: true,
+            sameSite: 'lax',
+            path: '/refresh_token'
         });
-
-        return loginResponse;
-        /* return this.authService.login(context.user); */
+        return true;
     }
-
-    @Query(() => Boolean, { nullable: true })
-    async logout(@Context() context) {
-        return this.authService.logout(context);
-    }
-
 }

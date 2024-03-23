@@ -17,7 +17,7 @@ export class Users {
     _id: mongoose.Types.ObjectId;
 
     @Field()
-    @Prop({unique: true, sparse: true})
+    @Prop({ unique: true, sparse: true })
     username: string;
 
     @Field()
@@ -46,7 +46,7 @@ export class Users {
     isLocked: boolean
 
     @Field()
-    @Prop({nullable: true, default: ''})
+    @Prop({ nullable: true, default: '' })
     refreshToken: string
 
 }

@@ -28,6 +28,10 @@ import { KetquacanlamsangModule } from './ketquacanlamsang/ketquacanlamsang.modu
 /* import { ServeStaticModule } from '@nestjs/serve-static'; */
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
+import { PubSub } from 'graphql-subscriptions';
+import { DatlichResolver } from './datlich/datlich.resolver';
 
 @Module({
   controllers: [AppController,],
@@ -45,6 +49,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       context: ({ req, res }) => ({ req, res }),
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true
     }),
     BenhModule,
     DatlichModule,

@@ -9,6 +9,9 @@ import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { Sinhhieu } from "src/sinhhieu/entities/sinhhieu.entity";
 import { SinhhieuService } from "src/sinhhieu/sinhhieu.service";
 import { FetchPagination } from "src/types/fetchPagination.input";
+import { HasRoles } from "src/auth/dto/has-roles.decorator";
+import { UserRole } from "src/types/Users.types";
+import { RolesGuard } from "src/auth/guards/roles.guard";
 
 @Resolver(() => BenhNhan)
 export class BenhNhanResolver {
@@ -17,35 +20,46 @@ export class BenhNhanResolver {
     ) { }
 
 
-    @Query(() => Number, {name: 'CountBenhNhan'})
-    async getCount(): Promise<number>{
+    @Query(() => Number, { name: 'CountBenhNhan' })
+    async getCount(): Promise<number> {
         return this.benhnhanService.getCount();
     }
 
-    /* @UseGuards(JwtAuthGuard) */
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => [BenhNhan])
-    async getAllBenhNhan(@Args('fetchPagination')fetchPagination: FetchPagination): Promise<BenhNhan[] | null> {
+    async getAllBenhNhan(@Args('fetchPagination') fetchPagination: FetchPagination): Promise<BenhNhan[] | null> {
         return await this.benhnhanService.getAllBenhNhan(fetchPagination);
     }
 
-    /* @UseGuards(JwtAuthGuard) */
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => BenhNhan)
     async getBenhNhanbyId(@Args('id') id: string): Promise<BenhNhan | null> {
         return await this.benhnhanService.getBenhNhanbyId(id);
     }
 
-    @ResolveField(() => Sinhhieu, {name: 'sinhhieu'})
-    async getAllSinhHieuByBenhNhan(@Parent() Sinhhieu) {
-        const { id } = Sinhhieu;
-        return this.sinhhieuService.getAllSinhHieuByBenhNhan( id );
+    @Query(() => BenhNhan, { nullable: true })
+    async getBenhNhanbyUserId(@Args('user') user: string): Promise<BenhNhan | null> {
+        return await this.benhnhanService.getBenhNhanbyUserId(user);
     }
 
+    @ResolveField(() => Sinhhieu, { name: 'sinhhieu', nullable: true })
+    async getAllSinhHieuByBenhNhan(@Parent() Sinhhieu) {
+        const { id } = Sinhhieu;
+        return this.sinhhieuService.getAllSinhHieuByBenhNhan(id);
+    }
+
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Mutation(() => BenhNhan)
     async createBenhNhan(@Args('newBenhNhanInput') newBenhNhanInput: NewBenhNhanInput): Promise<BenhNhan> {
         const benhnhanNew = await this.benhnhanService.createBenhNhan(newBenhNhanInput);
         return benhnhanNew;
     }
 
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Mutation(() => BenhNhan)
     async updateBenhNhan(@Args('input') input: UpdateBenhNhanInput): Promise<BenhNhan> {
         const update = await this.benhnhanService.updateBenhNhan(input);
@@ -55,6 +69,8 @@ export class BenhNhanResolver {
         return update;
     }
 
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Mutation(() => Boolean)
     async deleteBenhNhan(@Args('_id') _id: string): Promise<boolean> {
         await this.benhnhanService.deleteBenhNhan(_id);

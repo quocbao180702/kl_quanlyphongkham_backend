@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { Users } from "src/users/entities/user.entity";
 
 
@@ -8,8 +8,14 @@ export class LoginResponse{
     access_token: string;
 
     @Field()
-    refresh_token: string;
+    success: boolean;
 
-    @Field()
-    user:  Users
+    @Field(() => Int)
+    code: number
+
+    /* @Field()
+    refresh_token: string;
+ */
+    /* @Field()
+    user:  Users */
 }

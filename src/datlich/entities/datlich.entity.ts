@@ -16,7 +16,7 @@ export class DatLich {
 
     @Prop({ type: MongooSchema.Types.ObjectId, ref: 'BenhNhan' })
     @Field(() => BenhNhan)
-    benhnhans: BenhNhan;
+    benhnhan: BenhNhan;
 
     @Prop()
     @Field()

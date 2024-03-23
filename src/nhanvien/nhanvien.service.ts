@@ -1,37 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { NhanVien } from './schemas/nhanvien.schema';
+import { NhanVien } from './entities/nhanvien.entity';
 import { Model } from 'mongoose';
-import { CreateNhanVienDto } from './dto/create-nhanvien.dto';
 import { UpdateNhanVienInput } from './dto/update-nhanvien.input';
+import { NewNhanVienInput } from './dto/new-nhanvien.input';
 
 @Injectable()
 export class NhanvienService {
-    constructor(@InjectModel(NhanVien.name) private readonly nhanVienModel: Model<NhanVien>){}
+    constructor(@InjectModel(NhanVien.name) private readonly nhanVienModel: Model<NhanVien>) { }
 
-    async getAllNhanVien(): Promise<NhanVien[] |null>{
+    async getAllNhanVien(): Promise<NhanVien[] | null> {
         return await this.nhanVienModel.find().exec();
     }
 
-    async createNhanVien(createNhanVienDto: CreateNhanVienDto): Promise<NhanVien|null>{
-        const createNhanVien = await this.nhanVienModel.create(createNhanVienDto);
+    async getNhanVienbyUserId(user: string): Promise<NhanVien | null> {
+        const nhanVien = await this.nhanVienModel.findOne({ user: user }).populate('phongs').populate('user').exec();
+        return nhanVien;
+    }
+
+    async createNhanVien(newNhanVien: NewNhanVienInput): Promise<NhanVien | null> {
+        const createNhanVien = (await (await this.nhanVienModel.create(newNhanVien)).populate('phongs')).populate('user');
         return createNhanVien;
     }
 
-    async updateNhanVien(_id: string, updateNhanVien: UpdateNhanVienInput): Promise<NhanVien|null>{
+    async updateNhanVien(updateNhanVien: UpdateNhanVienInput): Promise<NhanVien | null> {
         return await this.nhanVienModel.findByIdAndUpdate(
-            _id,
+            updateNhanVien.id,
             {
                 $set: {
                     ...updateNhanVien
                 }
             },
-            {new: true}
+            { new: true }
         ).exec();
     }
 
-    async deleteNhanVien(_id: string): Promise<void>{
-        await this.nhanVienModel.deleteOne({_id});
+    async deleteNhanVien(_id: string): Promise<void> {
+        await this.nhanVienModel.deleteOne({ _id });
     }
 
 }

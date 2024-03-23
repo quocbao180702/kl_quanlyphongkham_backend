@@ -2,21 +2,31 @@ import { Field, InputType } from "@nestjs/graphql";
 
 
 @InputType()
-export class NewNhanVienInput{
+export class NewNhanVienInput {
     @Field()
     hoten: string;
+
     @Field()
-	ngaysinh: Date;
+    ngaysinh: Date;
+
     @Field()
-	gioitinh: boolean;
+    gioitinh: boolean;
+
     @Field()
-	diachi: string;
+    diachi: string;
+
     @Field()
-	sdt: string;
+    cccd: string;
+
+    @Field(() => [String])
+    phongs: string[];
+
     @Field()
-	cccd: string;
+    ngayBD: Date;
+
     @Field()
-	phong: string;
-    @Field()
-	ngayBD: Date;
+    chucvu: string;
+
+    @Field(() => String)
+    user: String;
 }

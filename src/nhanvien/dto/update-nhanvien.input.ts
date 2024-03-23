@@ -1,21 +1,8 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType, PartialType } from "@nestjs/graphql";
+import { NewNhanVienInput } from "./new-nhanvien.input";
 
 @InputType()
-export class UpdateNhanVienInput{
+export class UpdateNhanVienInput extends PartialType(NewNhanVienInput) {
     @Field()
-    hoten: string;
-    @Field()
-	ngaysinh: Date;
-    @Field()
-	gioitinh: boolean;
-    @Field()
-	diachi: string;
-    @Field()
-	sdt: string;
-    @Field()
-	cccd: string;
-    @Field()
-	phong: string;
-    @Field()
-	ngayBD: Date;
+    id: string;
 }

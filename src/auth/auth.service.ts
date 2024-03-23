@@ -24,6 +24,24 @@ export class AuthService {
         return null;
     }
 
+    async decodeToken(token: string){
+        
+    }
+
+    async createRefreshToken(user: Users){
+
+        const payload = {
+            username: user.username,
+            sub: {
+                _id: user._id,
+            },
+            roles: user?.role
+        };
+        return {
+            refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' })
+        }
+    }
+
 
     async login(user: Users) {
 
@@ -32,22 +50,15 @@ export class AuthService {
             sub: {
                 _id: user._id,
             },
+            roles: user?.role
         };
 
         return {
             access_token: this.jwtService.sign(payload),
-            refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
-            user
+            /* refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), */
+            /* user */
         }
     };
 
-    async logout(context) {
-        try{
-            context.res.cookie('refresh_token', '', {maxAge: 0 });
-            return true;
-        }catch (error) {
-            console.error('Error logout user:', error);
-        }
-    }
 
 }

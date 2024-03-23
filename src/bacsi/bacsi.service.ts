@@ -23,6 +23,11 @@ export class BacsiService {
         return await this.bacsiModel.find(null, null, { limit: fetchPagination.take, skip: fetchPagination.skip }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
     }
 
+    async getBacSibyUserId(user: string): Promise<BacSi | null> {
+        const bacsi = await this.bacsiModel.findOne({ user: user }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
+        return bacsi;
+    }
+
     async createBacSi(createBacSiDto: NewBacSiInput): Promise<BacSi | null> {
         try {
             /* const user = await this.usersService.getUserByUsername(createBacSiDto.username);

@@ -14,7 +14,7 @@ export class KetquacanlamsangService {
     return createdKetQuaCLS;
   }
 
-  async updateKetQuaCLS(updateKetQuaCLS: UpdateKetquacanlamsangInput): Promise<KetQuaCanLamSang | null>{
+  async updateKetQuaCLS(updateKetQuaCLS: UpdateKetquacanlamsangInput): Promise<KetQuaCanLamSang | null> {
     return await this.KetQuaCanLamSangModel.findByIdAndUpdate(
       updateKetQuaCLS.id,
       {
@@ -22,9 +22,15 @@ export class KetquacanlamsangService {
           ...updateKetQuaCLS
         }
       },
-      {new: true}
+      { new: true }
     ).exec();
   }
 
 
+  async findAllRelatedKetQuaCanLamSang(ketQuaIds: string[]): Promise<KetQuaCanLamSang[] | null> {
+    const ketQuaList = await this.KetQuaCanLamSangModel.find({
+      _id: { $in: ketQuaIds }
+    }).populate('loaicanlamsang');
+    return ketQuaList;
+  }
 }

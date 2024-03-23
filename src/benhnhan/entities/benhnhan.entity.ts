@@ -22,7 +22,7 @@ export class BenhNhan {
 
     @Prop()
     @Field()
-    ngaysinh: string;
+    ngaysinh: Date;
 
     @Prop()
     @Field()
@@ -44,9 +44,8 @@ export class BenhNhan {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
     user: Users;
 
-    @Field(() => Sinhhieu, {nullable: true})
+    @Field(() => Sinhhieu, { nullable: true })
     sinhhieu: Sinhhieu;
-
 
 
     /* @Field(() => [PhieuXacNhan])

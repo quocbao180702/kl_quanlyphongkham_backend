@@ -24,9 +24,11 @@ export class PhieuXacNhanService {
       .exec();
   }
 
-  async getAllByNgayVaPhong(ngaykham: Date, phong: string): Promise<PhieuXacNhan[]> {
+  async getAllByNgayVaPhong(ngaykham: string, phong: string): Promise<PhieuXacNhan[]> {
+    const ngayKhamDate = new Date(ngaykham);
+
     return this.phieuxacnhanModel
-      .find({ ngaykham, 'phongs': { $in: phong } })
+      .find({ ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) }, 'phongs': { $in: phong } })
       .populate({
         path: 'benhnhan',
         populate: {

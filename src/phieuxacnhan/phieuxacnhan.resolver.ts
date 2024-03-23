@@ -16,7 +16,7 @@ export class PhieuXacNhanResolver {
 
   @Query(() => [PhieuXacNhan])
   async getAllByNgayVaPhong(
-    @Args('ngaykham') ngaykham: Date,
+    @Args('ngaykham') ngaykham: string,
     @Args('phongIds') phongIds: string,
   ): Promise<PhieuXacNhan[]> {
     return await this.phieuxacnhanService.getAllByNgayVaPhong(ngaykham, phongIds);
