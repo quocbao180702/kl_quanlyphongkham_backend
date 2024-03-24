@@ -6,15 +6,20 @@ import { UpdateHoadonInput } from './dto/update-hoadon.input';
 
 @Resolver(() => Hoadon)
 export class HoadonResolver {
-  constructor(private readonly hoadonService: HoadonService) {}
+  constructor(private readonly hoadonService: HoadonService) { }
 
   @Mutation(() => Hoadon)
   createHoadon(@Args('createHoadonInput') createHoadonInput: CreateHoadonInput) {
     return this.hoadonService.createHoaDon(createHoadonInput);
   }
 
+  @Mutation(() => Hoadon)
+  async updateTrangThai(@Args('id') id: string): Promise<Hoadon> {
+    return this.hoadonService.updateTrangThai(id);
+  }
+
   @Query(() => [Hoadon])
-  findAll() {
+  getAllHoadon() {
     return this.hoadonService.getAllHoadon();
   }
 
@@ -28,8 +33,8 @@ export class HoadonResolver {
     return this.hoadonService.updateHoaDon(updateHoadonInput);
   }
 
-  @Mutation(() => Hoadon)
-  deleteHoadon(@Args('id', { type: () => String }) id: string) {
+  @Mutation(() => Boolean)
+  deleteHoadon(@Args('id', { type: () => String }) id: string): Promise<boolean> {
     return this.hoadonService.deleteHoadon(id);
   }
 }

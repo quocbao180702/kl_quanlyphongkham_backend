@@ -1,15 +1,14 @@
 import { Field, Float, ID, Int, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument, Schema as MongooSchemas } from "mongoose";
-import { Hoadon } from "src/hoadon/entities/hoadon.entity";
-import { Toathuoc } from "src/toathuoc/entities/toathuoc.entity";
+
 
 export type ThuoDocument = HydratedDocument<Thuoc>;
 
 
 @ObjectType()
 @Schema()
-export class Thuoc{
+export class Thuoc {
 
     @Field(() => ID)
     _id: mongoose.Types.ObjectId;
@@ -20,19 +19,19 @@ export class Thuoc{
 
     @Field()
     @Prop()
-	tenPhoBien: string;
+    tenPhoBien: string;
 
     @Field()
     @Prop()
-	dangthuoc: string;
+    dangthuoc: string;
 
     @Field()
     @Prop()
-	donvi: string;
+    donvi: string;
 
     @Field(() => Float)
     @Prop()
-	gia: number;
+    gia: number;
 
     @Field(() => Float)
     @Prop()
@@ -40,27 +39,19 @@ export class Thuoc{
 
     @Field()
     @Prop()
-	bhyt: Boolean;
+    bhyt: Boolean;
 
     @Field()
     @Prop()
-	nhasanxuat: string;
+    nhasanxuat: string;
 
     @Field()
     @Prop()
-	hansudung: string;
+    hansudung: string;
 
     @Field(() => Int)
     @Prop()
-	soluong: number;
-
-   /*  @Field(() => [Toathuoc])
-    @Prop({type: [{type: MongooSchemas.Types.ObjectId, ref: 'Toathuoc', require: true}] })
-    toathuocs: Toathuoc[];
-
-    @Field(() => [Hoadon])
-    @Prop({type: [{type: MongooSchemas.Types.ObjectId, ref: 'Hoadon', require: true}] })
-    hoadons: Hoadon[]; */
+    soluong: number;
 }
 
 export const ThuocSchema = SchemaFactory.createForClass(Thuoc);
