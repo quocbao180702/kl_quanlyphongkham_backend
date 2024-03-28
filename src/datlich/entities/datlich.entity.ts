@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument, Schema as MongooSchema } from "mongoose";
 import { BenhNhan } from "src/benhnhan/entities/benhnhan.entity";
+import { TrangThaiDatKham } from "src/types/trangthai-datkham-types";
 
 
 export type DatLichDocument = HydratedDocument<DatLich>;
@@ -33,6 +34,11 @@ export class DatLich {
     @Prop()
     @Field()
     bhyt: Boolean;
+
+    @Prop({ enum: TrangThaiDatKham, default: TrangThaiDatKham.DANGXET})
+    @Field(type => TrangThaiDatKham)
+    trangthai: TrangThaiDatKham
+
 }
 
 export const DatLichSchema = SchemaFactory.createForClass(DatLich);

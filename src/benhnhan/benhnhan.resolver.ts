@@ -32,6 +32,11 @@ export class BenhNhanResolver {
         return await this.benhnhanService.getAllBenhNhan(fetchPagination);
     }
 
+    @Query(() => [BenhNhan])
+    async getAllBenhNhanNoPagination(): Promise<BenhNhan[] | null> {
+        return await this.benhnhanService.getAllBenhNhanNoPagination();
+    }
+
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => BenhNhan)
@@ -43,7 +48,6 @@ export class BenhNhanResolver {
     async getBenhNhanbyUserId(@Args('user') user: string): Promise<BenhNhan | null> {
         return await this.benhnhanService.getBenhNhanbyUserId(user);
     }
-
     @ResolveField(() => Sinhhieu, { name: 'sinhhieu', nullable: true })
     async getAllSinhHieuByBenhNhan(@Parent() Sinhhieu) {
         const { id } = Sinhhieu;

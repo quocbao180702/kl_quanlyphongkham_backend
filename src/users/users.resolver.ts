@@ -54,8 +54,8 @@ export class UsersResolver {
     }
 
     @Mutation(() => Users)
-    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    /* @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @UseGuards(JwtAuthGuard, RolesGuard) */
     async createUser(@Args('newUserInput') newUserInput: NewUserInput): Promise<Users> {
         const user = await this.userService.createUser(newUserInput);
         return user;
@@ -86,7 +86,6 @@ export class UsersResolver {
         await this.userService.deleteUser(_id);
         return true;
     }
-
 
 
 }

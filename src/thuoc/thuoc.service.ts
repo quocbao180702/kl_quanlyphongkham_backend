@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Thuoc } from './entities/thuoc.entity';
 import { Model } from 'mongoose';
-import { CreateThuocDto } from './dto/create-thuoc.dto';
 import { UpdateThuocInput } from './dto/update-thuoc.input';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { NewThuocInput } from './dto/new-thuoc.input';
 
 @Injectable()
 export class ThuocService {
@@ -27,7 +27,7 @@ export class ThuocService {
         }).exec();
     }
 
-    async createThuoc(createThuocDto: CreateThuocDto): Promise<Thuoc> {
+    async createThuoc(createThuocDto: NewThuocInput): Promise<Thuoc> {
         const createdThuoc = await this.thuocModel.create(createThuocDto);
         return createdThuoc;
     }

@@ -23,15 +23,20 @@ export class PhieuchidinhcanlamsangResolver {
     return this.phieuchidinhcanlamsangService.getAllPhieuCLS();
   }
 
-  @Query(() => [Phieuchidinhcanlamsang])
-  getAllPhieuCLSbyNgay( @Args('ngaytao') ngaytao: Date) {
-    return this.phieuchidinhcanlamsangService.getAllPhieuCLSbyNgay(ngaytao);
+  @Query(() => Phieuchidinhcanlamsang, {nullable: true})
+  async getPhieuCanLamSangbyPhieuXacNhanId(@Args('phieuxacnhan') phieuxacnhan: string): Promise<Phieuchidinhcanlamsang | null>{
+    return this.phieuchidinhcanlamsangService.getPhieuCanLamSangbyPhieuXacNhanId(phieuxacnhan)
   }
 
-  /* @Query(() => Phieuchidinhcanlamsang, { name: 'phieuchidinhcanlamsang' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.phieuchidinhcanlamsangService.findOne(id);
-  } */
+  @Query(() => [Phieuchidinhcanlamsang])
+  getAllPhieuCLSbyNgay(@Args('ngaytao') ngaytao: Date, @Args('trangthai') trangthai: boolean) {
+    return this.phieuchidinhcanlamsangService.getAllPhieuCLSbyNgay(ngaytao, trangthai);
+  }
+
+  @Mutation(() => Phieuchidinhcanlamsang)
+  async updateTrangThaiCanLamSang(@Args('id') id: string): Promise<Phieuchidinhcanlamsang | null> {
+    return await this.phieuchidinhcanlamsangService.updateTrangThaiCanLamSang(id)
+  }
 
   @Mutation(() => Phieuchidinhcanlamsang)
   updatePhieuchidinhcanlamsang(@Args('updatePhieuchidinhcanlamsangInput') updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput) {

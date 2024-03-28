@@ -4,6 +4,7 @@ import { DatLich } from './entities/datlich.entity';
 import { NewDatLichInput } from './dto/new-datlich.input';
 import { UpdateDatLichInput } from './dto/update-datlich.input';
 import { PubSub } from 'graphql-subscriptions';
+import { TrangThaiDatKham } from 'src/types/trangthai-datkham-types';
 
 const pubSub = new PubSub()
 
@@ -14,6 +15,11 @@ export class DatlichResolver {
     @Query(() => [DatLich], { nullable: true })
     async getAllDatLich(): Promise<DatLich[]> {
         return await this.datlichService.getAllDatLich();
+    }
+
+    @Query(() => [DatLich], { nullable: true })
+    async getAllDatLichbyTrangThai(@Args('trangthai') trangthai: TrangThaiDatKham): Promise<DatLich[]> {
+        return await this.datlichService.getAllDatLichbyTrangThai(trangthai);
     }
 
     @Mutation(() => DatLich)
@@ -35,6 +41,15 @@ export class DatlichResolver {
         const update = await this.datlichService.updateDatLich(input);
         if (!update) {
             throw new Error(`User with ID ${input.id} not found.`);
+        }
+        return update;
+    }
+
+    @Mutation(() => DatLich)
+    async updateTrangThaiDatLich(@Args('id') id: string, @Args('trangthai') trangthai: string): Promise<DatLich | null>{
+        const update = await this.datlichService.updateTrangThaiDatLich(id, trangthai);
+        if(!update){
+            throw new Error(`DatLich with ID ${id} not found.`);
         }
         return update;
     }

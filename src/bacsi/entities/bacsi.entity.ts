@@ -35,6 +35,10 @@ export class BacSi {
 
     @Field()
     @Prop()
+    sodienthoai: string
+
+    @Field()
+    @Prop()
     cccd: string;
 
     @Field()

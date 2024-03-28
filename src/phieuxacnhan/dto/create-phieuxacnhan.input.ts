@@ -7,12 +7,6 @@ export class CreatePhieuXacNhanInput {
   @Field(() => [String])
   phongs: string[];
 
-  @Field(() => Boolean) 
-  trangthai: boolean
-
-  @Field(() => Int)
-  sothutu: number;
-
   @Field(() => Date)
   ngaykham: Date;
 

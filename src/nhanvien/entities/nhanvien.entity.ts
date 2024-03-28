@@ -30,6 +30,10 @@ export class NhanVien {
     @Field()
     diachi: string;
 
+    @Field()
+    @Prop()
+    sodienthoai: string
+
     @Prop()
     @Field()
     cccd: string;

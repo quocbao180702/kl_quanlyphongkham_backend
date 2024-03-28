@@ -19,6 +19,9 @@ export class NewBacSiInput {
     @Field()
     diachi: string;
 
+    @Field()
+    sodienthoai: string
+
 
     @Field()
     cccd: string;
@@ -27,7 +30,7 @@ export class NewBacSiInput {
     ngayBD: Date;
 
     @Field(() => String)
-    user: string
+    username: string
 
     @Field(() => [ID])
     phongs: string[];

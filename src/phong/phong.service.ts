@@ -17,10 +17,13 @@ export class PhongService {
     }
 
     async createPhong(createPhongDto: CreatePhongDto): Promise<Phong | null> {
+        if (!createPhongDto.chuyenkhoa) {
+            createPhongDto.chuyenkhoa = null;
+        }
         const createdPhong = await this.phongModel.create(createPhongDto);
-        const populatedPhong = await createdPhong.populate('chuyenkhoa');
-        return populatedPhong;
+        return createdPhong;
     }
+
 
 
     async updatePhong(updatePhong: UpdatePhongInput): Promise<Phong | null> {

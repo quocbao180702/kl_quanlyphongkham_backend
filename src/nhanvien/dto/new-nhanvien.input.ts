@@ -16,7 +16,13 @@ export class NewNhanVienInput {
     diachi: string;
 
     @Field()
+    sodienthoai: string
+
+    @Field()
     cccd: string;
+
+    @Field()
+    username: string
 
     @Field(() => [String])
     phongs: string[];
@@ -26,7 +32,4 @@ export class NewNhanVienInput {
 
     @Field()
     chucvu: string;
-
-    @Field(() => String)
-    user: String;
 }

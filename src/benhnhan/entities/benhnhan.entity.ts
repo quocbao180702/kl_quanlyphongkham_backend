@@ -31,6 +31,10 @@ export class BenhNhan {
     @Prop()
     @Field()
     diachi: string;
+    
+    @Field()
+    @Prop()
+    sodienthoai: string
 
     @Prop()
     @Field()
@@ -41,12 +45,11 @@ export class BenhNhan {
     bhyt: string;
 
     @Field(() => Users)
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users'})
     user: Users;
 
     @Field(() => Sinhhieu, { nullable: true })
     sinhhieu: Sinhhieu;
-
 
     /* @Field(() => [PhieuXacNhan])
     @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'PhieuXacNhan' }] })

@@ -16,11 +16,14 @@ export class NewBenhNhanInput {
     diachi: string;
 
     @Field()
+    sodienthoai: string
+
+    @Field()
     cccd: string;
 
     @Field()
     bhyt: string;
 
     @Field(() => String)
-    user: string;
+    username: string;
 }

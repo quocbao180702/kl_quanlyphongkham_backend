@@ -31,7 +31,11 @@ export class Thuoc {
 
     @Field(() => Float)
     @Prop()
-    gia: number;
+    giaBHYT: number;
+
+    @Field(() => Float)
+    @Prop()
+    giaKhongBHYT: number;
 
     @Field(() => Float)
     @Prop()

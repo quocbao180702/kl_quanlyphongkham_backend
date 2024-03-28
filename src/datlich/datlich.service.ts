@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateDatLichInput } from './dto/update-datlich.input';
 import { NewDatLichInput } from './dto/new-datlich.input';
+import { TrangThaiDatKham } from 'src/types/trangthai-datkham-types';
 
 @Injectable()
 export class DatlichService {
@@ -20,6 +21,24 @@ export class DatlichService {
                 }
             })
             .exec();
+    }
+
+    async getAllDatLichbyTrangThai(trangthai: string): Promise<DatLich[] | null> {
+        try {
+            return await this.datLichModel
+                .find({ trangthai: trangthai })
+                .sort({ ngaydat: 1 })
+                .populate({
+                    path: 'benhnhan',
+                    populate: {
+                        path: 'user'
+                    }
+                })
+                .exec();
+        } catch (error) {
+            console.error('Error while fetching DatLich:', error);
+            return null;
+        }
     }
 
     async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich> {
@@ -42,6 +61,16 @@ export class DatlichService {
             },
             { new: true }
         ).populate('benhnhan').exec();
+    }
+
+    async updateTrangThaiDatLich(id: string, trangthai: string): Promise<DatLich | null> {
+        try {
+            const updatedDatLich = await this.datLichModel.findByIdAndUpdate(id, { trangthai }, { new: true });
+            return updatedDatLich;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 
     async deleteDatLich(_id: string): Promise<void> {

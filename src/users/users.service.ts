@@ -15,12 +15,12 @@ import { FetchUsersArgs } from './dto/fetch_user.input';
 export class UsersService {
   constructor(@InjectModel(Users.name) private readonly userModel: Model<Users>) { }
 
-  async getCount(): Promise<number>{
+  async getCount(): Promise<number> {
     const count = await this.userModel.countDocuments()
     return count
   }
   async getAllUsers(fetchUserArgs: FetchUsersArgs): Promise<Users[] | null> {
-    return await this.userModel.find(null, null,{
+    return await this.userModel.find(null, null, {
       limit: fetchUserArgs.take,
       skip: fetchUserArgs.skip
     }).exec() as Users[];
@@ -37,6 +37,20 @@ export class UsersService {
   async getUserById(@Args('_id') _id: string): Promise<Users | null> {
     return await this.userModel.findOne({ _id }).exec();
   }
+
+  async updateTrangThaiThongTinUser(id: string): Promise<Users | null> {
+    try {
+      const user = await this.userModel.findById(id).exec();
+      if (!user) {
+        throw new Error('User not found');
+      }
+      user.thongtin = !user.thongtin;
+      return await user.save();
+    } catch (error) {
+      throw new Error('Error xử lý khóa bị lỗi: ' + error.message);
+    }
+  }
+
 
   async createUser(createUserDto: CreateUserDto): Promise<Users> {
     try {

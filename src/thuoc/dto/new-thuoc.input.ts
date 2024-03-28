@@ -20,7 +20,10 @@ export class NewThuocInput{
     hamluong: number
 
     @Field(() => Float)
-	gia: number;
+	giaBHYT: number;
+
+    @Field(() => Float)
+    giaKhongBHYT: number;
 
     @Field()
 	bhyt: Boolean;

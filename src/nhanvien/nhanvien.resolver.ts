@@ -31,7 +31,7 @@ export class NhanvienResolver {
     async updateNhanVien(@Args('input') updateNhanVienInput: UpdateNhanVienInput): Promise<NhanVien> {
         const update = await this.nhanVienService.updateNhanVien(updateNhanVienInput);
         if (!update) {
-            throw new Error(`User with ID ${updateNhanVienInput.id} not found.`);
+            throw new Error(`Nhân Viên with ID ${updateNhanVienInput.id} not found.`);
         }
         return update;
     }

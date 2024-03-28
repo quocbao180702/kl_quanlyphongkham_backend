@@ -20,9 +20,6 @@ export class UpdateUserInput {
     @MaxLength(8)
     password: string;
 
-    @Field()
-    phoneNumber: string
-
     @Field(type => LinkImageInput)
     avatar: LinkImageInput
 

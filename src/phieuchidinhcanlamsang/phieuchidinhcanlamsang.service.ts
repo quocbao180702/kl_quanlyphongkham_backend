@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreatePhieuchidinhcanlamsangInput } from './dto/create-phieuchidinhcanlamsang.input';
 import { UpdatePhieuchidinhcanlamsangInput } from './dto/update-phieuchidinhcanlamsang.input';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,11 +8,15 @@ import { KetquacanlamsangService } from 'src/ketquacanlamsang/ketquacanlamsang.s
 import { CreateKetquacanlamsangInput } from 'src/ketquacanlamsang/dto/create-ketquacanlamsang.input';
 import { Schema as MongooSchemas } from 'mongoose';
 import { ObjectId } from 'mongodb';
+import { PhieuXacNhanService } from 'src/phieuxacnhan/PhieuXacNhan.service';
+import { TrangThaiKham } from 'src/types/trangthai-kham.types';
 
 @Injectable()
 export class PhieuchidinhcanlamsangService {
   constructor(@InjectModel(Phieuchidinhcanlamsang.name) private readonly phieuCLSModel: Model<Phieuchidinhcanlamsang>,
-    private readonly KetquacanlamsangService: KetquacanlamsangService,) { }
+    private readonly KetquacanlamsangService: KetquacanlamsangService,
+    @Inject(forwardRef(() => PhieuXacNhanService))
+    private PhieuXacNhanService: PhieuXacNhanService,) { }
 
   async getAllPhieuCLS(): Promise<Phieuchidinhcanlamsang[] | null> {
     return await this.phieuCLSModel.find()
@@ -37,9 +41,39 @@ export class PhieuchidinhcanlamsangService {
       .exec();
   }
 
+  async getPhieuCanLamSangbyPhieuXacNhanId(phieuxacnhan: string): Promise<Phieuchidinhcanlamsang | null> {
+    try {
+      const phieuCLS = await this.phieuCLSModel.findOne({ phieuxacnhan: phieuxacnhan })
+        .populate({
+          path: 'benhnhan',
+          populate: {
+            path: 'user'
+          }
+        })
+        .populate({
+          path: 'bacsi',
+          populate: {
+            path: 'user'
+          }
+        })
+        .populate({
+          path: 'ketquacanlamsangs',
+          populate: {
+            path: 'loaicanlamsang'
+          }
+        })
+        .exec();
 
-  async getAllPhieuCLSbyNgay(ngaytao: Date): Promise<Phieuchidinhcanlamsang[] | null> {
-    return await this.phieuCLSModel.find({ ngaytao })
+      return phieuCLS;
+    } catch (error) {
+      console.error("Lỗi khi lấy phiếu cận lâm sàng:", error);
+      return null;
+    }
+  }
+
+
+  async getAllPhieuCLSbyNgay(ngaytao: Date, trangthai: boolean): Promise<Phieuchidinhcanlamsang[] | null> {
+    return await this.phieuCLSModel.find({ ngaytao, trangthai })
       .populate({
         path: 'benhnhan',
         populate: {
@@ -88,8 +122,6 @@ export class PhieuchidinhcanlamsangService {
   }
 
 
-
-
   async updatePhieuCLS(updatePhieuCanLamSang: UpdatePhieuchidinhcanlamsangInput): Promise<Phieuchidinhcanlamsang | null> {
     return await this.phieuCLSModel.findByIdAndUpdate(
       updatePhieuCanLamSang.id,
@@ -101,6 +133,30 @@ export class PhieuchidinhcanlamsangService {
       { new: true }
     ).exec();
   }
+
+  async updateTrangThaiCanLamSang(id: string): Promise<Phieuchidinhcanlamsang | null> {
+    try {
+      const phieuCLS = await this.phieuCLSModel.findById(id).exec();
+      if (!phieuCLS) {
+        throw new Error('Phiếu Cận Lâm Sàng Không Tìm Thấy');
+      }
+      phieuCLS.trangthai = !phieuCLS.trangthai;
+      await phieuCLS.save();
+      if (phieuCLS?.trangthai == true) {
+        const trangthai = TrangThaiKham.DAXETNGHIEM;
+        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(phieuCLS.phieuxacnhan.toString(), trangthai);
+      }
+      else {
+        const trangthai = TrangThaiKham.CHOXETNGIEM;
+        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(phieuCLS.phieuxacnhan.toString(), trangthai);
+      }
+      return phieuCLS;
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái:", error);
+      return null;
+    }
+  }
+
 
   async deletePhieuCLS(_id: string): Promise<void> {
     await this.phieuCLSModel.deleteOne({ _id });

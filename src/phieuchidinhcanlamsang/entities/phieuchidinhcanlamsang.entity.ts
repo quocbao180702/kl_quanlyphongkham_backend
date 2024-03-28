@@ -4,6 +4,7 @@ import mongoose, { HydratedDocument, Schema as MongooSchemas } from 'mongoose';
 import { BacSi } from 'src/bacsi/entities/bacsi.entity';
 import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 import { KetQuaCanLamSang } from 'src/ketquacanlamsang/entities/ketquacanlamsang.entity';
+import { PhieuXacNhan } from 'src/phieuxacnhan/entities/phieuxacnhan.entity';
 
 
 export type PhieuchidinhcanlamsangDocument = HydratedDocument<Phieuchidinhcanlamsang>;
@@ -22,6 +23,10 @@ export class Phieuchidinhcanlamsang {
   @Field(() => BacSi)
   bacsi: BacSi;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'PhieuXacNhan' })
+  @Field(() => PhieuXacNhan)
+  phieuxacnhan: PhieuXacNhan
+
   @Prop()
   @Field(() => Boolean)
   bhyt: boolean
@@ -29,6 +34,10 @@ export class Phieuchidinhcanlamsang {
   @Prop()
   @Field()
   ngaytao: Date;
+
+  @Prop({ default: false })
+  @Field()
+  trangthai: boolean
 
   @Field(() => [KetQuaCanLamSang])
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'KetQuaCanLamSang' }], required: true })

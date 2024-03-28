@@ -20,9 +20,6 @@ export class Users {
     @Prop({ unique: true, sparse: true })
     username: string;
 
-    @Field()
-    @Prop()
-    phoneNumber: string
 
     @Field()
     @Prop()
@@ -32,6 +29,9 @@ export class Users {
     @Prop()
     password: string;
 
+    @Field()
+    @Prop({default: false})
+    thongtin: boolean;
 
     @Field(type => UserRole)
     @Prop({ enum: UserRole, default: UserRole.USER })

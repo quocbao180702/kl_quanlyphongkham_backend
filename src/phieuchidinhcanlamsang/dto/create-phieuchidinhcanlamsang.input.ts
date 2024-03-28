@@ -9,6 +9,9 @@ export class CreatePhieuchidinhcanlamsangInput {
   @Field(() => String)
   bacsi: string;
 
+  @Field(() => String)
+  phieuxacnhan: string
+
   @Field(() => Boolean)
   bhyt: boolean
 

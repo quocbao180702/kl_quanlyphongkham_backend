@@ -21,8 +21,8 @@ export class Phong {
     @Prop()
     mota: string;
 
-    @Field(() => ChuyenKhoa)
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ChuyenKhoa', required: true })
+    @Field(() => ChuyenKhoa, {nullable: true})
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ChuyenKhoa'})
     chuyenkhoa: ChuyenKhoa;
 
     /* @Field(() => [String])

@@ -5,7 +5,6 @@ export class CreateUserDto {
     username: string;
     email: string;
     password: string;
-    phoneNumber: string;
     role: UserRole;
     isLocked: boolean
     avatar: LinkImage

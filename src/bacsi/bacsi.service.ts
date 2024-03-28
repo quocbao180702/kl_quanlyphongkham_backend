@@ -30,21 +30,21 @@ export class BacsiService {
 
     async createBacSi(createBacSiDto: NewBacSiInput): Promise<BacSi | null> {
         try {
-            /* const user = await this.usersService.getUserByUsername(createBacSiDto.username);
-            if (!user) {
-                throw new Error('User with the provided username not found');
+            const user = await this.usersService.getUserByUsername(createBacSiDto.username);
+            if (user.thongtin == true) {
+                throw new Error('User đã có thông tin');
             }
-            console.log(user._id.toString()) */
-            const newBacSi = await this.bacsiModel.create(createBacSiDto);
+            const newBacSi = await this.bacsiModel.create({ ...createBacSiDto, user: user?._id });
             const createdBacSi = await this.bacsiModel
                 .findById(newBacSi._id)
                 .populate('user')
                 .populate('phongs')
                 .populate('chuyenkhoa')
                 .exec();
+            await this.usersService.updateTrangThaiThongTinUser(user?._id.toString());
             return createdBacSi;
         } catch (error) {
-            throw error;
+            throw new Error('Bác sĩ xử lý khóa bị lỗi: ' + error.message);
         }
     }
 
