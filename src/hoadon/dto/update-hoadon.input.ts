@@ -10,8 +10,8 @@ export class UpdateHoadonInput extends PartialType(CreateHoadonInput) {
   @Field(() => [DichVuInput])
   thuocs: DichVuInput[]
 
-  @Field(() => [DichVuInput])
-  canlamsangs: DichVuInput[]; 
+  /* @Field(() => [DichVuInput])
+  canlamsangs: DichVuInput[];  */
 
   @Field(() => [DichVuInput])
   vattuyte: DichVuInput[];

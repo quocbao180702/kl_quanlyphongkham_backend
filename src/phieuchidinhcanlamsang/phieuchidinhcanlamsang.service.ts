@@ -108,11 +108,19 @@ export class PhieuchidinhcanlamsangService {
 
       const ketQuaIds = createdKetQuaCLSList.map(ketQua => ketQua._id.toString());
       const ketQuaObjectIds = ketQuaIds.map(id => new ObjectId(id));
-
-      const createdPhieuCanLamSang = await this.phieuCLSModel.create({
+      
+      const newPhieuCanLamSang = await this.phieuCLSModel.create({
         ...createPhieuCanLamSang,
         ketquacanlamsangs: ketQuaObjectIds
       });
+      const createdPhieuCanLamSang = await this.phieuCLSModel
+        .findById(newPhieuCanLamSang?._id)
+        .populate({
+          path: 'ketquacanlamsangs',
+          populate: {
+            path: 'loaicanlamsang'
+          }
+        })
 
       return createdPhieuCanLamSang;
     } catch (error) {

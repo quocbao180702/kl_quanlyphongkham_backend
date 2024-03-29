@@ -209,7 +209,6 @@ type Hoadon {
   benhnhan: BenhNhan!
   bhyt: Boolean!
   thuocs: [DichVu!]!
-  canlamsangs: [DichVu!]!
   vattuyte: [DichVu!]!
   thanhtien: Float!
   trangthai: Boolean!
@@ -249,6 +248,16 @@ type Vattuyte {
   chiphi: [ChiPhi!]!
   soluong: Int!
   dvt: String!
+}
+
+type Hoadonchidinhcanlamsang {
+  _id: ID!
+  benhnhan: BenhNhan!
+  bhyt: Boolean!
+  chitietcanlamsang: [DichVu!]!
+  tinhtrang: Boolean!
+  thanhtien: Float!
+  ngaytao: DateTime!
 }
 
 type Query {
@@ -292,6 +301,7 @@ type Query {
   getAllSoBenh: [Sobenh!]!
   onlyUser: OnlyUser
   getAllVatTuYTe: [Vattuyte!]!
+  getAllHoaDonPhieuCanLamSang: [Hoadonchidinhcanlamsang!]!
 }
 
 input FetchUsersArgs {
@@ -360,7 +370,7 @@ type Mutation {
   updateDichvu(updateDichvuInput: UpdateDichvuInput!): Dichvu!
   deleteDichvu(id: String!): Dichvu!
   createHoadon(createHoadonInput: CreateHoadonInput!): Hoadon!
-  updateTrangThai(id: String!): Hoadon!
+  updateTrangThaiHoaDon(id: String!): Hoadon!
   updateHoadon(updateHoadonInput: UpdateHoadonInput!): Hoadon!
   deleteHoadon(id: String!): Boolean!
   createSobenh(createSobenhInput: CreateSobenhInput!): Sobenh!
@@ -371,6 +381,7 @@ type Mutation {
   createVatTuYTe(createDichvuInput: CreateVattuyteInput!): Vattuyte!
   updateVatTuYTe(updateDichvuInput: UpdateVattuyteInput!): Vattuyte!
   deleteVatTuYTe(id: String!): Boolean!
+  createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang: CreateHoadonchidinhcanlamsangInput!): Hoadonchidinhcanlamsang!
 }
 
 input NewUserInput {
@@ -690,7 +701,6 @@ input UpdateHoadonInput {
   ngaytao: DateTime
   id: String!
   thuocs: [DichVuInput!]!
-  canlamsangs: [DichVuInput!]!
   vattuyte: [DichVuInput!]!
 }
 
@@ -735,6 +745,12 @@ input UpdateVattuyteInput {
   soluong: Int
   dvt: String
   id: String!
+}
+
+input CreateHoadonchidinhcanlamsangInput {
+  benhnhan: String!
+  bhyt: Boolean!
+  chitietcanlamsang: [DichVuInput!]!
 }
 
 type Subscription {

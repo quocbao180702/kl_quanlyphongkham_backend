@@ -26,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileUploadModule } from './file-upload/file-upload.module';
 import { KetquacanlamsangModule } from './ketquacanlamsang/ketquacanlamsang.module';
 import { VattuyteModule } from './vattuyte/vattuyte.module';
+import { HoadonchidinhcanlamsangModule } from './hoadonchidinhcanlamsang/hoadonchidinhcanlamsang.module';
 
 @Module({
   controllers: [AppController,],
@@ -62,6 +63,7 @@ import { VattuyteModule } from './vattuyte/vattuyte.module';
     FileUploadModule,
     KetquacanlamsangModule,
     VattuyteModule,
+    HoadonchidinhcanlamsangModule,
   ],
 })
 export class AppModule { }

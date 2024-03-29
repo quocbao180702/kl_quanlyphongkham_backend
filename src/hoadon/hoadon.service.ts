@@ -43,16 +43,25 @@ export class HoadonService {
                 thanhtien += thuoc.thanhtien;
             }
         }
-
-        if (updateHoaDonInput?.canlamsangs) {
+        /* if (updateHoaDonInput?.canlamsangs) {
             for (const canLamSang of updateHoaDonInput.canlamsangs) {
-                thanhtien += canLamSang.thanhtien;
+                if (updateHoaDonInput.bhyt == true) {
+                    thanhtien += canLamSang.thanhtien * 50 / 100;
+                }
+                else {
+                    thanhtien += canLamSang.thanhtien;
+                }
             }
-        }
+        } */
 
         if (updateHoaDonInput?.vattuyte) {
             for (const vatTuYte of updateHoaDonInput.vattuyte) {
-                thanhtien += vatTuYte.thanhtien;
+                if (updateHoaDonInput.bhyt == true) {
+                    thanhtien += vatTuYte.thanhtien * 50 / 100;
+                }
+                else {
+                    thanhtien += vatTuYte.thanhtien;
+                }
             }
         }
         return await this.hoadonModel.findByIdAndUpdate(
@@ -66,7 +75,7 @@ export class HoadonService {
         ).exec();
     }
 
-    async updateTrangThai(id: string): Promise<Hoadon | null> {
+    async updateTrangThaiHoaDon(id: string): Promise<Hoadon | null> {
         try {
             const hoadon = await this.hoadonModel.findById(id).exec();
             if (!hoadon) {

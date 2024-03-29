@@ -14,8 +14,8 @@ export class HoadonResolver {
   }
 
   @Mutation(() => Hoadon)
-  async updateTrangThai(@Args('id') id: string): Promise<Hoadon> {
-    return this.hoadonService.updateTrangThai(id);
+  async updateTrangThaiHoaDon(@Args('id') id: string): Promise<Hoadon> {
+    return this.hoadonService.updateTrangThaiHoaDon(id);
   }
 
   @Query(() => [Hoadon])

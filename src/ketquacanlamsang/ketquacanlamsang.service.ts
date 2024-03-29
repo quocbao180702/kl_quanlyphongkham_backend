@@ -10,7 +10,9 @@ export class KetquacanlamsangService {
   constructor(@InjectModel(KetQuaCanLamSang.name) private readonly KetQuaCanLamSangModel: Model<KetQuaCanLamSang>) { }
 
   async createKetQuaCLS(createKetQuaCLS: CreateKetquacanlamsangInput): Promise<KetQuaCanLamSang | null> {
-    const createdKetQuaCLS = await this.KetQuaCanLamSangModel.create(createKetQuaCLS);
+    const newKetQuaCLS = await this.KetQuaCanLamSangModel.create(createKetQuaCLS);
+    const createdKetQuaCLS = await this.KetQuaCanLamSangModel.findById(newKetQuaCLS?._id)
+      .populate('loaicanlamsang').exec()
     return createdKetQuaCLS;
   }
 

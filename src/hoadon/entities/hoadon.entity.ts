@@ -45,9 +45,9 @@ export class Hoadon {
   @Field(() => [DichVu])
   thuocs: DichVu[]
 
-  @Prop()
+  /* @Prop()
   @Field(() => [DichVu])
-  canlamsangs: DichVu[];
+  canlamsangs: DichVu[]; */
 
   @Prop()
   @Field(() => [DichVu])
