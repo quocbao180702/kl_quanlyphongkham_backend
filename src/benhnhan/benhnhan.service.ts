@@ -38,6 +38,10 @@ export class BenhnhanService {
         return await this.benhnhanModel.findOne({ user: user }).populate('user').exec();
     }
 
+    async getBenhNhanbySoDienThoai(sodienthoai: string): Promise<BenhNhan | null>{
+        return (await this.benhnhanModel.findOne({sodienthoai: sodienthoai}));
+    }
+
 
     async createBenhNhan(createBenhNhanDto: NewBenhNhanInput): Promise<BenhNhan | null> {
         try {

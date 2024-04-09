@@ -66,6 +66,22 @@ export class UsersService {
     }
   }
 
+  async createUserGoogle(username: string, email: string, avatar: LinkImageInput): Promise<Users> {
+    try {
+      const password = await hashPassword('abc@123');
+      const createUser = await this.userModel.create({
+        username: username,
+        email: email,
+        avatar: avatar,
+        password: password
+      })
+      return createUser;
+
+    } catch (error) {
+      throw new Error('Error create with google');
+    }
+  }
+
   async updateUser(updateUser: UpdateUserInput): Promise<Users | null> {
     try {
       const password = await hashPassword(updateUser.password);

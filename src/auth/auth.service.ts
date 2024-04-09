@@ -6,6 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Context } from '@nestjs/graphql';
 import { comparePasswords } from 'src/HashPassword/hash';
 import { Users } from 'src/users/entities/user.entity';
+import { TypeImage, UserRole } from 'src/types/Users.types';
+import { LinkImage } from 'src/types/LinkImage.types';
 
 @Injectable()
 export class AuthService {
@@ -24,11 +26,47 @@ export class AuthService {
         return null;
     }
 
-    async decodeToken(token: string){
-        
+    async loginwithGoogle(user: any) {
+        const emailParts = user.email.split('@');
+        const username = emailParts[0];
+        let existingUser = await this.userService.getUserByUsername(username);
+
+        if (!existingUser) {
+            existingUser = await this.userService.createUserGoogle(
+                username,
+                user.email,
+                {
+                    url: user.picture,
+                    fileName: `${user.email}_phongkhamdakhoa_google`,
+                    type: TypeImage.LINK
+                }
+            );
+        }
+
+        const payload = {
+            username: existingUser.username,
+            sub: {
+                _id: existingUser._id,
+            },
+            roles: existingUser.role
+        }
+
+        return {
+            access_token: this.jwtService.sign(payload)
+        }
     }
 
-    async createRefreshToken(user: Users){
+
+    getUrlGoogle(){
+        const url = process?.env?.CALLBACK_URL
+        return url;
+    }
+
+    async decodeToken(token: string) {
+
+    }
+
+    async createRefreshToken(user: Users) {
 
         const payload = {
             username: user.username,

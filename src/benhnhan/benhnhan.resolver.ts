@@ -37,6 +37,12 @@ export class BenhNhanResolver {
         return await this.benhnhanService.getAllBenhNhanNoPagination();
     }
 
+    @Query(() => BenhNhan, { nullable: true })
+    async getBenhNhanbySodienthoai(@Args('sodienthoai') sodienthoai: string): Promise<BenhNhan | null> {
+        return await this.benhnhanService.getBenhNhanbySoDienThoai(sodienthoai);
+    }
+
+
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => BenhNhan)

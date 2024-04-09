@@ -31,9 +31,9 @@ export class DatLich {
     @Field()
     ngaykham: Date;
 
-    @Prop()
+    /* @Prop()
     @Field()
-    bhyt: Boolean;
+    bhyt: Boolean; */
 
     @Prop({ enum: TrangThaiDatKham, default: TrangThaiDatKham.DANGXET})
     @Field(type => TrangThaiDatKham)

@@ -8,18 +8,24 @@ import { CreateLoaicanlamsangDto } from './dto/create-loaicanlamsang.dto';
 @Injectable()
 export class LoaicanlamsangService {
 
-  constructor(@InjectModel(LoaiCanLamSang.name) private readonly loaiCanLamSangModel: Model<LoaiCanLamSang>){}
+  constructor(@InjectModel(LoaiCanLamSang.name) private readonly loaiCanLamSangModel: Model<LoaiCanLamSang>) { }
 
-  async getAllLoaiCLS(): Promise<LoaiCanLamSang[] | null>{
-    return await this.loaiCanLamSangModel.find().exec();
+  async getAllLoaiCLS(): Promise<LoaiCanLamSang[] | null> {
+    try {
+      const loaiCLSList = await this.loaiCanLamSangModel.find().sort({ loaicanlamsang: 1 }).exec();
+      return loaiCLSList;
+    } catch (error) {
+      console.error("Error while fetching LoaiCanLamSang data:", error);
+      return null;
+    }
   }
 
-  async createLoaiCLS(createLoaiCanLamSang: CreateLoaicanlamsangDto): Promise<LoaiCanLamSang|null>{
+  async createLoaiCLS(createLoaiCanLamSang: CreateLoaicanlamsangDto): Promise<LoaiCanLamSang | null> {
     const createdLoaiCanLamSang = await this.loaiCanLamSangModel.create(createLoaiCanLamSang);
     return createdLoaiCanLamSang;
   }
 
-  async updateLoaiCLS(updateLoaiCanLamSang: UpdateLoaicanlamsangInput): Promise<LoaiCanLamSang | null>{
+  async updateLoaiCLS(updateLoaiCanLamSang: UpdateLoaicanlamsangInput): Promise<LoaiCanLamSang | null> {
     return await this.loaiCanLamSangModel.findByIdAndUpdate(
       updateLoaiCanLamSang.id,
       {
@@ -27,11 +33,11 @@ export class LoaicanlamsangService {
           ...updateLoaiCanLamSang
         }
       },
-      {new: true}
+      { new: true }
     ).exec();
   }
 
-  async deleteLoaiCLS(_id: string): Promise<void>{
-    await this.loaiCanLamSangModel.deleteOne({_id});
+  async deleteLoaiCLS(_id: string): Promise<void> {
+    await this.loaiCanLamSangModel.deleteOne({ _id });
   }
 }

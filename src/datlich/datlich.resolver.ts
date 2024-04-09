@@ -22,8 +22,8 @@ export class DatlichResolver {
         return await this.datlichService.getAllDatLichbyTrangThai(trangthai);
     }
 
-    @Mutation(() => DatLich)
-    async createDatLich(@Args('newDatLichInput') newDatLichInput: NewDatLichInput): Promise<DatLich> {
+    @Mutation(() => DatLich, {nullable: true})
+    async createDatLich(@Args('newDatLichInput') newDatLichInput: NewDatLichInput): Promise<DatLich | null> {
         const newDatLich = await this.datlichService.createDatLich(newDatLichInput);
         pubSub.publish('newDatLich', { newDatLich: newDatLich });
         return newDatLich;

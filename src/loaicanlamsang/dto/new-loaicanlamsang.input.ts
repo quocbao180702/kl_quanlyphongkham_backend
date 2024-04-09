@@ -1,15 +1,18 @@
 import { Field, Float, InputType } from "@nestjs/graphql";
 
 @InputType()
-export class NewLoaiCanLamSangInput{
+export class NewLoaiCanLamSangInput {
 
     @Field()
-	tenxetnghiem: string;
+    tenxetnghiem: string;
 
     @Field(() => Float)
-	gia: number;
+    gia: number;
 
     @Field()
-	mota: string;
+    loaicanlamsang: string
+
+    @Field()
+    mota: string;
 
 }

@@ -16,6 +16,7 @@ import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
 import { NhanvienService } from 'src/nhanvien/nhanvien.service';
 import { OnlyUserUnion } from 'src/types/unions.types';
 import { Users } from 'src/users/entities/user.entity';
+import { GoogleOauthGuard } from './guards/google-oauth.guard';
 
 @Resolver()
 export class AuthResolver {
@@ -52,8 +53,26 @@ export class AuthResolver {
         };
     }
 
+    /* @Mutation()
+    async loginwithGoogle() {
+        const response = this.authService.getUrlGoogle();
+        return response;
+    } */
+
+    @Mutation(() => LoginResponse)
+    @UseGuards(GoogleOauthGuard)
+    async loginwithGoogleCallback(@Context() ctx) {
+        try {
+            const token = await this.authService.loginwithGoogle(ctx?.user);
+            return { access_token: token.access_token };
+        } catch (err) {
+            console.error("Error logging in with Google:", err);
+            throw new Error("Internal Server Error");
+        }
+    }
+
     @UseGuards(JwtAuthGuard)
-    @Query(() => OnlyUserUnion, {nullable: true})
+    @Query(() => OnlyUserUnion, { nullable: true })
     async onlyUser(@Context() ctx): Promise<typeof OnlyUserUnion | null> {
 
         try {
@@ -86,4 +105,6 @@ export class AuthResolver {
         });
         return true;
     }
+
+
 }

@@ -20,6 +20,10 @@ export class LoaiCanLamSang {
   @Field(() => Float)
   gia: number;
 
+  @Field()
+  @Prop()
+  loaicanlamsang: string
+
   @Prop()
   @Field()
   mota: string;

@@ -5,11 +5,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UpdateDatLichInput } from './dto/update-datlich.input';
 import { NewDatLichInput } from './dto/new-datlich.input';
 import { TrangThaiDatKham } from 'src/types/trangthai-datkham-types';
+import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
 
 @Injectable()
 export class DatlichService {
 
-    constructor(@InjectModel(DatLich.name) private readonly datLichModel: Model<DatLich>) { }
+    constructor(@InjectModel(DatLich.name) private readonly datLichModel: Model<DatLich>,
+        private readonly benhNhanService: BenhnhanService) { }
 
 
     async getAllDatLich(): Promise<DatLich[] | null> {
@@ -40,15 +42,21 @@ export class DatlichService {
             return null;
         }
     }
+    async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich | null> {
+        const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLich.sodienthoai);
 
-    async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich> {
-        const createdDatLich = (await this.datLichModel.create(createDatLich)).populate({
-            path: 'benhnhan',
-            populate: {
-                path: 'user'
-            }
-        });
-        return createdDatLich;
+        if (getBenhNhan) {
+            const createdDatLich = (await this.datLichModel.create({ ...createDatLich, benhnhan: getBenhNhan?._id })).populate({
+                path: 'benhnhan',
+                populate: {
+                    path: 'user'
+                }
+            });
+            return createdDatLich;
+        }
+        else {
+            return null;
+        }
     }
 
     async updateDatLich(updateDatLich: UpdateDatLichInput): Promise<DatLich | null> {

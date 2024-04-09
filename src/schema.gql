@@ -109,7 +109,6 @@ type DatLich {
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
-  bhyt: Boolean!
   trangthai: TrangThaiDatKham!
 }
 
@@ -145,6 +144,7 @@ type LoaiCanLamSang {
   _id: ID!
   tenxetnghiem: String!
   gia: Float!
+  loaicanlamsang: String!
   mota: String!
 }
 
@@ -260,6 +260,18 @@ type Hoadonchidinhcanlamsang {
   ngaytao: DateTime!
 }
 
+type Blog {
+  _id: ID!
+  user: Users!
+  hinhanh: LinkImage!
+  tieude: String!
+  tomtat: String
+  noidung: String!
+  luotxem: Int!
+  kichhoat: Boolean!
+  ngaytao: DateTime!
+}
+
 type Query {
   countUser: Float!
   getAllUsers(fetchUsersArgs: FetchUsersArgs!): [Users!]!
@@ -269,6 +281,7 @@ type Query {
   CountBenhNhan: Float!
   getAllBenhNhan(fetchPagination: FetchPagination!): [BenhNhan!]!
   getAllBenhNhanNoPagination: [BenhNhan!]!
+  getBenhNhanbySodienthoai(sodienthoai: String!): BenhNhan
   getBenhNhanbyId(id: String!): BenhNhan!
   getBenhNhanbyUserId(user: String!): BenhNhan
   getAllSinhhieu: [Sinhhieu!]!
@@ -302,6 +315,9 @@ type Query {
   onlyUser: OnlyUser
   getAllVatTuYTe: [Vattuyte!]!
   getAllHoaDonPhieuCanLamSang: [Hoadonchidinhcanlamsang!]!
+  countBlogs: Float!
+  getAllBlog(fetchPagination: FetchPagination!): [Blog!]!
+  getLastestBlog(limit: Float!): [Blog!]!
 }
 
 input FetchUsersArgs {
@@ -336,7 +352,7 @@ type Mutation {
   createBenh(newBenhInput: NewBenhInput!): Benh!
   updateBenh(input: UpdateBenhInput!): Benh!
   deleteBenh(_id: String!): Boolean!
-  createDatLich(newDatLichInput: NewDatLichInput!): DatLich!
+  createDatLich(newDatLichInput: NewDatLichInput!): DatLich
   updateDatLich(input: UpdateDatLichInput!): DatLich!
   updateTrangThaiDatLich(id: String!, trangthai: String!): DatLich!
   deleteDatLich(_id: String!): Boolean!
@@ -377,11 +393,16 @@ type Mutation {
   updateSobenh(updateSobenhInput: UpdateSobenhInput!): Sobenh!
   deleteSobenh(id: String!): Sobenh!
   login(loginUserInput: LoginUserInput!): LoginResponse!
+  loginwithGoogleCallback: LoginResponse!
   logout: Boolean
   createVatTuYTe(createDichvuInput: CreateVattuyteInput!): Vattuyte!
   updateVatTuYTe(updateDichvuInput: UpdateVattuyteInput!): Vattuyte!
   deleteVatTuYTe(id: String!): Boolean!
   createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang: CreateHoadonchidinhcanlamsangInput!): Hoadonchidinhcanlamsang!
+  createBlog(createBlogInput: CreateBlogInput!): Blog!
+  updateKichHoat(_id: String!): Boolean!
+  updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
+  deleteBlog(id: String!): Boolean!
 }
 
 input NewUserInput {
@@ -523,31 +544,33 @@ input UpdateBenhInput {
 }
 
 input NewDatLichInput {
-  benhnhan: String!
+  hoten: String!
+  sodienthoai: String!
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
-  bhyt: Boolean!
 }
 
 input UpdateDatLichInput {
-  benhnhan: String
+  hoten: String
+  sodienthoai: String
   motabenh: String
   ngaydat: DateTime
   ngaykham: DateTime
-  bhyt: Boolean
   id: String!
 }
 
 input NewLoaiCanLamSangInput {
   tenxetnghiem: String!
   gia: Float!
+  loaicanlamsang: String!
   mota: String!
 }
 
 input UpdateLoaicanlamsangInput {
   tenxetnghiem: String
   gia: Float
+  loaicanlamsang: String
   mota: String
   id: String!
 }
@@ -751,6 +774,23 @@ input CreateHoadonchidinhcanlamsangInput {
   benhnhan: String!
   bhyt: Boolean!
   chitietcanlamsang: [DichVuInput!]!
+}
+
+input CreateBlogInput {
+  user: String!
+  hinhanh: LinkImageInput!
+  tieude: String!
+  tomtat: String!
+  noidung: String!
+}
+
+input UpdateBlogInput {
+  user: String
+  hinhanh: LinkImageInput
+  tieude: String
+  tomtat: String
+  noidung: String
+  id: String!
 }
 
 type Subscription {
