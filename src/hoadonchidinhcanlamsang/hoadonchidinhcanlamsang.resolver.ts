@@ -13,6 +13,11 @@ export class HoadonchidinhcanlamsangResolver {
     return this.hoadonchidinhcanlamsangService.createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang);
   }
 
+  @Mutation(() => Hoadonchidinhcanlamsang)
+  async updateTinhTrangHoaDonCLS(@Args('id') id: string): Promise<Hoadonchidinhcanlamsang> {
+    return this.hoadonchidinhcanlamsangService.updateTinhTrangHoaDonCLS(id);
+  }
+
   @Query(() => [Hoadonchidinhcanlamsang])
   getAllHoaDonPhieuCanLamSang() {
     return this.hoadonchidinhcanlamsangService.getAllHoaDonPhieuCanLamSang()

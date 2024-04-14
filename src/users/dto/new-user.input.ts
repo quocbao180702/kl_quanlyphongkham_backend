@@ -17,7 +17,7 @@ export class NewUserInput {
     @MaxLength(8)
     password: string;
 
-    @Field(type => LinkImageInput)
+    @Field(type => LinkImageInput, {nullable: true})
     avatar: LinkImageInput
 
     @Field(type => UserRole)

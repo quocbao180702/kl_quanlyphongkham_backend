@@ -28,6 +28,20 @@ export class HoadonchidinhcanlamsangService {
     return created
   }
 
+  async updateTinhTrangHoaDonCLS(id: string): Promise<Hoadonchidinhcanlamsang | null>{
+    try{
+      const hoadonchidinhcanlamsang = await this.hoadonchidinhcanlamsanModel.findById(id).exec();
+      if(!hoadonchidinhcanlamsang){
+        throw new Error("Bill not found");
+      }
+      hoadonchidinhcanlamsang.tinhtrang = !hoadonchidinhcanlamsang.tinhtrang;
+      return await hoadonchidinhcanlamsang.save();
+    }catch(error){
+      throw new Error('Error xử lý thanh toán bị lỗi ' + error.message);
+    }
+
+  }
+
 
   async getAllHoaDonPhieuCanLamSang(): Promise<Hoadonchidinhcanlamsang[]> {
     return await this.hoadonchidinhcanlamsanModel.find().populate({

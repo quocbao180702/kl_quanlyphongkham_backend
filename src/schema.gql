@@ -399,6 +399,7 @@ type Mutation {
   updateVatTuYTe(updateDichvuInput: UpdateVattuyteInput!): Vattuyte!
   deleteVatTuYTe(id: String!): Boolean!
   createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang: CreateHoadonchidinhcanlamsangInput!): Hoadonchidinhcanlamsang!
+  updateTinhTrangHoaDonCLS(id: String!): Hoadonchidinhcanlamsang!
   createBlog(createBlogInput: CreateBlogInput!): Blog!
   updateKichHoat(_id: String!): Boolean!
   updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
@@ -409,7 +410,7 @@ input NewUserInput {
   username: String!
   email: String!
   password: String!
-  avatar: LinkImageInput!
+  avatar: LinkImageInput
   role: UserRole!
   isLocked: Boolean!
 }

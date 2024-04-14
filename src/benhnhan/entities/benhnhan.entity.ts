@@ -45,7 +45,7 @@ export class BenhNhan {
     bhyt: string;
 
     @Field(() => Users)
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users'})
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', default: ""})
     user: Users;
 
     @Field(() => Sinhhieu, { nullable: true })

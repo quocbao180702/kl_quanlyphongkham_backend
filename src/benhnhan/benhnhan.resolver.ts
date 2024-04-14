@@ -25,7 +25,7 @@ export class BenhNhanResolver {
         return this.benhnhanService.getCount();
     }
 
-    @HasRoles(UserRole.ADMIN, UserRole.STAFF)
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF, UserRole.DOCTOR)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => [BenhNhan])
     async getAllBenhNhan(@Args('fetchPagination') fetchPagination: FetchPagination): Promise<BenhNhan[] | null> {

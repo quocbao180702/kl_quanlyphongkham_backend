@@ -13,7 +13,7 @@ export class PhongService {
 
 
     async getAllPhong(): Promise<Phong[]> {
-        return await this.phongModel.find().populate('chuyenkhoa').exec();
+        return await this.phongModel.find().populate('chuyenkhoa').sort({tenphong: 1}).exec();
     }
 
     async createPhong(createPhongDto: CreatePhongDto): Promise<Phong | null> {
