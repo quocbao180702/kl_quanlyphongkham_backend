@@ -23,7 +23,7 @@ export class PhieuXacNhan {
   @Field(() => [Phong])
   phongs: Phong[];
 
-  @Prop({ enum: TrangThaiKham, default: TrangThaiKham.CHOKHAM })
+  @Prop({type: String, enum: TrangThaiKham, default: TrangThaiKham.CHOKHAM })
   @Field(type => TrangThaiKham)
   trangthai: TrangThaiKham;
 

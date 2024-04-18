@@ -109,6 +109,7 @@ type DatLich {
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
+  email: String!
   trangthai: TrangThaiDatKham!
 }
 
@@ -309,7 +310,9 @@ type Query {
   getAllPhieuCLSbyNgay(ngaytao: DateTime!, trangthai: Boolean!): [Phieuchidinhcanlamsang!]!
   findAllRelatedKetQuaCanLamSang(ketQuaIds: [String!]!): [KetQuaCanLamSang!]
   getAllToaThuoc: [Toathuoc!]!
+  getAllToaThuocbyBenhNhan(benhnhanId: String!): [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
+  getAllHoadonByBenhNhan(benhnhanId: String!): [Hoadon!]!
   getAllHoadon: [Hoadon!]!
   getAllSoBenh: [Sobenh!]!
   onlyUser: OnlyUser
@@ -318,6 +321,7 @@ type Query {
   countBlogs: Float!
   getAllBlog(fetchPagination: FetchPagination!): [Blog!]!
   getLastestBlog(limit: Float!): [Blog!]!
+  getBlogbyId(id: String!): Blog!
 }
 
 input FetchUsersArgs {
@@ -550,6 +554,7 @@ input NewDatLichInput {
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
+  email: String!
 }
 
 input UpdateDatLichInput {
@@ -558,6 +563,7 @@ input UpdateDatLichInput {
   motabenh: String
   ngaydat: DateTime
   ngaykham: DateTime
+  email: String
   id: String!
 }
 
@@ -634,6 +640,7 @@ input CreatePhieuXacNhanInput {
   phongs: [String!]!
   ngaykham: DateTime!
   ngaytao: DateTime!
+  email: String!
 }
 
 input UpdatePhieuXacNhanInput {
@@ -641,6 +648,7 @@ input UpdatePhieuXacNhanInput {
   phongs: [String!]
   ngaykham: DateTime
   ngaytao: DateTime
+  email: String
   id: String!
 }
 
@@ -796,4 +804,5 @@ input UpdateBlogInput {
 
 type Subscription {
   newDatLich: DatLich!
+  newPhieuXacNhan: PhieuXacNhan!
 }

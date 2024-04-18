@@ -42,6 +42,7 @@ export class DatlichService {
             return null;
         }
     }
+    
     async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich | null> {
         const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLich.sodienthoai);
 

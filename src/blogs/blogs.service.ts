@@ -31,6 +31,10 @@ export class BlogsService {
     }).populate('user').exec();
   }
 
+  async getBlogbyId(id: string): Promise<Blog | null>{
+    return await this.blogModel.findById(id).populate('user').exec();
+  }
+
   async updateKichHoat(id: string): Promise<Blog | null> {
     try {
       const blog = await this.blogModel.findById(id).exec();

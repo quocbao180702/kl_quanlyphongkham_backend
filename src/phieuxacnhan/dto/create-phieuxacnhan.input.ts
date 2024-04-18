@@ -12,4 +12,7 @@ export class CreatePhieuXacNhanInput {
 
   @Field(() => Date)
   ngaytao: Date;
+
+  @Field(() => String)
+  email: string
 }

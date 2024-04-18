@@ -28,11 +28,16 @@ import { KetquacanlamsangModule } from './ketquacanlamsang/ketquacanlamsang.modu
 import { VattuyteModule } from './vattuyte/vattuyte.module';
 import { HoadonchidinhcanlamsangModule } from './hoadonchidinhcanlamsang/hoadonchidinhcanlamsang.module';
 import { BlogsModule } from './blogs/blogs.module';
+import { MailModule } from './mail/mail.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [AppController,],
   providers: [AppService],
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot('mongodb://localhost:27017/QuanLyPhongKham'),
     UsersModule,
     BenhnhanModule,
@@ -66,6 +71,7 @@ import { BlogsModule } from './blogs/blogs.module';
     VattuyteModule,
     HoadonchidinhcanlamsangModule,
     BlogsModule,
+    MailModule,
   ],
 })
 export class AppModule { }

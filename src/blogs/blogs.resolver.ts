@@ -30,6 +30,11 @@ export class BlogsResolver {
     return await this.blogsService.getLastestBlog(limit);
   }
 
+  @Query(() => Blog)
+  async getBlogbyId(@Args('id') id: string): Promise<Blog | null>{
+    return await this.blogsService.getBlogbyId(id);
+  }
+
   @Mutation(() => Boolean)
   async updateKichHoat(@Args('_id') _id: string): Promise<boolean> {
     await this.blogsService.updateKichHoat(_id)

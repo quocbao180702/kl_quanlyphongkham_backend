@@ -6,7 +6,7 @@ import { UpdateToathuocInput } from './dto/update-toathuoc.input';
 
 @Resolver(() => Toathuoc)
 export class ToathuocResolver {
-  constructor(private readonly toathuocService: ToathuocService) {}
+  constructor(private readonly toathuocService: ToathuocService) { }
 
   @Mutation(() => Toathuoc)
   createToathuoc(@Args('createToathuocInput') createToathuocInput: CreateToathuocInput) {
@@ -16,6 +16,11 @@ export class ToathuocResolver {
   @Query(() => [Toathuoc])
   getAllToaThuoc() {
     return this.toathuocService.getAllToaThuoc();
+  }
+
+  @Query(() => [Toathuoc])
+  async getAllToaThuocbyBenhNhan(@Args('benhnhanId') benhnhanId: string): Promise<Toathuoc[] | null> {
+    return await this.toathuocService.getAllToaThuocbyBenhNhan(benhnhanId);
   }
 
   /* @Query(() => Toathuoc, { name: 'toathuoc' })

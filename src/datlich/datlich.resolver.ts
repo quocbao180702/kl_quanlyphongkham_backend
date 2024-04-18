@@ -18,11 +18,11 @@ export class DatlichResolver {
     }
 
     @Query(() => [DatLich], { nullable: true })
-    async getAllDatLichbyTrangThai(@Args('trangthai') trangthai: TrangThaiDatKham): Promise<DatLich[]> {
+    async getAllDatLichbyTrangThai(@Args('trangthai', { type: () => String }) trangthai: string): Promise<DatLich[]> {
         return await this.datlichService.getAllDatLichbyTrangThai(trangthai);
     }
 
-    @Mutation(() => DatLich, {nullable: true})
+    @Mutation(() => DatLich, { nullable: true })
     async createDatLich(@Args('newDatLichInput') newDatLichInput: NewDatLichInput): Promise<DatLich | null> {
         const newDatLich = await this.datlichService.createDatLich(newDatLichInput);
         pubSub.publish('newDatLich', { newDatLich: newDatLich });
@@ -46,9 +46,9 @@ export class DatlichResolver {
     }
 
     @Mutation(() => DatLich)
-    async updateTrangThaiDatLich(@Args('id') id: string, @Args('trangthai') trangthai: string): Promise<DatLich | null>{
+    async updateTrangThaiDatLich(@Args('id') id: string, @Args('trangthai') trangthai: string): Promise<DatLich | null> {
         const update = await this.datlichService.updateTrangThaiDatLich(id, trangthai);
-        if(!update){
+        if (!update) {
             throw new Error(`DatLich with ID ${id} not found.`);
         }
         return update;

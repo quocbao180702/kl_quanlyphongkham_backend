@@ -8,7 +8,8 @@ import { KetquacanlamsangService } from 'src/ketquacanlamsang/ketquacanlamsang.s
 import { CreateKetquacanlamsangInput } from 'src/ketquacanlamsang/dto/create-ketquacanlamsang.input';
 import { Schema as MongooSchemas } from 'mongoose';
 import { ObjectId } from 'mongodb';
-import { PhieuXacNhanService } from 'src/phieuxacnhan/PhieuXacNhan.service';
+/* import { PhieuXacNhanService } from 'src/phieuxacnhan/PhieuXacNhan.service'; */
+import { PhieuXacNhanService } from 'src/phieuxacnhan/phieuxacnhan.service';
 import { TrangThaiKham } from 'src/types/trangthai-kham.types';
 
 @Injectable()

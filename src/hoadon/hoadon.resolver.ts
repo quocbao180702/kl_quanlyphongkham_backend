@@ -13,6 +13,11 @@ export class HoadonResolver {
     return this.hoadonService.createHoaDon(createHoadonInput);
   }
 
+  @Query(() => [Hoadon])
+  async getAllHoadonByBenhNhan(@Args('benhnhanId') benhnhanId: string): Promise<Hoadon[] | null>{
+    return await this.hoadonService.getAllHoadonByBenhNhan(benhnhanId);
+  }
+
   @Mutation(() => Hoadon)
   async updateTrangThaiHoaDon(@Args('id') id: string): Promise<Hoadon> {
     return this.hoadonService.updateTrangThaiHoaDon(id);

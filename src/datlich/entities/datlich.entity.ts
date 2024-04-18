@@ -35,7 +35,11 @@ export class DatLich {
     @Field()
     bhyt: Boolean; */
 
-    @Prop({ enum: TrangThaiDatKham, default: TrangThaiDatKham.DANGXET})
+    @Field()
+    @Prop()
+    email: string;
+
+    @Prop({ type: String, enum: TrangThaiDatKham, default: TrangThaiDatKham.DANGXET})
     @Field(type => TrangThaiDatKham)
     trangthai: TrangThaiDatKham
 

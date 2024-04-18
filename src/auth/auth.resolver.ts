@@ -45,7 +45,6 @@ export class AuthResolver {
                 path: '/refresh_token'
             });
         }
-
         return {
             access_token: loginResponse.access_token,
             success: true,
@@ -74,7 +73,7 @@ export class AuthResolver {
     @UseGuards(JwtAuthGuard)
     @Query(() => OnlyUserUnion, { nullable: true })
     async onlyUser(@Context() ctx): Promise<typeof OnlyUserUnion | null> {
-
+        
         try {
             switch (ctx.req.user?.roles) {
                 case "USER":

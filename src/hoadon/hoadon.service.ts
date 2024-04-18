@@ -16,6 +16,10 @@ export class HoadonService {
             .exec();
     }
 
+    async getAllHoadonByBenhNhan(benhnhanId ): Promise<Hoadon[]>{
+        return await this.hoadonModel.find({ benhnhan: benhnhanId}).populate('benhnhan').exec();
+    }
+
     async createHoaDon(createHoadonInput: CreateHoadonInput): Promise<Hoadon | null> {
         let thanhtien = 0;
         if (createHoadonInput.bhyt == true) {

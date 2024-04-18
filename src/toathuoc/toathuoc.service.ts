@@ -23,10 +23,14 @@ export class ToathuocService {
       .exec();
   }
 
+  async getAllToaThuocbyBenhNhan(benhnhanId: string): Promise<Toathuoc[] | null>{
+    return await this.toathuochModel.find({benhnhan: benhnhanId})
+    .populate('benhnhan').populate('bacsi').populate('thuocs').populate('benhs').exec();
+  }
+
   async createToathuoc(createToathuoc: CreateToathuocInput): Promise<Toathuoc | null> {
     try {
       const thuocIds = createToathuoc.thuocs;
-      console.log(thuocIds);
 
       const danhSachThuoc = await this.thuocService.getThuocbyIds(thuocIds);
 

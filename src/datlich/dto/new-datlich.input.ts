@@ -17,6 +17,9 @@ export class NewDatLichInput{
 
     @Field()
     ngaykham: Date;
+
+    @Field()
+    email: string;
     
     /* @Field()
     bhyt: Boolean; */

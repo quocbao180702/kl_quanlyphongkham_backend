@@ -6,7 +6,6 @@ import mongoose, {
 import { LinkImage } from 'src/types/LinkImage.types';
 import { UserRole } from 'src/types/Users.types';
 
-
 export type UsersDocument = HydratedDocument<Users>;
 
 @Schema()
@@ -34,7 +33,7 @@ export class Users {
     thongtin: boolean;
 
     @Field(type => UserRole)
-    @Prop({ enum: UserRole, default: UserRole.USER })
+    @Prop({type: String, enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
     @Field(type => LinkImage)

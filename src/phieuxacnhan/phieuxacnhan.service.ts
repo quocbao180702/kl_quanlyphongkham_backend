@@ -8,11 +8,13 @@ import { Schema as MongooseSchema } from "mongoose";
 import { get } from 'http';
 import { count } from 'console';
 import { TrangThaiKham } from 'src/types/trangthai-kham.types';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class PhieuXacNhanService {
 
-  constructor(@InjectModel(PhieuXacNhan.name) private readonly phieuxacnhanModel: Model<PhieuXacNhan>) { }
+  constructor(@InjectModel(PhieuXacNhan.name) private readonly phieuxacnhanModel: Model<PhieuXacNhan>,
+    private readonly mailService: MailService) { }
 
 
 
@@ -60,15 +62,18 @@ export class PhieuXacNhanService {
     }
   }
 
-
-
   async getPhieubyNgay(ngaykham: string): Promise<PhieuXacNhan[] | null> {
     try {
       const ngayKhamDate = new Date(ngaykham);
-      return this.phieuxacnhanModel.find({ ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) } }).exec();
+      ngayKhamDate.setUTCHours(0, 0, 0, 0);
+      const nextDay = new Date(ngayKhamDate);
+      nextDay.setUTCDate(ngayKhamDate.getUTCDate() + 1);
+      return this.phieuxacnhanModel.find({
+        ngaykham: { $gte: ngayKhamDate, $lt: nextDay }
+      }).exec();
     } catch (error) {
-      console.log(error)
-      return null
+      console.log(error);
+      return null;
     }
   }
 
@@ -95,12 +100,21 @@ export class PhieuXacNhanService {
   async createPhieuXacNhan(createPhieuXacNhan: CreatePhieuXacNhanInput): Promise<PhieuXacNhan | null> {
     try {
       const sothutu = await this.getSoThuTu(createPhieuXacNhan.ngaykham.toString());
-      const createdPhieuXacNhan = (await this.phieuxacnhanModel.create({ ...createPhieuXacNhan, sothutu })).populate({
+      const createdPhieuXacNhan = (await this.phieuxacnhanModel.create({ ...createPhieuXacNhan, sothutu })).populate([{
         path: 'benhnhan',
         populate: {
           path: 'user'
         }
-      });
+      }, { path: 'phongs' }]);
+      if (createPhieuXacNhan.email) {
+        await this.mailService.guiMailPhieuXacNhan({
+          email: createPhieuXacNhan.email,
+          subject: "Phiếu Xác Nhận Đặt Thành Công",
+          template: "./phieuxacnhan_mail",
+          name: "Phòng Khám Đa Khoa",
+          content: sothutu.toString()
+        });
+      }
       return createdPhieuXacNhan;
     } catch (error) {
       console.error("Lỗi khi tạo phiếu xác nhận:", error);

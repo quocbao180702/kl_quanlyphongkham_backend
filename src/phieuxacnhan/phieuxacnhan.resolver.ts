@@ -1,12 +1,18 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
-import { PhieuXacNhanService } from './PhieuXacNhan.service';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Subscription } from '@nestjs/graphql';
+/* import { PhieuXacNhanService } from './PhieuXacNhan.service'; */
+import { PhieuXacNhanService } from './phieuxacnhan.service';
 import { PhieuXacNhan } from './entities/phieuxacnhan.entity';
-import { CreatePhieuXacNhanInput } from './dto/create-PhieuXacNhan.input';
-import { UpdatePhieuXacNhanInput } from './dto/update-PhieuXacNhan.input';
+/* import { CreatePhieuXacNhanInput } from './dto/create-PhieuXacNhan.input'; */
+import { CreatePhieuXacNhanInput } from './dto/create-phieuxacnhan.input';
+/* import { UpdatePhieuXacNhanInput } from './dto/update-PhieuXacNhan.input'; */
+import { UpdatePhieuXacNhanInput } from './dto/update-phieuxacnhan.input';
 import { Schema as MongooseSchema } from "mongoose";
 import { Phieuchidinhcanlamsang } from 'src/phieuchidinhcanlamsang/entities/phieuchidinhcanlamsang.entity';
 import { PhieuchidinhcanlamsangService } from 'src/phieuchidinhcanlamsang/phieuchidinhcanlamsang.service';
 import { Inject, forwardRef } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub()
 
 @Resolver(() => PhieuXacNhan)
 export class PhieuXacNhanResolver {
@@ -52,7 +58,15 @@ export class PhieuXacNhanResolver {
   @Mutation(() => PhieuXacNhan)
   async createPhieuXacNhan(@Args('newPhieuXacNhanInput') newPhieuXacNhanInput: CreatePhieuXacNhanInput): Promise<PhieuXacNhan | null> {
     const newPhieuXacNhan = await this.phieuxacnhanService.createPhieuXacNhan(newPhieuXacNhanInput);
+    pubSub.publish('newPhieuXacNhan', { newPhieuXacNhan: newPhieuXacNhan });
     return newPhieuXacNhan;
+  }
+
+  @Subscription(returns => PhieuXacNhan, {
+    name: 'newPhieuXacNhan'
+  })
+  newPhieuXacNhan() {
+    return pubSub.asyncIterator('newPhieuXacNhan')
   }
 
   @Mutation(() => PhieuXacNhan)

@@ -32,6 +32,8 @@ export class BenhNhanResolver {
         return await this.benhnhanService.getAllBenhNhan(fetchPagination);
     }
 
+    @HasRoles(UserRole.ADMIN, UserRole.STAFF, UserRole.DOCTOR)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Query(() => [BenhNhan])
     async getAllBenhNhanNoPagination(): Promise<BenhNhan[] | null> {
         return await this.benhnhanService.getAllBenhNhanNoPagination();

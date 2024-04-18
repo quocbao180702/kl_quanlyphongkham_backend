@@ -10,6 +10,8 @@ import { BenhnhanModule } from 'src/benhnhan/benhnhan.module';
 import { BacsiModule } from 'src/bacsi/bacsi.module';
 import { NhanvienModule } from 'src/nhanvien/nhanvien.module';
 import { AuthController } from './auth.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 
 @Module({
   providers: [AuthService,
@@ -25,10 +27,14 @@ import { AuthController } from './auth.controller';
     BenhnhanModule,
     BacsiModule,
     NhanvienModule,
-    JwtModule.register({
-      signOptions: { expiresIn: '1h' },
-      secret: `${process.env.jwt_secret}`, //process.env.JWT_SECRET
-    })
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // Import ConfigModule để sử dụng ConfigService
+      useFactory: async (configService: ConfigService) => ({
+        signOptions: { expiresIn: '1h' },
+        secret: configService.get<string>('JWT_SECRET'), // Lấy giá trị từ .env
+      }),
+      inject: [ConfigService], // Inject ConfigService vào useFactory
+    }),
   ],
   controllers: [AuthController],
 })
