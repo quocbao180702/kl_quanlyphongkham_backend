@@ -31,7 +31,7 @@ export class BenhNhan {
     @Prop()
     @Field()
     diachi: string;
-    
+
     @Field()
     @Prop()
     sodienthoai: string
@@ -45,36 +45,11 @@ export class BenhNhan {
     bhyt: string;
 
     @Field(() => Users)
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', default: ""})
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', default: "" })
     user: Users;
 
     @Field(() => Sinhhieu, { nullable: true })
     sinhhieu: Sinhhieu;
-
-    /* @Field(() => [PhieuXacNhan])
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'PhieuXacNhan' }] })
-    phieuxacnhans: PhieuXacNhan[];
-
-    @Field(() => [Toathuoc])
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Toathuoc' }] })
-    toathuocs: Toathuoc[];
-
-    @Field(() => [Hoadon])
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Hoadon' }] })
-    hoadons: Hoadon[];
-
-    @Field(() => Sobenh)
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Sobenh' }] })
-    sobenhs: Sobenh;
-
-    @Field(() => Sinhhieu)
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Sinhhieu' }] })
-    sinhieu: Sinhhieu;
-
-    @Field(() => [Phieuchidinhcanlamsang])
-    @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Phieuchidinhcanlamsang' }] })
-    phieuchidinhcanlamsangs: Phieuchidinhcanlamsang[]; */
-
 
 }
 

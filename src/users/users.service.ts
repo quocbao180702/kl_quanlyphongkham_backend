@@ -9,7 +9,8 @@ import { hashPassword } from 'src/HashPassword/hash';
 import { LinkImageInput } from 'src/types/LinkImage.input';
 import { LinkImage } from 'src/types/LinkImage.types';
 import { FetchUsersArgs } from './dto/fetch_user.input';
-
+import { RegisterInput } from './dto/registerInput';
+import { register } from 'module';
 
 @Injectable()
 export class UsersService {
@@ -63,6 +64,19 @@ export class UsersService {
       return createdUser;
     } catch (error) {
       throw new Error('Error creating user: ' + error.message);
+    }
+  }
+
+  async registerUser(register: RegisterInput): Promise<Users> {
+    try {
+      const password = await hashPassword(register?.password);
+      const registerUser = await this.userModel.create({
+        ...register,
+        password
+      })
+      return registerUser;
+    } catch (error) {
+      throw new Error('Error creatign user: ' + error.message);
     }
   }
 

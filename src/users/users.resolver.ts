@@ -11,6 +11,7 @@ import { FetchUsersArgs } from "./dto/fetch_user.input";
 import { HasRoles } from "src/auth/dto/has-roles.decorator";
 import { UserRole } from "src/types/Users.types";
 import { RolesGuard } from "src/auth/guards/roles.guard";
+import { RegisterInput } from "./dto/registerInput";
 
 
 @Resolver(() => Users)
@@ -19,8 +20,8 @@ export class UsersResolver {
     constructor(private readonly userService: UsersService) { }
 
 
-    @Query(() => Number, {name: 'countUser'})
-    async getCount(): Promise<number>{
+    @Query(() => Number, { name: 'countUser' })
+    async getCount(): Promise<number> {
         return this.userService.getCount();
     }
 
@@ -31,17 +32,17 @@ export class UsersResolver {
         return await this.userService.getAllUsers(fetchUsersArgs);
     }
 
-    @Query(() => Users, {nullable: true})
+    @Query(() => Users, { nullable: true })
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    async getUserByUsername(@Args('username') username: string): Promise<Users>{
+    async getUserByUsername(@Args('username') username: string): Promise<Users> {
         return await this.userService.getUserByUsername(username);
     }
-    
+
     @Query(() => Users)
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    async getUserByEmail(@Args('email') email: string): Promise<Users>{
+    async getUserByEmail(@Args('email') email: string): Promise<Users> {
         return await this.userService.getUserByEmail(email);
     }
 
@@ -49,7 +50,7 @@ export class UsersResolver {
     @Query(() => Users)
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    async getUserById(@Args('_id') _id: string): Promise<Users>{
+    async getUserById(@Args('_id') _id: string): Promise<Users> {
         return await this.userService.getUserById(_id);
     }
 
@@ -58,6 +59,18 @@ export class UsersResolver {
     @UseGuards(JwtAuthGuard, RolesGuard) */
     async createUser(@Args('newUserInput') newUserInput: NewUserInput): Promise<Users> {
         const user = await this.userService.createUser(newUserInput);
+        return user;
+    }
+
+    @Mutation(() => Users)
+    async registerUser(@Args('registerInput') registerInput: RegisterInput): Promise<Users> {
+        const user = await this.userService.registerUser(registerInput);
+        return user;
+    }
+
+    @Mutation(() => Users)
+    async updateTrangThaiThongTinUser(@Args('id') id: string): Promise<Users | null>{
+        const user = await this.userService.updateTrangThaiThongTinUser(id);
         return user;
     }
 
@@ -75,7 +88,7 @@ export class UsersResolver {
     @Mutation(() => Users)
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    async xulyKhoa(@Args('id') id: string): Promise<Users>{
+    async xulyKhoa(@Args('id') id: string): Promise<Users> {
         return this.userService.xuly_Khoa(id);
     }
 

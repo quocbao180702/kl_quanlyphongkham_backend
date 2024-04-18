@@ -38,8 +38,23 @@ export class BenhnhanService {
         return await this.benhnhanModel.findOne({ user: user }).populate('user').exec();
     }
 
-    async getBenhNhanbySoDienThoai(sodienthoai: string): Promise<BenhNhan | null>{
-        return (await this.benhnhanModel.findOne({sodienthoai: sodienthoai}));
+    async getBenhNhanbySoDienThoai(sodienthoai: string): Promise<BenhNhan | null> {
+        return (await this.benhnhanModel.findOne({ sodienthoai: sodienthoai }));
+    }
+
+
+    async updateUserbySoDienThoai(user: string, sodienthoai: string): Promise<BenhNhan | null> {
+        try {
+            const benhNhan = await this.getBenhNhanbySoDienThoai(sodienthoai);
+            if (!benhNhan) {
+                return null;
+            }
+            const updatedUser = await this.benhnhanModel.findByIdAndUpdate(benhNhan?._id, { user }, { new: true }).populate('user');
+            return updatedUser;
+        } catch (error) {
+            console.error("Error updating user:", error);
+            return null;
+        }
     }
 
 

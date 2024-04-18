@@ -338,9 +338,12 @@ union OnlyUser = Users | BenhNhan | BacSi | NhanVien
 
 type Mutation {
   createUser(newUserInput: NewUserInput!): Users!
+  registerUser(registerInput: RegisterInput!): Users!
+  updateTrangThaiThongTinUser(id: String!): Users!
   updateUser(input: UpdateUserInput!): Users!
   xulyKhoa(id: String!): Users!
   deleteUser(_id: String!): Boolean!
+  updateUserbySoDienThoai(user: String!, sodienthoai: String!): BenhNhan
   createBenhNhan(newBenhNhanInput: NewBenhNhanInput!): BenhNhan!
   updateBenhNhan(input: UpdateBenhNhanInput!): BenhNhan!
   deleteBenhNhan(_id: String!): Boolean!
@@ -423,6 +426,13 @@ input LinkImageInput {
   url: String!
   fileName: String!
   type: TypeImage!
+}
+
+input RegisterInput {
+  username: String!
+  email: String!
+  password: String!
+  avatar: LinkImageInput
 }
 
 input UpdateUserInput {
