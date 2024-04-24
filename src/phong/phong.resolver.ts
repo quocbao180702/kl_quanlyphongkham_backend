@@ -16,6 +16,11 @@ export class PhongResolver {
         return await this.phongService.getAllPhong();
     }
 
+    @Query(() => Number)
+    async CountPhong(): Promise<Number>{
+        return await this.phongService.getCount();
+    }
+
     @Mutation(() => Phong)
     async createPhong(@Args('newPhongInput') newPhongInput: NewPhongInput): Promise<Phong | null> {
         const newPhong = await this.phongService.createPhong(newPhongInput);

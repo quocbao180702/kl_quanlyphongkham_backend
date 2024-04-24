@@ -7,6 +7,9 @@ export class CreateHoadonchidinhcanlamsangInput {
   @Field(() => String)
   benhnhan: string;
 
+  @Field(()=> String)
+  idPhieuCLS: string
+
   @Field(() => Boolean)
   bhyt: boolean
 

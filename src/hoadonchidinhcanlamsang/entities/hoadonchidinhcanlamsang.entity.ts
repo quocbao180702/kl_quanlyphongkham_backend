@@ -19,6 +19,10 @@ export class Hoadonchidinhcanlamsang {
   benhnhan: BenhNhan;
 
   @Prop()
+  @Field(() => String, {nullable: true})
+  idPhieuCLS: string
+
+  @Prop()
   @Field(() => Boolean)
   bhyt: boolean
 

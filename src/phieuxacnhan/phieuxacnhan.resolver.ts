@@ -11,6 +11,8 @@ import { Phieuchidinhcanlamsang } from 'src/phieuchidinhcanlamsang/entities/phie
 import { PhieuchidinhcanlamsangService } from 'src/phieuchidinhcanlamsang/phieuchidinhcanlamsang.service';
 import { Inject, forwardRef } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
+import { start } from 'repl';
+import { MonthRange } from './dto/monthRange';
 
 const pubSub = new PubSub()
 
@@ -25,6 +27,16 @@ export class PhieuXacNhanResolver {
     return await this.phieuxacnhanService.getAllPhieuXacNhan();
   }
 
+
+  @Query(() => Number)
+  async countPhieuXacNhanByDate(@Args('start') start: Date, @Args('end') end: Date): Promise<Number | null> {
+    return this.phieuxacnhanService.countPhieuXacNhanByDate(start, end)
+  }
+
+  @Query(() => [MonthRange])
+  async getStartAndEndOfMonth(@Args('year') year: number): Promise<MonthRange[]> {
+    return await this.phieuxacnhanService.getStartAndEndOfMonth(year);
+  }
 
   @Query(() => [PhieuXacNhan], { nullable: true })
   async getAllPhieuXacNhanDaXetNgiem(

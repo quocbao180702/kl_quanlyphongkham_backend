@@ -16,6 +16,11 @@ export class PhongService {
         return await this.phongModel.find().populate('chuyenkhoa').sort({tenphong: 1}).exec();
     }
 
+    async getCount(): Promise<number> {
+        const count = await this.phongModel.countDocuments();
+        return count
+    }
+
     async createPhong(createPhongDto: CreatePhongDto): Promise<Phong | null> {
         if (!createPhongDto.chuyenkhoa) {
             createPhongDto.chuyenkhoa = null;

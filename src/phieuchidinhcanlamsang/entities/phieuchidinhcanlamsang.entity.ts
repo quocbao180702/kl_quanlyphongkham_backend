@@ -5,6 +5,7 @@ import { BacSi } from 'src/bacsi/entities/bacsi.entity';
 import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 import { KetQuaCanLamSang } from 'src/ketquacanlamsang/entities/ketquacanlamsang.entity';
 import { PhieuXacNhan } from 'src/phieuxacnhan/entities/phieuxacnhan.entity';
+import { TrangThaiCLS } from '../dto/trangthaiCLS';
 
 
 export type PhieuchidinhcanlamsangDocument = HydratedDocument<Phieuchidinhcanlamsang>;
@@ -35,9 +36,9 @@ export class Phieuchidinhcanlamsang {
   @Field()
   ngaytao: Date;
 
-  @Prop({ default: false })
-  @Field()
-  trangthai: boolean
+  @Prop({type: String,  enum: TrangThaiCLS, default: TrangThaiCLS.THANHTOAN })
+  @Field(type => TrangThaiCLS)
+  trangthai: TrangThaiCLS
 
   @Field(() => [KetQuaCanLamSang])
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'KetQuaCanLamSang' }], required: true })

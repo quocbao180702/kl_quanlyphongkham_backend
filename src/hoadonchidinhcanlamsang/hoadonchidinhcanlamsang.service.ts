@@ -5,6 +5,8 @@ import { Hoadon } from 'src/hoadon/entities/hoadon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Hoadonchidinhcanlamsang } from './entities/hoadonchidinhcanlamsang.entity';
 import { Model } from 'mongoose';
+import { MonthRangeCLS } from './dto/MonthRang';
+import *  as moment from 'moment';
 
 @Injectable()
 export class HoadonchidinhcanlamsangService {
@@ -28,15 +30,61 @@ export class HoadonchidinhcanlamsangService {
     return created
   }
 
-  async updateTinhTrangHoaDonCLS(id: string): Promise<Hoadonchidinhcanlamsang | null>{
-    try{
+
+  async getTotalThanhTienByDate(start: Date, end: Date): Promise<number> {
+    const startOfDay = new Date(start);
+    startOfDay.setHours(0, 0, 0, 0);
+    /* startOfDay.setHours(23, 59, 59, 999); */
+    const endOfDay = new Date(end);
+    endOfDay.setHours(23, 59, 59, 999);
+    /*  endOfDay.setHours(0, 0, 0, 0); */
+
+
+    const result = await this.hoadonchidinhcanlamsanModel.aggregate([
+      {
+        $match: {
+          ngaytao: { $gte: startOfDay, $lte: endOfDay },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$thanhtien' },
+        },
+      },
+    ]);
+
+    return result.length > 0 ? result[0].total : 0;
+  }
+
+  async getTongTienbyMonthCLS(year: number): Promise<MonthRangeCLS[] | null> {
+    let data: MonthRangeCLS[] = []
+    for (let i = 1; i < 13; i++) {
+      const startDate = moment([year, i - 1]).startOf('month').toDate();
+      const endDate = moment([year, i - 1]).endOf('month').toDate();
+
+      const tongtien = await this.getTotalThanhTienByDate(startDate, endDate);
+      data.push({
+        month: i,
+        tongtien: tongtien
+      })
+    }
+    return data
+  }
+
+
+
+
+
+  async updateTinhTrangHoaDonCLS(id: string): Promise<Hoadonchidinhcanlamsang | null> {
+    try {
       const hoadonchidinhcanlamsang = await this.hoadonchidinhcanlamsanModel.findById(id).exec();
-      if(!hoadonchidinhcanlamsang){
+      if (!hoadonchidinhcanlamsang) {
         throw new Error("Bill not found");
       }
       hoadonchidinhcanlamsang.tinhtrang = !hoadonchidinhcanlamsang.tinhtrang;
       return await hoadonchidinhcanlamsang.save();
-    }catch(error){
+    } catch (error) {
       throw new Error('Error xử lý thanh toán bị lỗi ' + error.message);
     }
 

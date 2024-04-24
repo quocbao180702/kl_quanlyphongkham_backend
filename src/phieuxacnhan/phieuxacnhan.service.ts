@@ -4,11 +4,10 @@ import { UpdatePhieuXacNhanInput } from './dto/update-phieuxacnhan.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PhieuXacNhan } from './entities/phieuxacnhan.entity';
-import { Schema as MongooseSchema } from "mongoose";
-import { get } from 'http';
-import { count } from 'console';
 import { TrangThaiKham } from 'src/types/trangthai-kham.types';
 import { MailService } from 'src/mail/mail.service';
+import * as moment from "moment";
+import { MonthRange } from './dto/monthRange';
 
 @Injectable()
 export class PhieuXacNhanService {
@@ -30,7 +29,36 @@ export class PhieuXacNhanService {
       .exec();
   }
 
-  async getAllPhieuXacNhanDaXetNgiem(ngaykham: string, phong: string): Promise<PhieuXacNhan[] | null> {
+  async countPhieuXacNhanByDate(start: Date, end: Date): Promise<number> {
+    const startOfDay = new Date(start);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(end);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const count = await this.phieuxacnhanModel.countDocuments({
+      ngaykham: { $gte: startOfDay, $lte: endOfDay },
+    });
+
+    return count;
+  }
+
+  async getStartAndEndOfMonth(year: number): Promise<MonthRange[]> {
+    let data: MonthRange[] = [];
+    for (let i = 1; i < 13; i++) {
+      const startDate = moment([year, i - 1]).startOf('month').toDate();
+      const endDate = moment([year, i - 1]).endOf('month').toDate();
+
+      const count = await this.countPhieuXacNhanByDate(startDate, endDate);
+      data.push({
+        month: i,
+        count: count
+      });
+    }
+
+    return data;
+  }
+
+  /* async getAllPhieuXacNhanDaXetNgiem(ngaykham: string, phong: string): Promise<PhieuXacNhan[] | null> {
     const ngayKhamDate = new Date(ngaykham);
     try {
       const phieuXacNhanDaXetNgiem = await this.phieuxacnhanModel.find({
@@ -48,6 +76,31 @@ export class PhieuXacNhanService {
     } catch (error) {
       console.error("Lỗi khi lấy tất cả các phiếu xác nhận đã xét nghiệm:", error);
       return;
+    }
+  } */
+  async getAllPhieuXacNhanDaXetNgiem(ngaykham: string, phong: string): Promise<PhieuXacNhan[] | null> {
+    const ngayKhamDate = new Date(ngaykham);
+    try {
+      let query = this.phieuxacnhanModel.find({
+        ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) },
+        trangthai: TrangThaiKham.DAXETNGHIEM
+      }).populate({
+        path: 'benhnhan',
+        populate: {
+          path: 'user'
+        }
+      });
+
+      // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
+      if (phong && phong.length > 0) {
+        query = query.populate('phongs');
+      }
+
+      const phieuXacNhanDaXetNgiem = await query.exec();
+      return phieuXacNhanDaXetNgiem;
+    } catch (error) {
+      console.error("Lỗi khi lấy tất cả các phiếu xác nhận đã xét nghiệm:", error);
+      return null;
     }
   }
 
@@ -77,7 +130,7 @@ export class PhieuXacNhanService {
     }
   }
 
-  async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
+  /* async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
     const ngayKhamDate = new Date(ngaykham);
 
     return this.phieuxacnhanModel
@@ -94,6 +147,27 @@ export class PhieuXacNhanService {
       })
       .populate('phongs')
       .exec();
+  } */
+
+  async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
+    const ngayKhamDate = new Date(ngaykham);
+
+    let query = this.phieuxacnhanModel.find({
+      ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) },
+      trangthai: trangthai
+    }).populate({
+      path: 'benhnhan',
+      populate: {
+        path: 'user'
+      }
+    });
+
+    // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
+    if (phong && phong.length > 0) {
+      query = query.populate('phongs');
+    }
+
+    return query.exec();
   }
 
 

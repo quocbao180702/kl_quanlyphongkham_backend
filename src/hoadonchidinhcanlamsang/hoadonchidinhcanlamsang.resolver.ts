@@ -3,6 +3,7 @@ import { HoadonchidinhcanlamsangService } from './hoadonchidinhcanlamsang.servic
 import { Hoadonchidinhcanlamsang } from './entities/hoadonchidinhcanlamsang.entity';
 import { CreateHoadonchidinhcanlamsangInput } from './dto/create-hoadonchidinhcanlamsang.input';
 import { UpdateHoadonchidinhcanlamsangInput } from './dto/update-hoadonchidinhcanlamsang.input';
+import { MonthRangeCLS } from './dto/MonthRang';
 
 @Resolver()
 export class HoadonchidinhcanlamsangResolver {
@@ -18,9 +19,19 @@ export class HoadonchidinhcanlamsangResolver {
     return this.hoadonchidinhcanlamsangService.updateTinhTrangHoaDonCLS(id);
   }
 
+  @Query(() => [MonthRangeCLS])
+  async getTongTienbyMonthCLS(@Args('year') year: number): Promise<MonthRangeCLS[] | null>{
+    return this.hoadonchidinhcanlamsangService.getTongTienbyMonthCLS(year);
+  }
+
   @Query(() => [Hoadonchidinhcanlamsang])
   getAllHoaDonPhieuCanLamSang() {
     return this.hoadonchidinhcanlamsangService.getAllHoaDonPhieuCanLamSang()
+  }
+
+  @Query(() => Number)
+  async getTotalThanhTienCLSByDate(@Args('start') start: Date, @Args('end') end: Date): Promise<Number | null> {
+    return this.hoadonchidinhcanlamsangService.getTotalThanhTienByDate(start, end)
   }
 
 }

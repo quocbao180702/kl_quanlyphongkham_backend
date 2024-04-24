@@ -29,13 +29,13 @@ export class PhieuchidinhcanlamsangResolver {
   }
 
   @Query(() => [Phieuchidinhcanlamsang])
-  getAllPhieuCLSbyNgay(@Args('ngaytao') ngaytao: Date, @Args('trangthai') trangthai: boolean) {
+  getAllPhieuCLSbyNgay(@Args('ngaytao') ngaytao: Date, @Args('trangthai') trangthai: String) {
     return this.phieuchidinhcanlamsangService.getAllPhieuCLSbyNgay(ngaytao, trangthai);
   }
 
   @Mutation(() => Phieuchidinhcanlamsang)
-  async updateTrangThaiCanLamSang(@Args('id') id: string): Promise<Phieuchidinhcanlamsang | null> {
-    return await this.phieuchidinhcanlamsangService.updateTrangThaiCanLamSang(id)
+  async updateTrangThaiCanLamSang(@Args('id') id: string, @Args('trangthai') trangthai: string): Promise<Phieuchidinhcanlamsang | null> {
+    return await this.phieuchidinhcanlamsangService.updateTrangThaiCanLamSang(id, trangthai)
   }
 
   @Mutation(() => Phieuchidinhcanlamsang)

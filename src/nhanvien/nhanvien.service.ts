@@ -15,6 +15,11 @@ export class NhanvienService {
         return await this.nhanVienModel.find().populate('phongs').populate('user').exec();
     }
 
+    async getCount(): Promise<number> {
+        const count = await this.nhanVienModel.countDocuments();
+        return count
+    }
+
     async getNhanVienbyUserId(user: string): Promise<NhanVien | null> {
         const nhanVien = await this.nhanVienModel.findOne({ user: user }).populate('phongs').populate('user').exec();
         return nhanVien;
@@ -40,11 +45,11 @@ export class NhanvienService {
             updateNhanVien.id,
             {
                 $set: {
-                    ...updateNhanVien 
+                    ...updateNhanVien
                 }
             },
             { new: true }
-        ).exec(); 
+        ).exec();
     }
 
     async deleteNhanVien(_id: string): Promise<boolean> {

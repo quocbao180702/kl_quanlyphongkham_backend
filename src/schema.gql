@@ -164,8 +164,14 @@ type Phieuchidinhcanlamsang {
   phieuxacnhan: PhieuXacNhan!
   bhyt: Boolean!
   ngaytao: DateTime!
-  trangthai: Boolean!
+  trangthai: TrangThaiCLS!
   ketquacanlamsangs: [KetQuaCanLamSang!]!
+}
+
+enum TrangThaiCLS {
+  THANHTOAN
+  CHOKHAM
+  DAXETNGHIEM
 }
 
 type PhieuXacNhan {
@@ -184,6 +190,11 @@ enum TrangThaiKham {
   CHOXETNGIEM
   DAXETNGHIEM
   HOANTAT
+}
+
+type MonthRange {
+  month: Float!
+  count: Float!
 }
 
 type Toathuoc {
@@ -226,6 +237,11 @@ type Dichvu {
   hoadons: [Hoadon!]!
 }
 
+type MongthRange {
+  month: Float!
+  tongtien: Float!
+}
+
 type Sobenh {
   _id: ID!
   benhnhan: BenhNhan!
@@ -254,11 +270,17 @@ type Vattuyte {
 type Hoadonchidinhcanlamsang {
   _id: ID!
   benhnhan: BenhNhan!
+  idPhieuCLS: String
   bhyt: Boolean!
   chitietcanlamsang: [DichVu!]!
   tinhtrang: Boolean!
   thanhtien: Float!
   ngaytao: DateTime!
+}
+
+type MonthRangeCLS {
+  month: Float!
+  tongtien: Float!
 }
 
 type Blog {
@@ -287,6 +309,7 @@ type Query {
   getBenhNhanbyUserId(user: String!): BenhNhan
   getAllSinhhieu: [Sinhhieu!]!
   getAllSinhHieuByBenhNhan(benhnhanId: String!): Sinhhieu!
+  CountNhanVien: Float!
   getAllNhanVien: [NhanVien!]!
   getNhanVienbyUserId(user: String!): NhanVien
   CountBacSi: Float!
@@ -297,27 +320,35 @@ type Query {
   getAllDatLichbyTrangThai(trangthai: String!): [DatLich!]
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
+  CountChuyenKhoa: Float!
   getAllPhong: [Phong!]!
+  CountPhong: Float!
   CountThuoc: Float!
   getAllThuoc: [Thuoc!]!
   getThuocPagination(fetchPagination: FetchPagination!): [Thuoc!]!
   getThuocbyIds(ids: [String!]!): [Thuoc!]!
   getAllPhieuXacNhan: [PhieuXacNhan!]!
+  countPhieuXacNhanByDate(start: DateTime!, end: DateTime!): Float!
+  getStartAndEndOfMonth(year: Float!): [MonthRange!]!
   getAllPhieuXacNhanDaXetNgiem(ngaykham: String!, phongIds: String!): [PhieuXacNhan!]
   getAllByNgayVaPhong(ngaykham: String!, phongIds: String!, trangthai: String!): [PhieuXacNhan!]!
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
   getPhieuCanLamSangbyPhieuXacNhanId(phieuxacnhan: String!): Phieuchidinhcanlamsang
-  getAllPhieuCLSbyNgay(ngaytao: DateTime!, trangthai: Boolean!): [Phieuchidinhcanlamsang!]!
+  getAllPhieuCLSbyNgay(ngaytao: DateTime!, trangthai: String!): [Phieuchidinhcanlamsang!]!
   findAllRelatedKetQuaCanLamSang(ketQuaIds: [String!]!): [KetQuaCanLamSang!]
   getAllToaThuoc: [Toathuoc!]!
   getAllToaThuocbyBenhNhan(benhnhanId: String!): [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
+  getTotalThanhTienByDate(start: DateTime!, end: DateTime!): Float!
   getAllHoadonByBenhNhan(benhnhanId: String!): [Hoadon!]!
   getAllHoadon: [Hoadon!]!
+  getTongTienbyMonth(year: Float!): [MongthRange!]!
   getAllSoBenh: [Sobenh!]!
   onlyUser: OnlyUser
   getAllVatTuYTe: [Vattuyte!]!
+  getTongTienbyMonthCLS(year: Float!): [MonthRangeCLS!]!
   getAllHoaDonPhieuCanLamSang: [Hoadonchidinhcanlamsang!]!
+  getTotalThanhTienCLSByDate(start: DateTime!, end: DateTime!): Float!
   countBlogs: Float!
   getAllBlog(fetchPagination: FetchPagination!): [Blog!]!
   getLastestBlog(limit: Float!): [Blog!]!
@@ -381,7 +412,7 @@ type Mutation {
   updateTrangThaiKham(id: String!, trangthai: String!): PhieuXacNhan!
   deletePhieuXacNhan(_id: String!): Boolean!
   createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!, createKetQuaCLSList: [CreateKetquacanlamsangInput!]!): Phieuchidinhcanlamsang!
-  updateTrangThaiCanLamSang(id: String!): Phieuchidinhcanlamsang!
+  updateTrangThaiCanLamSang(id: String!, trangthai: String!): Phieuchidinhcanlamsang!
   updatePhieuchidinhcanlamsang(updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
   deletePhieuchidinhcanlamsang(id: String!): Phieuchidinhcanlamsang!
   createKetquacanlamsang(createKetquacanlamsangInput: CreateKetquacanlamsangInput!): KetQuaCanLamSang!
@@ -791,6 +822,7 @@ input UpdateVattuyteInput {
 
 input CreateHoadonchidinhcanlamsangInput {
   benhnhan: String!
+  idPhieuCLS: String!
   bhyt: Boolean!
   chitietcanlamsang: [DichVuInput!]!
 }

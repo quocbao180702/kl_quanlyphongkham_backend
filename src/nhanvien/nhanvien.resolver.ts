@@ -11,6 +11,11 @@ export class NhanvienResolver {
 
     constructor(private readonly nhanVienService: NhanvienService) { }
 
+    @Query(() => Number, {name: "CountNhanVien"})
+    async CountNhanVien(): Promise<Number | null>{
+        return await this.nhanVienService.getCount();
+    }
+
     @Query(() => [NhanVien])
     async getAllNhanVien(): Promise<NhanVien[]> {
         return await this.nhanVienService.getAllNhanVien();

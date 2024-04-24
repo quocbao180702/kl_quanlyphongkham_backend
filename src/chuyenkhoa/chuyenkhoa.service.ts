@@ -14,6 +14,10 @@ export class ChuyenkhoaService {
         return await this.chuyenkhoaModel.find().exec();
     }
 
+    async getCount(): Promise<Number>{
+        return await this.chuyenkhoaModel.countDocuments();
+    }
+
     async createChuyenKhoa(createChuyenKhoa: CreateChuyenKhoa): Promise<ChuyenKhoa |null>{
         const createdChuyenKhoa  = await this.chuyenkhoaModel.create(createChuyenKhoa);
         return createdChuyenKhoa;

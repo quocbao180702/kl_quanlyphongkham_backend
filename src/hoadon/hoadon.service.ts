@@ -4,6 +4,8 @@ import { UpdateHoadonInput } from './dto/update-hoadon.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Hoadon } from './entities/hoadon.entity';
 import { Model } from 'mongoose';
+import { MongthRange } from './dto/monthRange';
+import * as moment from 'moment';
 
 @Injectable()
 export class HoadonService {
@@ -16,8 +18,49 @@ export class HoadonService {
             .exec();
     }
 
-    async getAllHoadonByBenhNhan(benhnhanId ): Promise<Hoadon[]>{
-        return await this.hoadonModel.find({ benhnhan: benhnhanId}).populate('benhnhan').exec();
+    async getTotalThanhTienByDate(start: Date, end: Date): Promise<number> {
+        const startOfDay = new Date(start);
+       /*  startOfDay.setHours(0, 0, 0, 0); */
+        /* startOfDay.setHours(23, 59, 59, 999); */
+        const endOfDay = new Date(end);
+       /*  endOfDay.setHours(23, 59, 59, 999); */
+       /*  endOfDay.setHours(0, 0, 0, 0); */
+
+
+        const result = await this.hoadonModel.aggregate([
+            {
+                $match: {
+                    ngaytao: { $gte: startOfDay, $lte: endOfDay },
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: '$thanhtien' },
+                },
+            },
+        ]);
+
+        return result.length > 0 ? result[0].total : 0;
+    }
+
+    async getTongTienbyMonth(year: number): Promise<MongthRange[] | null>{
+        let data: MongthRange[] = []
+        for(let i = 1; i < 13; i++){
+            const startDate = moment([year, i-1]).startOf('month').toDate();
+            const endDate = moment([year, i-1]).endOf('month').toDate();
+
+            const tongtien = await this.getTotalThanhTienByDate(startDate, endDate);
+            data.push({
+                month: i,
+                tongtien: tongtien
+            })
+        }
+        return data
+    }
+
+    async getAllHoadonByBenhNhan(benhnhanId): Promise<Hoadon[]> {
+        return await this.hoadonModel.find({ benhnhan: benhnhanId }).populate('benhnhan').exec();
     }
 
     async createHoaDon(createHoadonInput: CreateHoadonInput): Promise<Hoadon | null> {

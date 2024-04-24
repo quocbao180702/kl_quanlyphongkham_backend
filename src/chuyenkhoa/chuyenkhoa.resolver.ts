@@ -14,6 +14,11 @@ export class ChuyenkhoaResolver {
         return await this.chuyenkhoaService.getAllChuyenKhoa();
     }
 
+    @Query(() => Number)
+    async CountChuyenKhoa(): Promise<Number>{
+        return await this.chuyenkhoaService.getCount()
+    }
+
     @Mutation(() => ChuyenKhoa)
     async createChuyenKhoa(@Args('newChuyenKhoaInput') newChuyenKhoaInput: NewChuyenKhoaInput): Promise<ChuyenKhoa | null>{
         const newChuyenKhoa = await this.chuyenkhoaService.createChuyenKhoa(newChuyenKhoaInput);

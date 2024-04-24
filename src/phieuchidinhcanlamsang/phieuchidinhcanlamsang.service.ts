@@ -11,6 +11,7 @@ import { ObjectId } from 'mongodb';
 /* import { PhieuXacNhanService } from 'src/phieuxacnhan/PhieuXacNhan.service'; */
 import { PhieuXacNhanService } from 'src/phieuxacnhan/phieuxacnhan.service';
 import { TrangThaiKham } from 'src/types/trangthai-kham.types';
+import { TrangThaiCLS } from './dto/trangthaiCLS';
 
 @Injectable()
 export class PhieuchidinhcanlamsangService {
@@ -73,7 +74,7 @@ export class PhieuchidinhcanlamsangService {
   }
 
 
-  async getAllPhieuCLSbyNgay(ngaytao: Date, trangthai: boolean): Promise<Phieuchidinhcanlamsang[] | null> {
+  async getAllPhieuCLSbyNgay(ngaytao: Date, trangthai: String): Promise<Phieuchidinhcanlamsang[] | null> {
     return await this.phieuCLSModel.find({ ngaytao, trangthai })
       .populate({
         path: 'benhnhan',
@@ -143,23 +144,18 @@ export class PhieuchidinhcanlamsangService {
     ).exec();
   }
 
-  async updateTrangThaiCanLamSang(id: string): Promise<Phieuchidinhcanlamsang | null> {
+  async updateTrangThaiCanLamSang(id: string, trangthai: string): Promise<Phieuchidinhcanlamsang | null> {
     try {
-      const phieuCLS = await this.phieuCLSModel.findById(id).exec();
-      if (!phieuCLS) {
-        throw new Error('Phiếu Cận Lâm Sàng Không Tìm Thấy');
-      }
-      phieuCLS.trangthai = !phieuCLS.trangthai;
-      await phieuCLS.save();
-      if (phieuCLS?.trangthai == true) {
+      const update = await this.phieuCLSModel.findByIdAndUpdate(id, { trangthai: trangthai }, { new: true }).exec();
+      if (update?.trangthai === TrangThaiCLS.DAXETNGHIEM) {
         const trangthai = TrangThaiKham.DAXETNGHIEM;
-        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(phieuCLS.phieuxacnhan.toString(), trangthai);
+        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(update.phieuxacnhan.toString(), trangthai);
       }
       else {
         const trangthai = TrangThaiKham.CHOXETNGIEM;
-        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(phieuCLS.phieuxacnhan.toString(), trangthai);
+        const updatePhieuXacNhan = await this.PhieuXacNhanService.updateTrangThaiKham(update.phieuxacnhan.toString(), trangthai);
       }
-      return phieuCLS;
+      return update;
     } catch (error) {
       console.error("Lỗi khi cập nhật trạng thái:", error);
       return null;
