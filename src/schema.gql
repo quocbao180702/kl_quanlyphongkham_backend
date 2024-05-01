@@ -57,12 +57,31 @@ type BacSi {
   user: Users!
   phongs: [Phong!]!
   chuyenkhoa: ChuyenKhoa!
+  lichkham: String
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Phiens {
+  batdau: String!
+  ketthuc: String!
+  trangthai: Boolean!
+  soluongToiDa: Float!
+}
+
+type Phienkham {
+  phiens: [Phiens!]!
+  ngaytrongtuan: String!
+}
+
+type Lichkham {
+  _id: ID!
+  ngaykham: [Phienkham!]!
+  ngaynghi: [DateTime!]!
+}
 
 type Sinhhieu {
   _id: ID!
@@ -116,6 +135,18 @@ type DatLich {
 enum TrangThaiDatKham {
   DANGXET
   XACNHAN
+}
+
+type DatLichBacSi {
+  _id: ID!
+  bacsi: BacSi!
+  benhnhan: BenhNhan!
+  motabenh: String!
+  phien: Phiens!
+  ngaydat: DateTime!
+  ngaykham: DateTime!
+  email: String!
+  trangthai: TrangThaiDatKham!
 }
 
 type Benh {
@@ -315,9 +346,12 @@ type Query {
   CountBacSi: Float!
   getAllBacSi(fetchPagination: FetchPagination!): [BacSi!]!
   getBacSibyUserId(user: String!): BacSi
+  getAllLich: [Lichkham!]!
+  getLichKham(id: String!): Lichkham!
   getAllBenh: [Benh!]!
   getAllDatLich: [DatLich!]
   getAllDatLichbyTrangThai(trangthai: String!): [DatLich!]
+  getAllDatlichBacSi: [DatLichBacSi!]
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
   CountChuyenKhoa: Float!
@@ -384,9 +418,12 @@ type Mutation {
   createNhanVien(newNhanVienInput: NewNhanVienInput!): NhanVien!
   updateNhanVien(input: UpdateNhanVienInput!): NhanVien!
   deleteNhanVien(_id: String!): Boolean!
-  createBacSi(newBacSiInput: NewBacSiInput!): BacSi!
+  createBacSi(newBacSiInput: NewBacSiInput!, createLichkham: CreateLichkhamInput!): BacSi!
   updateBacSi(input: UpdateBacSiInput!): BacSi!
   deleteBacSi(_id: String!): Boolean!
+  createLichKham(createLichKham: CreateLichkhamInput!): Lichkham!
+  updateLichKham(updateLichkham: UpdateLichkhamInput!): Lichkham!
+  deleteLichKham(id: String!): Boolean!
   createBenh(newBenhInput: NewBenhInput!): Benh!
   updateBenh(input: UpdateBenhInput!): Benh!
   deleteBenh(_id: String!): Boolean!
@@ -394,6 +431,10 @@ type Mutation {
   updateDatLich(input: UpdateDatLichInput!): DatLich!
   updateTrangThaiDatLich(id: String!, trangthai: String!): DatLich!
   deleteDatLich(_id: String!): Boolean!
+  createDatlichBacSi(createDatlichBacSi: NewDatLichBacSiInput!): DatLichBacSi!
+  updateDatlichBacSi(updateDatlichBacSi: UpdateDatLichBacSiInput!): DatLichBacSi!
+  updateTrangThaiDatLichBacSi(id: String!, trangthai: String!): DatLichBacSi!
+  deleteDatLichBacSi(_id: String!): Boolean!
   createLoaicanlamsang(createLoaicanlamsangInput: NewLoaiCanLamSangInput!): LoaiCanLamSang!
   updateLoaicanlamsang(updateLoaicanlamsangInput: UpdateLoaicanlamsangInput!): LoaiCanLamSang!
   deleteLoaicanlamsang(id: String!): Boolean!
@@ -560,6 +601,23 @@ input NewBacSiInput {
   chuyenkhoa: ID!
 }
 
+input CreateLichkhamInput {
+  ngaykham: [PhienkhamInput!]!
+  ngaynghi: [DateTime!]!
+}
+
+input PhienkhamInput {
+  phiens: [PhienInput!]!
+  ngaytrongtuan: String!
+}
+
+input PhienInput {
+  batdau: String!
+  ketthuc: String!
+  trangthai: Boolean!
+  soluongToiDa: Float!
+}
+
 input UpdateBacSiInput {
   hoten: String
   ngaysinh: DateTime
@@ -571,6 +629,12 @@ input UpdateBacSiInput {
   username: String
   phongs: [ID!]
   chuyenkhoa: ID
+  id: String!
+}
+
+input UpdateLichkhamInput {
+  ngaykham: [PhienkhamInput!]
+  ngaynghi: [DateTime!]
   id: String!
 }
 
@@ -605,6 +669,29 @@ input UpdateDatLichInput {
   ngaydat: DateTime
   ngaykham: DateTime
   email: String
+  id: String!
+}
+
+input NewDatLichBacSiInput {
+  bacsi: String!
+  hoten: String!
+  sodienthoai: String!
+  motabenh: String!
+  ngaydat: DateTime!
+  ngaykham: DateTime!
+  email: String!
+  phien: PhienInput!
+}
+
+input UpdateDatLichBacSiInput {
+  bacsi: String
+  hoten: String
+  sodienthoai: String
+  motabenh: String
+  ngaydat: DateTime
+  ngaykham: DateTime
+  email: String
+  phien: PhienInput
   id: String!
 }
 

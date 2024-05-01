@@ -6,6 +6,7 @@ import { UpdateDatLichInput } from './dto/update-datlich.input';
 import { NewDatLichInput } from './dto/new-datlich.input';
 import { TrangThaiDatKham } from 'src/types/trangthai-datkham-types';
 import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
+import { DatLichBacSi } from './entities/datlicbacsi.entity';
 
 @Injectable()
 export class DatlichService {
@@ -42,7 +43,7 @@ export class DatlichService {
             return null;
         }
     }
-    
+
     async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich | null> {
         const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLich.sodienthoai);
 
@@ -85,4 +86,5 @@ export class DatlichService {
     async deleteDatLich(_id: string): Promise<void> {
         await this.datLichModel.deleteOne({ _id });
     }
+
 }

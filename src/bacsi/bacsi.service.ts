@@ -7,11 +7,14 @@ import { UsersService } from 'src/users/users.service';
 import { ObjectId } from 'mongodb';
 import { NewBacSiInput } from './dto/new-bacsi.input';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { CreateLichkhamInput } from 'src/lichkham/dto/create-lichkham.input';
+import { LichkhamService } from 'src/lichkham/lichkham.service';
 
 @Injectable()
 export class BacsiService {
     constructor(@InjectModel(BacSi.name) private readonly bacsiModel: Model<BacSi>,
-        private readonly usersService: UsersService) { }
+        private readonly usersService: UsersService,
+        private readonly LichkhamService: LichkhamService) { }
 
 
     async getCount(): Promise<number> {
@@ -19,7 +22,7 @@ export class BacsiService {
         return count
     }
 
-    async getAllBacSi(fetchPagination: FetchPagination): Promise<BacSi[]> {
+    async getAllBacSi(fetchPagination: FetchPagination): Promise<BacSi[] | null> {
         return await this.bacsiModel.find(null, null, { limit: fetchPagination.take, skip: fetchPagination.skip }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
     }
 
@@ -28,38 +31,78 @@ export class BacsiService {
         return bacsi;
     }
 
-    async createBacSi(createBacSiDto: NewBacSiInput): Promise<BacSi | null> {
+    async createBacSi(createBacSiDto: NewBacSiInput, createLichKham: CreateLichkhamInput): Promise<BacSi | null> {
         try {
-            const user = await this.usersService.getUserByUsername(createBacSiDto.username);
-            if (user.thongtin == true) {
-                throw new Error('User đã có thông tin');
+            if (createBacSiDto.username == "") {
+                const createdLichKham = await this.LichkhamService.createLichKham(createLichKham);
+                const newBacSi = await this.bacsiModel.create({ ...createBacSiDto, user: null, lichkham: createdLichKham?._id })
+                const createdBacSi = await this.bacsiModel
+                    .findById(newBacSi._id)
+                    .populate('user')
+                    .populate('phongs')
+                    .populate('chuyenkhoa')
+                    .populate('lichkham')
+                    .exec();
+                return createdBacSi
             }
-            const newBacSi = await this.bacsiModel.create({ ...createBacSiDto, user: user?._id });
-            const createdBacSi = await this.bacsiModel
-                .findById(newBacSi._id)
-                .populate('user')
-                .populate('phongs')
-                .populate('chuyenkhoa')
-                .exec();
-            await this.usersService.updateTrangThaiThongTinUser(user?._id.toString());
-            return createdBacSi;
+            else {
+                const user = await this.usersService.getUserByUsername(createBacSiDto.username);
+                if (user.thongtin) {
+                    throw new Error('User đã có thông tin');
+                }
+
+                const createdLichKham = await this.LichkhamService.createLichKham(createLichKham);
+
+                const newBacSiData = { ...createBacSiDto, user: user?._id, lichkham: createdLichKham?._id };
+
+                const newBacSi = await this.bacsiModel.create(newBacSiData);
+
+                const createdBacSi = await this.bacsiModel
+                    .findById(newBacSi._id)
+                    .populate('user')
+                    .populate('phongs')
+                    .populate('chuyenkhoa')
+                    .populate('lichkham')
+                    .exec();
+
+                await this.usersService.updateTrangThaiThongTinUser(user?._id.toString());
+
+                return createdBacSi;
+            }
         } catch (error) {
-            throw new Error('Bác sĩ xử lý khóa bị lỗi: ' + error.message);
+            throw new Error('Xử lý tạo bác sĩ bị lỗi: ' + error.message);
         }
     }
 
 
 
     async updateBacSi(updateBacSi: UpdateBacSiInput): Promise<BacSi | null> {
-        return await this.bacsiModel.findByIdAndUpdate(
-            updateBacSi.id,
-            {
-                $set: {
-                    ...updateBacSi
-                }
-            },
-            { new: true }
-        ).exec();
+        if (updateBacSi.username == "") {
+            return await this.bacsiModel.findByIdAndUpdate(
+                updateBacSi.id,
+                {
+                    $set: {
+                        ...updateBacSi
+                    }
+                },
+                { new: true }
+            ).exec();
+        }
+        else {
+            const user = await this.usersService.getUserByUsername(updateBacSi.username);
+            if (!user) {
+                throw new Error('Không Tìm Thấy Thông Tin Tài Khoản');
+            }
+            return await this.bacsiModel.findByIdAndUpdate(
+                updateBacSi.id,
+                {
+                    $set: {
+                        ...updateBacSi, user: user?._id
+                    }
+                },
+                { new: true }
+            ).exec();
+        }
     }
 
     async deleteBacSi(_id: string): Promise<void> {

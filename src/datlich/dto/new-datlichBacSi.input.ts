@@ -1,7 +1,12 @@
 import { Field, InputType } from "@nestjs/graphql";
+import { PhienInput } from "src/types/phiens.input";
 
 @InputType()
-export class NewDatLichInput{
+export class NewDatLichBacSiInput{
+
+
+    @Field()
+    bacsi: string
 
     @Field()
     hoten: string;
@@ -20,4 +25,9 @@ export class NewDatLichInput{
 
     @Field()
     email: string;
+
+    @Field(() => PhienInput)
+    phien: PhienInput;
+
+
 }

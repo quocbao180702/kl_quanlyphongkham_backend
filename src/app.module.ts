@@ -30,6 +30,7 @@ import { HoadonchidinhcanlamsangModule } from './hoadonchidinhcanlamsang/hoadonc
 import { BlogsModule } from './blogs/blogs.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
+import { LichkhamModule } from './lichkham/lichkham.module';
 
 @Module({
   controllers: [AppController,],
@@ -72,6 +73,7 @@ import { ConfigModule } from '@nestjs/config';
     HoadonchidinhcanlamsangModule,
     BlogsModule,
     MailModule,
+    LichkhamModule,
   ],
 })
 export class AppModule { }

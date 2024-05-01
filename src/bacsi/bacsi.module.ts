@@ -4,10 +4,12 @@ import { BacsiResolver } from './bacsi.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BacSi, BacSiSchema } from './entities/bacsi.entity';
 import { UsersModule } from 'src/users/users.module';
+import { LichkhamModule } from 'src/lichkham/lichkham.module';
 
 @Module({
   providers: [BacsiService, BacsiResolver],
   imports: [
+    LichkhamModule,
     UsersModule,
     MongooseModule.forFeature([{name: BacSi.name, schema: BacSiSchema}])
   ],
