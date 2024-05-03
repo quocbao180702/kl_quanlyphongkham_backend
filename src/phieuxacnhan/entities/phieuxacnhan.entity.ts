@@ -4,6 +4,7 @@ import mongoose, { HydratedDocument, Schema as MongooSchema } from 'mongoose';
 import { BenhNhan } from 'src/benhnhan/entities/benhnhan.entity';
 import { Phieuchidinhcanlamsang } from 'src/phieuchidinhcanlamsang/entities/phieuchidinhcanlamsang.entity';
 import { Phong } from 'src/phong/entities/phong.entity';
+import { Phiens } from 'src/types/phiens';
 import { TrangThaiKham } from 'src/types/trangthai-kham.types';
 
 export type PhieuXacNhanDocument = HydratedDocument<PhieuXacNhan>;
@@ -23,7 +24,7 @@ export class PhieuXacNhan {
   @Field(() => [Phong])
   phongs: Phong[];
 
-  @Prop({type: String, enum: TrangThaiKham, default: TrangThaiKham.CHOKHAM })
+  @Prop({ type: String, enum: TrangThaiKham, default: TrangThaiKham.CHOKHAM })
   @Field(type => TrangThaiKham)
   trangthai: TrangThaiKham;
 
@@ -34,6 +35,10 @@ export class PhieuXacNhan {
   @Prop()
   @Field(() => Date)
   ngaykham: Date;
+
+  @Prop({ type: Phiens })
+  @Field(() => Phiens)
+  phien: Phiens
 
   @Prop()
   @Field(() => Date)

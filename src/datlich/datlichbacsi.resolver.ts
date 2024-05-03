@@ -16,6 +16,11 @@ export class DatlichBacSiResolver {
         return await this.datlichBacSiService.getAllDatLichBacSi();
     }
 
+    @Query(() => [DatLichBacSi], { nullable: true })
+    async getAllDatLichBacSiByTrangThai(@Args('trangthai') trangthai: string): Promise<DatLichBacSi[]> {
+        return await this.datlichBacSiService.getAllDatLichBacSiByTrangThai(trangthai);
+    }
+
     @Mutation(() => DatLichBacSi)
     async createDatlichBacSi(@Args('createDatlichBacSi') createDatlichBacSi: NewDatLichBacSiInput): Promise<DatLichBacSi | null> {
         return await this.datlichBacSiService.createDatlichBacSi(createDatlichBacSi);

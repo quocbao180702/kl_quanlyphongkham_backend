@@ -135,6 +135,7 @@ type DatLich {
 enum TrangThaiDatKham {
   DANGXET
   XACNHAN
+  HUY
 }
 
 type DatLichBacSi {
@@ -212,6 +213,7 @@ type PhieuXacNhan {
   trangthai: TrangThaiKham!
   sothutu: Int!
   ngaykham: DateTime!
+  phien: Phiens!
   ngaytao: DateTime!
   phieuchidinhcanlamsang: Phieuchidinhcanlamsang
 }
@@ -352,6 +354,7 @@ type Query {
   getAllDatLich: [DatLich!]
   getAllDatLichbyTrangThai(trangthai: String!): [DatLich!]
   getAllDatlichBacSi: [DatLichBacSi!]
+  getAllDatLichBacSiByTrangThai(trangthai: String!): [DatLichBacSi!]
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
   CountChuyenKhoa: Float!
@@ -767,6 +770,7 @@ input CreatePhieuXacNhanInput {
   benhnhan: String!
   phongs: [String!]!
   ngaykham: DateTime!
+  phien: PhienInput!
   ngaytao: DateTime!
   email: String!
 }
@@ -775,6 +779,7 @@ input UpdatePhieuXacNhanInput {
   benhnhan: String
   phongs: [String!]
   ngaykham: DateTime
+  phien: PhienInput
   ngaytao: DateTime
   email: String
   id: String!

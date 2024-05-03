@@ -6,6 +6,7 @@ import path from "path";
 import { BenhnhanService } from "src/benhnhan/benhnhan.service";
 import { NewDatLichBacSiInput } from "./dto/new-datlichBacSi.input";
 import { UpdateDatLichBacSiInput } from "./dto/update-datlichbacsi.input";
+import { TrangThaiDatKham } from "src/types/trangthai-datkham-types";
 
 @Injectable()
 export class DatLichBacSiService {
@@ -20,7 +21,30 @@ export class DatLichBacSiService {
             populate: {
                 path: 'user'
             }
-        }).populate('bacsi').exec();
+        }).populate({
+            path: 'bacsi',
+            populate: [{
+                path: 'chuyenkhoa',
+            }, {
+                path: 'phongs'
+            }]
+        }).exec();
+    }
+
+    async getAllDatLichBacSiByTrangThai(trangthai: string): Promise<DatLichBacSi[] | null> {
+        return await this.datlichBacSiModel.find({ trangthai: trangthai }).populate({
+            path: 'benhnhan',
+            populate: {
+                path: 'user'
+            }
+        }).populate({
+            path: 'bacsi',
+            populate: [{
+                path: 'chuyenkhoa',
+            }, {
+                path: 'phongs'
+            }]
+        }).exec();
     }
 
 
@@ -58,8 +82,9 @@ export class DatLichBacSiService {
         }
     }
 
+
     async deleteDatLichBacSi(_id: string): Promise<boolean> {
-       const result = await this.datlichBacSiModel.deleteOne({ _id }).exec();
+        const result = await this.datlichBacSiModel.deleteOne({ _id }).exec();
         return result.deletedCount > 0
     }
 

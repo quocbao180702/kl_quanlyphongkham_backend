@@ -26,6 +26,7 @@ export class PhieuXacNhanService {
         }
       })
       .populate('phongs')
+      .sort({'phien.batdau': 1})
       .exec();
   }
 
@@ -89,14 +90,14 @@ export class PhieuXacNhanService {
         populate: {
           path: 'user'
         }
-      });
+      }).sort({'phien.batdau': 1});
 
       // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
       if (phong && phong.length > 0) {
         query = query.populate('phongs');
       }
 
-      const phieuXacNhanDaXetNgiem = await query.exec();
+      const phieuXacNhanDaXetNgiem = await query.sort({'phien.batdau': 1}).exec();
       return phieuXacNhanDaXetNgiem;
     } catch (error) {
       console.error("Lỗi khi lấy tất cả các phiếu xác nhận đã xét nghiệm:", error);
@@ -123,7 +124,7 @@ export class PhieuXacNhanService {
       nextDay.setUTCDate(ngayKhamDate.getUTCDate() + 1);
       return this.phieuxacnhanModel.find({
         ngaykham: { $gte: ngayKhamDate, $lt: nextDay }
-      }).exec();
+      }).sort({'phien.batdau': 1}).exec();
     } catch (error) {
       console.log(error);
       return null;
@@ -160,7 +161,7 @@ export class PhieuXacNhanService {
       populate: {
         path: 'user'
       }
-    });
+    }).sort({'phien.batdau': 1});
 
     // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
     if (phong && phong.length > 0) {
