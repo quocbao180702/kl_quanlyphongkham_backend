@@ -354,6 +354,7 @@ type Query {
   getAllDatLich: [DatLich!]
   getAllDatLichbyTrangThai(trangthai: String!): [DatLich!]
   getAllDatlichBacSi: [DatLichBacSi!]
+  getAllDatLichBacSiByBacSi(bacsi: String!): [DatLichBacSi!]
   getAllDatLichBacSiByTrangThai(trangthai: String!): [DatLichBacSi!]
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!

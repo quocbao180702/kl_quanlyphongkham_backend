@@ -31,6 +31,22 @@ export class DatLichBacSiService {
         }).exec();
     }
 
+    async getAllLichBacSibyBacSi(bacsi: string): Promise<DatLichBacSi[] | null>{
+        return await this.datlichBacSiModel.find({ bacsi: bacsi }).populate({
+            path: 'benhnhan',
+            populate: {
+                path: 'user'
+            }
+        }).populate({
+            path: 'bacsi',
+            populate: [{
+                path: 'chuyenkhoa',
+            }, {
+                path: 'phongs'
+            }]
+        }).exec();
+    }
+
     async getAllDatLichBacSiByTrangThai(trangthai: string): Promise<DatLichBacSi[] | null> {
         return await this.datlichBacSiModel.find({ trangthai: trangthai }).populate({
             path: 'benhnhan',
