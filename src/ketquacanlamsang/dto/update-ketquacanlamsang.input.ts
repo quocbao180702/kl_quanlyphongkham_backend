@@ -7,8 +7,8 @@ export class UpdateKetquacanlamsangInput extends PartialType(CreateKetquacanlams
   @Field()
   id: string;
 
-  @Field(type => LinkImageInput)
-  hinhanh: LinkImageInput;
+  @Field(() => [LinkImageInput])
+  hinhanh: LinkImageInput[]
 
   @Field()
   ketluan: string;

@@ -20,6 +20,11 @@ export class BenhNhanResolver {
     ) { }
 
 
+    @Query(() => [BenhNhan], {nullable: true})
+    async getBenhNhanbyHoten(@Args('hoten') hoten: string): Promise<BenhNhan[] | null>{
+        return this.benhnhanService.getBenhNhanbyHoten(hoten);
+    }
+
     @Query(() => Number, { name: 'CountBenhNhan' })
     async getCount(): Promise<number> {
         return this.benhnhanService.getCount();

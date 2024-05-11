@@ -184,7 +184,7 @@ type LoaiCanLamSang {
 type KetQuaCanLamSang {
   _id: ID!
   loaicanlamsang: LoaiCanLamSang!
-  hinhanh: LinkImage
+  hinhanh: [LinkImage!]
   ketluan: String
   thietbi: String
 }
@@ -328,12 +328,18 @@ type Blog {
   ngaytao: DateTime!
 }
 
+type Test {
+  _id: ID!
+  listImages: [LinkImage!]!
+}
+
 type Query {
   countUser: Float!
   getAllUsers(fetchUsersArgs: FetchUsersArgs!): [Users!]!
   getUserByUsername(username: String!): Users
   getUserByEmail(email: String!): Users!
   getUserById(_id: String!): Users!
+  getBenhNhanbyHoten(hoten: String!): [BenhNhan!]
   CountBenhNhan: Float!
   getAllBenhNhan(fetchPagination: FetchPagination!): [BenhNhan!]!
   getAllBenhNhanNoPagination: [BenhNhan!]!
@@ -379,18 +385,22 @@ type Query {
   getAllDichVu: [Dichvu!]!
   getTotalThanhTienByDate(start: DateTime!, end: DateTime!): Float!
   getAllHoadonByBenhNhan(benhnhanId: String!): [Hoadon!]!
-  getAllHoadon: [Hoadon!]!
+  CountHoadon: Float!
+  getAllHoadon(fetchPagination: FetchPagination!): [Hoadon!]!
+  getHoaDonbyNgay(ngaykham: String!): [Hoadon!]!
   getTongTienbyMonth(year: Float!): [MongthRange!]!
   getAllSoBenh: [Sobenh!]!
   onlyUser: OnlyUser
   getAllVatTuYTe: [Vattuyte!]!
   getTongTienbyMonthCLS(year: Float!): [MonthRangeCLS!]!
-  getAllHoaDonPhieuCanLamSang: [Hoadonchidinhcanlamsang!]!
+  CountHoadonchidinhcanlamsang: Float!
+  getAllHoaDonPhieuCanLamSang(fetchPagination: FetchPagination!): [Hoadonchidinhcanlamsang!]!
   getTotalThanhTienCLSByDate(start: DateTime!, end: DateTime!): Float!
   countBlogs: Float!
   getAllBlog(fetchPagination: FetchPagination!): [Blog!]!
   getLastestBlog(limit: Float!): [Blog!]!
   getBlogbyId(id: String!): Blog!
+  get(id: String!): Test!
 }
 
 input FetchUsersArgs {
@@ -401,6 +411,7 @@ input FetchUsersArgs {
 input FetchPagination {
   skip: Int! = 0
   take: Int! = 25
+  search: String
 }
 
 union OnlyUser = Users | BenhNhan | BacSi | NhanVien
@@ -487,6 +498,7 @@ type Mutation {
   updateKichHoat(_id: String!): Boolean!
   updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
   deleteBlog(id: String!): Boolean!
+  createTest(createTestInput: CreateTestInput!): Test!
 }
 
 input NewUserInput {
@@ -810,7 +822,7 @@ input UpdatePhieuchidinhcanlamsangInput {
 input UpdateKetquacanlamsangInput {
   loaicanlamsang: String
   id: String!
-  hinhanh: LinkImageInput!
+  hinhanh: [LinkImageInput!]!
   ketluan: String!
   thietbi: String!
 }
@@ -935,6 +947,10 @@ input UpdateBlogInput {
   tomtat: String
   noidung: String
   id: String!
+}
+
+input CreateTestInput {
+  listImages: [LinkImageInput!]!
 }
 
 type Subscription {

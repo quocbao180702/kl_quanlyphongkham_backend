@@ -6,25 +6,53 @@ import { Hoadon } from './entities/hoadon.entity';
 import { Model } from 'mongoose';
 import { MongthRange } from './dto/monthRange';
 import * as moment from 'moment';
+import { FetchPagination } from 'src/types/fetchPagination.input';
+import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
 
 @Injectable()
 export class HoadonService {
-    constructor(@InjectModel(Hoadon.name) private readonly hoadonModel: Model<Hoadon>) { }
+    constructor(@InjectModel(Hoadon.name) private readonly hoadonModel: Model<Hoadon>,
+        private readonly benhnhanService: BenhnhanService) { }
 
 
-    async getAllHoadon(): Promise<Hoadon[]> {
-        return await this.hoadonModel.find()
-            .populate('benhnhan')
-            .exec();
+    async getCount(): Promise<number> {
+        const count = await this.hoadonModel.countDocuments();
+        return count
+    }
+
+    async getAllHoadon(fetchPagination: FetchPagination): Promise<Hoadon[]> {
+        const ngaykhamDate = new Date(fetchPagination.search);
+        let query = this.hoadonModel.find().populate('benhnhan').sort({ ngaytao: -1 });
+
+        if (fetchPagination.search) {
+            const searchBenhNhan = await this.benhnhanService.getBenhNhanbyHoten(fetchPagination.search);
+            const idBenhNhan = searchBenhNhan?.map(benhnhan => benhnhan?._id.toString());
+            if (idBenhNhan.length > 0) {
+                query = query.find({ benhnhan: { $in: idBenhNhan } });
+            }
+            else {
+                return []
+            }
+        }
+
+        const hoadons = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+        return hoadons;
+    }
+
+
+    async getHoaDonbyNgay(ngaykham: string): Promise<Hoadon[] | null> {
+        const ngaykhamDate = new Date(ngaykham);
+
+        return await this.hoadonModel.find({ ngaytao: { $gte: ngaykhamDate, $lt: new Date(ngaykhamDate.getTime() + 24 * 60 * 60 * 1000) }, }).populate('benhnhan').exec();
     }
 
     async getTotalThanhTienByDate(start: Date, end: Date): Promise<number> {
         const startOfDay = new Date(start);
-       /*  startOfDay.setHours(0, 0, 0, 0); */
+        /*  startOfDay.setHours(0, 0, 0, 0); */
         /* startOfDay.setHours(23, 59, 59, 999); */
         const endOfDay = new Date(end);
-       /*  endOfDay.setHours(23, 59, 59, 999); */
-       /*  endOfDay.setHours(0, 0, 0, 0); */
+        /*  endOfDay.setHours(23, 59, 59, 999); */
+        /*  endOfDay.setHours(0, 0, 0, 0); */
 
 
         const result = await this.hoadonModel.aggregate([
@@ -44,11 +72,11 @@ export class HoadonService {
         return result.length > 0 ? result[0].total : 0;
     }
 
-    async getTongTienbyMonth(year: number): Promise<MongthRange[] | null>{
+    async getTongTienbyMonth(year: number): Promise<MongthRange[] | null> {
         let data: MongthRange[] = []
-        for(let i = 1; i < 13; i++){
-            const startDate = moment([year, i-1]).startOf('month').toDate();
-            const endDate = moment([year, i-1]).endOf('month').toDate();
+        for (let i = 1; i < 13; i++) {
+            const startDate = moment([year, i - 1]).startOf('month').toDate();
+            const endDate = moment([year, i - 1]).endOf('month').toDate();
 
             const tongtien = await this.getTotalThanhTienByDate(startDate, endDate);
             data.push({

@@ -31,6 +31,7 @@ import { BlogsModule } from './blogs/blogs.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
 import { LichkhamModule } from './lichkham/lichkham.module';
+import { TestModule } from './test/test.module';
 
 @Module({
   controllers: [AppController,],
@@ -74,6 +75,7 @@ import { LichkhamModule } from './lichkham/lichkham.module';
     BlogsModule,
     MailModule,
     LichkhamModule,
+    TestModule,
   ],
 })
 export class AppModule { }

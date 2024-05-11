@@ -11,4 +11,7 @@ export class FetchPagination {
     @Min(1)
     @Max(50)
     take = 25
+
+    @Field(() => String, { nullable: true})
+    search: string
 }

@@ -18,9 +18,9 @@ export class KetQuaCanLamSang {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'LoaiCanLamSang', required: true })
     loaicanlamsang: LoaiCanLamSang;
 
-    @Prop({type: LinkImage})
-    @Field(type => LinkImage,{ nullable: true })
-    hinhanh: LinkImage;
+    @Prop({type: [LinkImage]})
+    @Field(() => [LinkImage], {nullable: true})
+    hinhanh: LinkImage[]
 
     @Prop()
     @Field({ nullable: true })

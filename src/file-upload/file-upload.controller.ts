@@ -26,6 +26,18 @@ export const imageFilter = (_, file, callback) => {
 }
 
 
+export const excelFilter = (_, file, callback) => {
+    if (
+        !file.originalname.match(
+            /\.(xls|xlsx|XLS|XLSX)$/,
+        )
+    ) {
+        return callback(new Error('Chỉ cho phép tệp Excel!'), false);
+    }
+    callback(null, true);
+};
+
+
 @Controller('file-upload')
 export class FileUploadController {
     // images
@@ -40,7 +52,7 @@ export class FileUploadController {
         }),
     )
     async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
-        /* console.log(files) */
+        console.log(files)
         const response = []
         files.forEach((file) => {
             const fileResponse = {
@@ -49,7 +61,31 @@ export class FileUploadController {
             }
             response.push(fileResponse)
         })
-        /* console.log(response) */
+        console.log(response)
+        return response
+    }
+
+
+    @Post('PhongKhamDocumentUpload')
+    @UseInterceptors(
+        FilesInterceptor('file', 10, {
+            storage: diskStorage({
+                destination: `${process.env.FILE_PATH || 'files'}/documents`,
+                filename: editFileName,
+            }),
+            fileFilter: excelFilter,
+        }),
+    )
+    async uploadDocument(@UploadedFiles() files: Express.Multer.File[]) {
+        console.log(files)
+        const response = []
+        files.forEach((file) => {
+            const fileResponse = {
+                originalname: file.originalname,
+                filename: file.filename,
+            }
+            response.push(fileResponse)
+        })
         return response
     }
 }

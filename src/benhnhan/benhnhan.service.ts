@@ -34,6 +34,15 @@ export class BenhnhanService {
         return benhNhan;
     }
 
+    /* async getBenhNhanbyHoten(hoten: string): Promise<BenhNhan[] | null> {
+        try {
+            return await this.benhnhanModel.find({ hoten: { $regex: hoten, $options: 'ui' } }).exec();
+        } catch (error) {
+            console.error("Error in getBenhNhanbyHoten:", error);
+            return null;
+        }
+    } */
+
     async getBenhNhanbyUserId(user: string): Promise<BenhNhan | null> {
         return await this.benhnhanModel.findOne({ user: user }).populate('user').exec();
     }
@@ -42,6 +51,20 @@ export class BenhnhanService {
         return (await this.benhnhanModel.findOne({ sodienthoai: sodienthoai }));
     }
 
+    async getBenhNhanbyHoten(hoten: string): Promise<BenhNhan[] | null> {
+        try {
+            return await this.benhnhanModel.find({
+                $text: {
+                    $search: `'\"${hoten}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     async updateUserbySoDienThoai(user: string, sodienthoai: string): Promise<BenhNhan | null> {
         try {

@@ -8,12 +8,4 @@ export class CreateKetquacanlamsangInput {
   @Field(() => String)
   loaicanlamsang: string;
 
-/*   @Field(type => LinkImageInput)
-  hinhanh: LinkImageInput;
-
-  @Field()
-  ketluan: string;
-
-  @Field()
-  thietbi: string */
 }

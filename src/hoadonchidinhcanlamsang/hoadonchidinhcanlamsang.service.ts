@@ -4,13 +4,16 @@ import { UpdateHoadonchidinhcanlamsangInput } from './dto/update-hoadonchidinhca
 import { Hoadon } from 'src/hoadon/entities/hoadon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Hoadonchidinhcanlamsang } from './entities/hoadonchidinhcanlamsang.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { MonthRangeCLS } from './dto/MonthRang';
 import *  as moment from 'moment';
+import { FetchPagination } from 'src/types/fetchPagination.input';
+import { BenhnhanService } from 'src/benhnhan/benhnhan.service';
 
 @Injectable()
 export class HoadonchidinhcanlamsangService {
-  constructor(@InjectModel(Hoadonchidinhcanlamsang.name) private readonly hoadonchidinhcanlamsanModel: Model<Hoadonchidinhcanlamsang>) { }
+  constructor(@InjectModel(Hoadonchidinhcanlamsang.name) private readonly hoadonchidinhcanlamsanModel: Model<Hoadonchidinhcanlamsang>,
+    private readonly benhNhanService: BenhnhanService) { }
 
 
   async createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang: CreateHoadonchidinhcanlamsangInput): Promise<Hoadonchidinhcanlamsang | null> {
@@ -72,10 +75,6 @@ export class HoadonchidinhcanlamsangService {
     return data
   }
 
-
-
-
-
   async updateTinhTrangHoaDonCLS(id: string): Promise<Hoadonchidinhcanlamsang | null> {
     try {
       const hoadonchidinhcanlamsang = await this.hoadonchidinhcanlamsanModel.findById(id).exec();
@@ -91,13 +90,41 @@ export class HoadonchidinhcanlamsangService {
   }
 
 
-  async getAllHoaDonPhieuCanLamSang(): Promise<Hoadonchidinhcanlamsang[]> {
-    return await this.hoadonchidinhcanlamsanModel.find().populate({
+  async getAllHoaDonPhieuCanLamSang(fetchPagination: FetchPagination): Promise<Hoadonchidinhcanlamsang[]> {
+    let query = this.hoadonchidinhcanlamsanModel.find().populate({
       path: 'benhnhan',
       populate: {
         path: 'user'
       }
-    }).exec();
+    }).sort({ ngaytao: -1 });
+
+    if (fetchPagination.search) {
+      const searchBenhNhan = await this.benhNhanService.getBenhNhanbyHoten(fetchPagination.search);
+
+      const idBenhNhan = searchBenhNhan?.map(benhnhan => benhnhan?._id.toString());
+
+      if (idBenhNhan.length > 0) {
+        query = query.find({ benhnhan: { $in: idBenhNhan } });
+      }
+      else{
+        return []
+      }
+    }
+
+    const hoadoncanlamsangs = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+
+    return hoadoncanlamsangs;
+  }
+
+
+  async getCount(): Promise<number> {
+    const count = await this.hoadonchidinhcanlamsanModel.countDocuments();
+    return count
+  }
+
+  async getAllHoaDonPhieuCanLamSangbyNgay(ngaykham: string): Promise<Hoadonchidinhcanlamsang[] | null> {
+    const ngaykhamDate = new Date(ngaykham)
+    return await this.hoadonchidinhcanlamsanModel.find({ ngaytao: { $gte: ngaykhamDate, $lt: new Date(ngaykhamDate.getTime() + 24 * 60 * 60 * 1000) } })
   }
 
 }

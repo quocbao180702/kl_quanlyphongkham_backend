@@ -4,6 +4,7 @@ import { Hoadon } from './entities/hoadon.entity';
 import { CreateHoadonInput } from './dto/create-hoadon.input';
 import { UpdateHoadonInput } from './dto/update-hoadon.input';
 import { MongthRange } from './dto/monthRange';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Resolver(() => Hoadon)
 export class HoadonResolver {
@@ -30,15 +31,20 @@ export class HoadonResolver {
     return this.hoadonService.updateTrangThaiHoaDon(id);
   }
 
-  @Query(() => [Hoadon])
-  getAllHoadon() {
-    return this.hoadonService.getAllHoadon();
+  @Query(() => Number, {name: 'CountHoadon'})
+  async getCount(): Promise<number>{
+    return this.hoadonService.getCount();
   }
 
-  /* @Query(() => Hoadon, { name: 'hoadon' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.hoadonService.findOne(id);
-  } */
+  @Query(() => [Hoadon])
+  async getAllHoadon(@Args('fetchPagination') fetchPagination: FetchPagination): Promise<Hoadon[] | null> {
+    return this.hoadonService.getAllHoadon(fetchPagination);
+  }
+
+  @Query(() => [Hoadon])
+  async getHoaDonbyNgay(@Args('ngaykham') ngaykham: string): Promise<Hoadon[] | null>{
+    return this.hoadonService.getHoaDonbyNgay(ngaykham);
+  }
 
   @Query(() => [MongthRange])
   async getTongTienbyMonth(@Args('year') year: number): Promise<MongthRange[]>{

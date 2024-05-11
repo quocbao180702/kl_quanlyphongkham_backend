@@ -16,7 +16,7 @@ export class BenhNhan {
     @Field(() => ID)
     _id: mongoose.Types.ObjectId;
 
-    @Prop()
+    @Prop({text: true})
     @Field()
     hoten: string;
 

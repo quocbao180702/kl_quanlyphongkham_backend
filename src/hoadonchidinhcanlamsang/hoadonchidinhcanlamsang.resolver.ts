@@ -4,6 +4,7 @@ import { Hoadonchidinhcanlamsang } from './entities/hoadonchidinhcanlamsang.enti
 import { CreateHoadonchidinhcanlamsangInput } from './dto/create-hoadonchidinhcanlamsang.input';
 import { UpdateHoadonchidinhcanlamsangInput } from './dto/update-hoadonchidinhcanlamsang.input';
 import { MonthRangeCLS } from './dto/MonthRang';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Resolver()
 export class HoadonchidinhcanlamsangResolver {
@@ -24,9 +25,14 @@ export class HoadonchidinhcanlamsangResolver {
     return this.hoadonchidinhcanlamsangService.getTongTienbyMonthCLS(year);
   }
 
+  @Query(() => Number, {name: 'CountHoadonchidinhcanlamsang'})
+  async getCount(): Promise<number>{
+    return this.hoadonchidinhcanlamsangService.getCount();
+  }
+
   @Query(() => [Hoadonchidinhcanlamsang])
-  getAllHoaDonPhieuCanLamSang() {
-    return this.hoadonchidinhcanlamsangService.getAllHoaDonPhieuCanLamSang()
+  getAllHoaDonPhieuCanLamSang(@Args('fetchPagination') fetchPagination: FetchPagination): Promise<Hoadonchidinhcanlamsang[] | null> {
+    return this.hoadonchidinhcanlamsangService.getAllHoaDonPhieuCanLamSang(fetchPagination)
   }
 
   @Query(() => Number)
