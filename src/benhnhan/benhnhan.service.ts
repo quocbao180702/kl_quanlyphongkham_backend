@@ -7,6 +7,7 @@ import { FetchPagination } from 'src/types/fetchPagination.input';
 import { NewBenhNhanInput } from './dto/new-benhnhan.input';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { query } from 'express';
 
 @Injectable()
 export class BenhnhanService {
@@ -19,10 +20,19 @@ export class BenhnhanService {
     }
 
     async getAllBenhNhan(fetchPagination: FetchPagination): Promise<BenhNhan[] | null> {
-        return await this.benhnhanModel.find(null, null, {
-            limit: fetchPagination.take,
-            skip: fetchPagination.skip
-        }).populate('user').exec();
+        let query = this.benhnhanModel.find().populate('user').sort({hoten: -1});
+        if(fetchPagination.search){
+            query = query.find({
+                $text: {
+                    $search: `'\"${fetchPagination.search}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            })
+        }
+        const benhnhan = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+        return benhnhan;
     }
 
     async getAllBenhNhanNoPagination(): Promise<BenhNhan[] | null> {

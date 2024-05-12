@@ -15,9 +15,22 @@ export class Test {
   _id: mongoose.Types.ObjectId;
 
 
-  @Prop({type: [LinkImage]})
+  /* @Prop({type: [LinkImage]})
   @Field(() => [LinkImage])
-  listImages: LinkImage[]
+  listImages: LinkImage[] */
+
+
+  @Prop()
+  @Field()
+  name: string;
+
+  @Prop()
+  @Field()
+  age: string
+
+  @Prop()
+  @Field()
+  adress: string;
 
 
 }

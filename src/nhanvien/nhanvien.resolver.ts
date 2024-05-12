@@ -3,6 +3,7 @@ import { NhanvienService } from './nhanvien.service';
 import { NhanVien } from './entities/nhanvien.entity';
 import { NewNhanVienInput } from './dto/new-nhanvien.input';
 import { UpdateNhanVienInput } from './dto/update-nhanvien.input';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 
 
@@ -17,8 +18,8 @@ export class NhanvienResolver {
     }
 
     @Query(() => [NhanVien])
-    async getAllNhanVien(): Promise<NhanVien[]> {
-        return await this.nhanVienService.getAllNhanVien();
+    async getAllNhanVien(@Args('fetchPagination') fetchPagination: FetchPagination): Promise<NhanVien[]> {
+        return await this.nhanVienService.getAllNhanVien(fetchPagination);
     }
 
     @Query(() => NhanVien, {nullable: true})

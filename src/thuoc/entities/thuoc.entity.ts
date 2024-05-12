@@ -14,7 +14,7 @@ export class Thuoc {
     _id: mongoose.Types.ObjectId;
 
     @Field()
-    @Prop()
+    @Prop({text: true})
     tenthuoc: string;
 
     @Field()

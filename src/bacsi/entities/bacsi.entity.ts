@@ -19,7 +19,7 @@ export class BacSi {
     _id: mongoose.Types.ObjectId;
 
     @Field()
-    @Prop()
+    @Prop({text: true})
     hoten: string;
 
     @Field()

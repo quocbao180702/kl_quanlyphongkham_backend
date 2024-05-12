@@ -21,10 +21,19 @@ export class ThuocService {
     }
 
     async getThuocPagination(fetchPagination: FetchPagination): Promise<Thuoc[]> {
-        return await this.thuocModel.find(null, null,{
-            limit: fetchPagination.take,
-            skip: fetchPagination.skip
-        }).exec();
+        let query = this.thuocModel.find().sort({tenthuoc: -1});
+        if(fetchPagination.search){
+            query = query.find({
+                $text: {
+                    $search: `'\"${fetchPagination.search}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            })
+        }
+        const thuoc = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+        return thuoc;
     }
 
     async createThuoc(createThuocDto: NewThuocInput): Promise<Thuoc> {

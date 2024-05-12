@@ -5,14 +5,27 @@ import { Model } from 'mongoose';
 import { UpdateNhanVienInput } from './dto/update-nhanvien.input';
 import { NewNhanVienInput } from './dto/new-nhanvien.input';
 import { UsersService } from 'src/users/users.service';
+import { FetchPagination } from 'src/types/fetchPagination.input';
 
 @Injectable()
 export class NhanvienService {
     constructor(@InjectModel(NhanVien.name) private readonly nhanVienModel: Model<NhanVien>,
         private readonly userService: UsersService) { }
 
-    async getAllNhanVien(): Promise<NhanVien[] | null> {
-        return await this.nhanVienModel.find().populate('phongs').populate('user').exec();
+    async getAllNhanVien(fetchPagination: FetchPagination): Promise<NhanVien[] | null> {
+        let query = this.nhanVienModel.find().populate('phongs').populate('user').sort({ hoten: -1 });
+        if (fetchPagination.search) {
+            query = query.find({
+                $text: {
+                    $search: `'\"${fetchPagination.search}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            });
+        }
+        const nhanvien = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+        return nhanvien;
     }
 
     async getCount(): Promise<number> {

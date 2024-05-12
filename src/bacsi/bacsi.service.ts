@@ -22,8 +22,35 @@ export class BacsiService {
         return count
     }
 
+    async getBacSibyHoten(hoten: string): Promise<BacSi[] | null> {
+        try {
+            return await this.bacsiModel.find({
+                $text: {
+                    $search: `'\"${hoten}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async getAllBacSi(fetchPagination: FetchPagination): Promise<BacSi[] | null> {
-        return await this.bacsiModel.find(null, null, { limit: fetchPagination.take, skip: fetchPagination.skip }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
+        let query = this.bacsiModel.find().populate('user').populate('phongs').populate('chuyenkhoa').sort({ hoten: -1 });
+        if (fetchPagination.search) {
+            query = query.find({
+                $text: {
+                    $search: `'\"${fetchPagination.search}\"'`,
+                    $language: "none",
+                    $caseSensitive: false,
+                    $diacriticSensitive: false,
+                }
+            });
+        }
+        const bacsi = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+        return bacsi
     }
 
     async getBacSibyUserId(user: string): Promise<BacSi | null> {

@@ -24,7 +24,7 @@ export class Blog {
   hinhanh: LinkImage
 
   @Field()
-  @Prop()
+  @Prop({text: true})
   tieude: string;
 
   @Field({ nullable: true })

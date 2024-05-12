@@ -38,6 +38,7 @@
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
     "ejs": "^3.1.10",
     "graphql": "^16.8.1",
     "graphql-subscriptions": "^2.0.0",

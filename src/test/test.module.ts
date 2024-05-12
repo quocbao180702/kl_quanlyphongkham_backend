@@ -6,6 +6,7 @@ import { Test, TestSchema } from './entities/test.entity';
 
 @Module({
   providers: [TestResolver, TestService],
-  imports: [MongooseModule.forFeature([{name: Test.name, schema: TestSchema}])]
+  imports: [MongooseModule.forFeature([{name: Test.name, schema: TestSchema}])],
+  exports: [TestService]
 })
 export class TestModule {}

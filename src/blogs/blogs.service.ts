@@ -5,6 +5,7 @@ import { Blog } from './entities/blog.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { query } from 'express';
 
 @Injectable()
 export class BlogsService {
@@ -20,18 +21,28 @@ export class BlogsService {
     return createdBlog;
   }
 
-  async getLastestBlog(litmit: number): Promise<Blog[] | null>{
-      return this.blogModel.find().sort({ngaytao: -1}).limit(litmit).populate('user').exec();
+  async getLastestBlog(litmit: number): Promise<Blog[] | null> {
+    return this.blogModel.find().sort({ ngaytao: -1 }).limit(litmit).populate('user').exec();
   }
 
   async getAllBlog(fetchPagination: FetchPagination): Promise<Blog[]> {
-    return await this.blogModel.find(null, null, {
-      limit: fetchPagination.take,
-      skip: fetchPagination.skip
-    }).populate('user').exec();
+
+    let query = this.blogModel.find().populate('user').sort({ tieude: -1 });
+    if (fetchPagination.search) {
+      query = query.find({
+        $text: {
+          $search: `'\"${fetchPagination.search}\"'`,
+          $language: "none",
+          $caseSensitive: false,
+          $diacriticSensitive: false,
+        }
+      });
+    }
+    const blogs = await query.skip(fetchPagination.skip).limit(fetchPagination.take).exec();
+    return blogs;
   }
 
-  async getBlogbyId(id: string): Promise<Blog | null>{
+  async getBlogbyId(id: string): Promise<Blog | null> {
     return await this.blogModel.findById(id).populate('user').exec();
   }
 

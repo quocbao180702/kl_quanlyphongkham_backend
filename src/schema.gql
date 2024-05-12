@@ -287,6 +287,13 @@ type LoginResponse {
   code: Int!
 }
 
+type Test {
+  _id: ID!
+  name: String!
+  age: String!
+  adress: String!
+}
+
 type ChiPhi {
   bhyt: Boolean!
   gia: Float!
@@ -328,11 +335,6 @@ type Blog {
   ngaytao: DateTime!
 }
 
-type Test {
-  _id: ID!
-  listImages: [LinkImage!]!
-}
-
 type Query {
   countUser: Float!
   getAllUsers(fetchUsersArgs: FetchUsersArgs!): [Users!]!
@@ -349,7 +351,7 @@ type Query {
   getAllSinhhieu: [Sinhhieu!]!
   getAllSinhHieuByBenhNhan(benhnhanId: String!): Sinhhieu!
   CountNhanVien: Float!
-  getAllNhanVien: [NhanVien!]!
+  getAllNhanVien(fetchPagination: FetchPagination!): [NhanVien!]!
   getNhanVienbyUserId(user: String!): NhanVien
   CountBacSi: Float!
   getAllBacSi(fetchPagination: FetchPagination!): [BacSi!]!
@@ -391,6 +393,7 @@ type Query {
   getTongTienbyMonth(year: Float!): [MongthRange!]!
   getAllSoBenh: [Sobenh!]!
   onlyUser: OnlyUser
+  get(id: String!): Test!
   getAllVatTuYTe: [Vattuyte!]!
   getTongTienbyMonthCLS(year: Float!): [MonthRangeCLS!]!
   CountHoadonchidinhcanlamsang: Float!
@@ -400,7 +403,6 @@ type Query {
   getAllBlog(fetchPagination: FetchPagination!): [Blog!]!
   getLastestBlog(limit: Float!): [Blog!]!
   getBlogbyId(id: String!): Blog!
-  get(id: String!): Test!
 }
 
 input FetchUsersArgs {
@@ -489,6 +491,7 @@ type Mutation {
   login(loginUserInput: LoginUserInput!): LoginResponse!
   loginwithGoogleCallback: LoginResponse!
   logout: Boolean
+  createTest(createTestInput: CreateTestInput!): Test!
   createVatTuYTe(createDichvuInput: CreateVattuyteInput!): Vattuyte!
   updateVatTuYTe(updateDichvuInput: UpdateVattuyteInput!): Vattuyte!
   deleteVatTuYTe(id: String!): Boolean!
@@ -498,7 +501,6 @@ type Mutation {
   updateKichHoat(_id: String!): Boolean!
   updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
   deleteBlog(id: String!): Boolean!
-  createTest(createTestInput: CreateTestInput!): Test!
 }
 
 input NewUserInput {
@@ -905,6 +907,12 @@ input LoginUserInput {
   password: String!
 }
 
+input CreateTestInput {
+  name: String!
+  age: String!
+  adress: String!
+}
+
 input CreateVattuyteInput {
   tenvattu: String!
   chiphi: [ChiPhiInput!]!
@@ -947,10 +955,6 @@ input UpdateBlogInput {
   tomtat: String
   noidung: String
   id: String!
-}
-
-input CreateTestInput {
-  listImages: [LinkImageInput!]!
 }
 
 type Subscription {
