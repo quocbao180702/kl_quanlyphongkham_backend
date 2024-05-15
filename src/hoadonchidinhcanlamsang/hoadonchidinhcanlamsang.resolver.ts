@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
 import { HoadonchidinhcanlamsangService } from './hoadonchidinhcanlamsang.service';
 import { Hoadonchidinhcanlamsang } from './entities/hoadonchidinhcanlamsang.entity';
 import { CreateHoadonchidinhcanlamsangInput } from './dto/create-hoadonchidinhcanlamsang.input';
@@ -7,14 +7,27 @@ import { MonthRangeCLS } from './dto/MonthRang';
 import { FetchPagination } from 'src/types/fetchPagination.input';
 import { PubSub } from 'graphql-subscriptions';
 
+const pubSub = new PubSub()
+
 @Resolver()
 export class HoadonchidinhcanlamsangResolver {
   constructor(private readonly hoadonchidinhcanlamsangService: HoadonchidinhcanlamsangService) { }
 
   @Mutation(() => Hoadonchidinhcanlamsang)
   async createHoadonchidinhcanlamsang(@Args('createHoadonchidinhcanlamsang') createHoadonchidinhcanlamsang: CreateHoadonchidinhcanlamsangInput): Promise<Hoadonchidinhcanlamsang | null> {
-    return this.hoadonchidinhcanlamsangService.createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang);
+    const createHoaDonCLS = await this.hoadonchidinhcanlamsangService.createHoadonchidinhcanlamsang(createHoadonchidinhcanlamsang);
+    pubSub.publish('newHoaDonCLS', {newHoaDonCLS: createHoaDonCLS});
+    return createHoaDonCLS;
   }
+
+  @Subscription(returns => Hoadonchidinhcanlamsang, {
+    name: 'newHoaDonCLS'
+  })
+  newHoaDonCLS(){
+    return pubSub.asyncIterator('newHoaDonCLS');
+  }
+
+  
 
   @Mutation(() => Hoadonchidinhcanlamsang)
   async updateTinhTrangHoaDonCLS(@Args('id') id: string): Promise<Hoadonchidinhcanlamsang> {

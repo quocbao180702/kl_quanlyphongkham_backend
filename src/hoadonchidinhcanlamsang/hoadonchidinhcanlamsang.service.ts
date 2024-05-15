@@ -29,7 +29,7 @@ export class HoadonchidinhcanlamsangService {
         }
       }
     }
-    const created = await this.hoadonchidinhcanlamsanModel.create({ ...createHoadonchidinhcanlamsang, thanhtien });
+    const created = (await this.hoadonchidinhcanlamsanModel.create({ ...createHoadonchidinhcanlamsang, thanhtien })).populate('benhnhan');
     return created
   }
 

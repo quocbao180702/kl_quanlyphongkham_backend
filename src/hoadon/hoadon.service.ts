@@ -99,7 +99,7 @@ export class HoadonService {
         else {
             thanhtien = thanhtien + 20000
         }
-        const createHoaDon = await this.hoadonModel.create({ ...createHoadonInput, thanhtien });
+        const createHoaDon = (await this.hoadonModel.create({ ...createHoadonInput, thanhtien })).populate('benhnhan');
         return createHoaDon;
     }
 

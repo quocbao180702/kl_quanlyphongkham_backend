@@ -1,20 +1,32 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
 import { HoadonService } from './hoadon.service';
 import { Hoadon } from './entities/hoadon.entity';
 import { CreateHoadonInput } from './dto/create-hoadon.input';
 import { UpdateHoadonInput } from './dto/update-hoadon.input';
 import { MongthRange } from './dto/monthRange';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { PubSub } from 'graphql-subscriptions';
+
+
+const pubSub = new PubSub();
 
 @Resolver(() => Hoadon)
 export class HoadonResolver {
   constructor(private readonly hoadonService: HoadonService) { }
 
   @Mutation(() => Hoadon)
-  createHoadon(@Args('createHoadonInput') createHoadonInput: CreateHoadonInput) {
-    return this.hoadonService.createHoaDon(createHoadonInput);
+  async createHoadon(@Args('createHoadonInput') createHoadonInput: CreateHoadonInput) {
+    const newHoaDon = await this.hoadonService.createHoaDon(createHoadonInput);
+    pubSub.publish('newHoaDon', {newHoaDon: newHoaDon});
+    return newHoaDon
   }
 
+  @Subscription(returns => Hoadon, {
+    name: 'newHoaDon'
+  })
+  newHoaDon(){
+    return pubSub.asyncIterator('newHoaDon')
+  }
 
   @Query(() => Number)
   async getTotalThanhTienByDate(@Args('start') start: Date, @Args('end') end: Date): Promise<Number | null> {

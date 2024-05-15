@@ -1,9 +1,14 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Subscription } from '@nestjs/graphql';
 import { PhieuchidinhcanlamsangService } from './phieuchidinhcanlamsang.service';
 import { Phieuchidinhcanlamsang } from './entities/phieuchidinhcanlamsang.entity';
 import { CreatePhieuchidinhcanlamsangInput } from './dto/create-phieuchidinhcanlamsang.input';
 import { UpdatePhieuchidinhcanlamsangInput } from './dto/update-phieuchidinhcanlamsang.input';
 import { CreateKetquacanlamsangInput } from 'src/ketquacanlamsang/dto/create-ketquacanlamsang.input';
+import { PubSub } from 'graphql-subscriptions';
+import { TrangThaiCLS } from './dto/trangthaiCLS';
+
+
+const pubSub = new PubSub();
 
 @Resolver(() => Phieuchidinhcanlamsang)
 export class PhieuchidinhcanlamsangResolver {
@@ -35,8 +40,33 @@ export class PhieuchidinhcanlamsangResolver {
 
   @Mutation(() => Phieuchidinhcanlamsang)
   async updateTrangThaiCanLamSang(@Args('id') id: string, @Args('trangthai') trangthai: string): Promise<Phieuchidinhcanlamsang | null> {
-    return await this.phieuchidinhcanlamsangService.updateTrangThaiCanLamSang(id, trangthai)
+    const  updateCLS = await this.phieuchidinhcanlamsangService.updateTrangThaiCanLamSang(id, trangthai)
+    if(trangthai === TrangThaiCLS.CHOKHAM){
+      pubSub.publish('updateCLSThanhToan', {updateCLSThanhToan: updateCLS});
+    }
+    else{
+      pubSub.publish('updateCLSDaXetNghiem', {updateCLSDaXetNghiem: updateCLS});
+    }
+    return updateCLS;
   }
+
+  //xử lý khi trạng thái đã đã thanh toán
+  @Subscription(returns => Phieuchidinhcanlamsang, {
+    name: "updateCLSThanhToan"
+  })
+  updateCLSThanhToan(){
+    return pubSub.asyncIterator('updateCLSThanhToan')
+  }
+
+  //xử lý khi trạng thái đã xét nghiệm
+  @Subscription(returns => Phieuchidinhcanlamsang, {
+    name: "updateCLSDaXetNghiem"
+  })
+  updateCLSDaXetNghiem(){
+    return pubSub.asyncIterator('updateCLSDaXetNghiem')
+  }
+
+
 
   @Mutation(() => Phieuchidinhcanlamsang)
   updatePhieuchidinhcanlamsang(@Args('updatePhieuchidinhcanlamsangInput') updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput) {

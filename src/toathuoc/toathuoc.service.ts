@@ -28,6 +28,11 @@ export class ToathuocService {
     .populate('benhnhan').populate('bacsi').populate('thuocs').populate('benhs').exec();
   }
 
+  async getAllToaThuocbyBacSi(bacsiId: string): Promise<Toathuoc[] | null>{
+    return await this.toathuochModel.find({bacsi: bacsiId})
+    .populate('benhnhan').populate('bacsi').populate('thuocs').populate('benhs').exec();
+  }
+
   async createToathuoc(createToathuoc: CreateToathuocInput): Promise<Toathuoc | null> {
     try {
       const thuocIds = createToathuoc.thuocs;

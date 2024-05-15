@@ -972,4 +972,8 @@ input UpdateBlogInput {
 type Subscription {
   newDatLich: DatLich!
   newPhieuXacNhan: PhieuXacNhan!
+  updateCLSThanhToan: Phieuchidinhcanlamsang!
+  updateCLSDaXetNghiem: Phieuchidinhcanlamsang!
+  newHoaDon: Hoadon!
+  newHoaDonCLS: Hoadonchidinhcanlamsang!
 }
