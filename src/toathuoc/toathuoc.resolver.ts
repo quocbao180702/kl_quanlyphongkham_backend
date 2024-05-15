@@ -23,6 +23,11 @@ export class ToathuocResolver {
     return await this.toathuocService.getAllToaThuocbyBenhNhan(benhnhanId);
   }
 
+  @Query(() => [Toathuoc])
+  async getAllToaThuocbyBacSi(@Args('bacsiId') bacsiId: string): Promise<Toathuoc[] | null> {
+    return await this.toathuocService.getAllToaThuocbyBacSi(bacsiId);
+  }
+
   /* @Query(() => Toathuoc, { name: 'toathuoc' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.toathuocService.findOne(id);

@@ -384,6 +384,7 @@ type Query {
   findAllRelatedKetQuaCanLamSang(ketQuaIds: [String!]!): [KetQuaCanLamSang!]
   getAllToaThuoc: [Toathuoc!]!
   getAllToaThuocbyBenhNhan(benhnhanId: String!): [Toathuoc!]!
+  getAllToaThuocbyBacSi(bacsiId: String!): [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
   getTotalThanhTienByDate(start: DateTime!, end: DateTime!): Float!
   getAllHoadonByBenhNhan(benhnhanId: String!): [Hoadon!]!
