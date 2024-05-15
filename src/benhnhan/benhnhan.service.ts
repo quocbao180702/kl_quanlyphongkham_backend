@@ -58,7 +58,11 @@ export class BenhnhanService {
     }
 
     async getBenhNhanbySoDienThoai(sodienthoai: string): Promise<BenhNhan | null> {
-        return (await this.benhnhanModel.findOne({ sodienthoai: sodienthoai }));
+        try{
+            return (await this.benhnhanModel.findOne({ sodienthoai: sodienthoai }));
+        }catch(error){
+            return null
+        }
     }
 
     async getBenhNhanbyHoten(hoten: string): Promise<BenhNhan[] | null> {

@@ -9,7 +9,6 @@ export class NewBenhInput{
     @Field(() => String)
     chuongbenh: string;
 
-
     @Field()
     tenbenh: string;
 

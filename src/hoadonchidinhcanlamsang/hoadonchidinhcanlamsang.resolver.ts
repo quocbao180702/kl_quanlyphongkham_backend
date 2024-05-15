@@ -5,6 +5,7 @@ import { CreateHoadonchidinhcanlamsangInput } from './dto/create-hoadonchidinhca
 import { UpdateHoadonchidinhcanlamsangInput } from './dto/update-hoadonchidinhcanlamsang.input';
 import { MonthRangeCLS } from './dto/MonthRang';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { PubSub } from 'graphql-subscriptions';
 
 @Resolver()
 export class HoadonchidinhcanlamsangResolver {

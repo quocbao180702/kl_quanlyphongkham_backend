@@ -71,22 +71,29 @@ export class AuthResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => OnlyUserUnion, { nullable: true })
-    async onlyUser(@Context() ctx): Promise<typeof OnlyUserUnion | null> {
-        
+    @Query(() => /* Users */OnlyUserUnion, { nullable: true })
+    async onlyUser(@Context() ctx): Promise</* Users */typeof OnlyUserUnion | null> {
+
         try {
             switch (ctx.req.user?.roles) {
-                case "USER":
-                    return await this.benhnhanService.getBenhNhanbyUserId(ctx.req.user?.user?._id);
+                case "ADMIN":
+                    return await this.userService.getUserByUsername(ctx.req.user?.username);
                 case "DOCTOR":
                     return await this.bacsiService.getBacSibyUserId(ctx.req.user?.user?._id);
                 case "STAFF":
                     return await this.nhanvienService.getNhanVienbyUserId(ctx.req.user?.user?._id);
-                case "ADMIN":
+                case "USER":
+                    if (ctx.req.user?.user?._id) {
+                        return await this.benhnhanService.getBenhNhanbyUserId(ctx.req.user?.user?._id);
+                    }
                     return await this.userService.getUserByUsername(ctx.req.user?.username);
                 default:
                     return null;
             }
+           /*  if(!ctx.req.user.username){
+                return null;
+            }
+            return await this.userService.getUserByUsername(ctx.req.user?.username); */
         } catch (error) {
             console.log(error);
             return null;

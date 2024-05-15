@@ -45,19 +45,45 @@ export class DatlichService {
     }
 
     async createDatLich(createDatLich: NewDatLichInput): Promise<DatLich | null> {
-        const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLich.sodienthoai);
+        try {
+            const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLich.sodienthoai);
 
-        if (getBenhNhan) {
-            const createdDatLich = (await this.datLichModel.create({ ...createDatLich, benhnhan: getBenhNhan?._id })).populate({
-                path: 'benhnhan',
-                populate: {
-                    path: 'user'
+            if (getBenhNhan?._id) {
+                const createdDatLich = (await this.datLichModel.create({ ...createDatLich, benhnhan: getBenhNhan?._id })).populate({
+                    path: 'benhnhan',
+                    populate: {
+                        path: 'user'
+                    }
+                });
+                return createdDatLich;
+            }
+            else {
+                const data = {
+                    hoten: createDatLich?.hoten,
+                    cccd: createDatLich?.cccd,
+                    sodienthoai: createDatLich?.sodienthoai,
+                    gioitinh: createDatLich?.gioitinh,
+                    ngaysinh: createDatLich?.ngaysinh,
+                    diachi: "",
+                    bhyt: "",
+                    username: ""
                 }
-            });
-            return createdDatLich;
-        }
-        else {
-            return null;
+                const createBenhNhan = await this.benhNhanService.createBenhNhan(data);
+                if(createBenhNhan?._id){
+                    const createdDatLich = (await this.datLichModel.create({ ...createDatLich, benhnhan: createBenhNhan?._id })).populate({
+                        path: 'benhnhan',
+                        populate: {
+                            path: 'user'
+                        }
+                    });
+                    return createdDatLich;
+                }
+                else{
+                    return null;
+                }
+            }
+        } catch (error) {
+            throw new Error("Error new now")
         }
     }
 

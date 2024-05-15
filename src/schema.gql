@@ -674,6 +674,9 @@ input UpdateBenhInput {
 input NewDatLichInput {
   hoten: String!
   sodienthoai: String!
+  cccd: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
@@ -683,6 +686,9 @@ input NewDatLichInput {
 input UpdateDatLichInput {
   hoten: String
   sodienthoai: String
+  cccd: String
+  ngaysinh: DateTime
+  gioitinh: Boolean
   motabenh: String
   ngaydat: DateTime
   ngaykham: DateTime
@@ -694,6 +700,9 @@ input NewDatLichBacSiInput {
   bacsi: String!
   hoten: String!
   sodienthoai: String!
+  cccd: String!
+  ngaysinh: DateTime!
+  gioitinh: Boolean!
   motabenh: String!
   ngaydat: DateTime!
   ngaykham: DateTime!
@@ -705,6 +714,9 @@ input UpdateDatLichBacSiInput {
   bacsi: String
   hoten: String
   sodienthoai: String
+  cccd: String
+  ngaysinh: DateTime
+  gioitinh: Boolean
   motabenh: String
   ngaydat: DateTime
   ngaykham: DateTime

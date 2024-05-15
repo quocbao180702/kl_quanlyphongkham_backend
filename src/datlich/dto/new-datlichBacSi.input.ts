@@ -15,6 +15,15 @@ export class NewDatLichBacSiInput{
     sodienthoai: string;
 
     @Field()
+    cccd: string;
+
+    @Field()
+    ngaysinh: Date;
+
+    @Field()
+    gioitinh: boolean;
+
+    @Field()
     motabenh: string;
 
     @Field()

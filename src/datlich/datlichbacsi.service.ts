@@ -65,13 +65,35 @@ export class DatLichBacSiService {
 
 
     async createDatlichBacSi(createDatLichBacSi: NewDatLichBacSiInput): Promise<DatLichBacSi | null> {
-        const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLichBacSi.sodienthoai);
-        if (getBenhNhan) {
-            const createdDatlicBacSi = (await (await this.datlichBacSiModel.create({ ...createDatLichBacSi, benhnhan: getBenhNhan?._id })).populate('benhnhan')).populate('bacsi');
-            return createdDatlicBacSi;
-        }
-        else {
-            return null
+        
+        try{
+            const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLichBacSi.sodienthoai);
+            if (getBenhNhan?._id) {
+                const createdDatlicBacSi = (await (await this.datlichBacSiModel.create({ ...createDatLichBacSi, benhnhan: getBenhNhan?._id })).populate('benhnhan')).populate('bacsi');
+                return createdDatlicBacSi;
+            }
+            else {
+                const data = {
+                    hoten: createDatLichBacSi?.hoten,
+                    cccd: createDatLichBacSi?.cccd,
+                    sodienthoai: createDatLichBacSi?.sodienthoai,
+                    gioitinh: createDatLichBacSi?.gioitinh,
+                    ngaysinh: createDatLichBacSi?.ngaysinh,
+                    diachi: "",
+                    bhyt: "",
+                    username: ""
+                }
+                const createBenhNhan = await this.benhNhanService.createBenhNhan(data);
+                if(createBenhNhan?._id){
+                    const createdDatlicBacSi = (await (await this.datlichBacSiModel.create({ ...createDatLichBacSi, benhnhan: createBenhNhan?._id })).populate('benhnhan')).populate('bacsi');
+                    return createdDatlicBacSi;
+                }
+                else{
+                    return null
+                }
+            }
+        }catch(error){
+            throw new Error("Create not now")
         }
     }
 
