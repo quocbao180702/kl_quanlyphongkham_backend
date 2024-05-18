@@ -15,6 +15,9 @@ export class CreatePhieuchidinhcanlamsangInput {
   @Field(() => Boolean)
   bhyt: boolean
 
+  @Field(() => Boolean)
+  truoc: boolean
+
   @Field()
   ngaytao: Date;
 

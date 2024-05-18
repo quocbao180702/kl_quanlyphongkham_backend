@@ -33,6 +33,10 @@ export class Phieuchidinhcanlamsang {
   bhyt: boolean
 
   @Prop()
+  @Field(() => Boolean)
+  truoc: boolean
+
+  @Prop()
   @Field()
   ngaytao: Date;
 

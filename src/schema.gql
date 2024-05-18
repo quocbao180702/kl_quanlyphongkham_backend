@@ -195,6 +195,7 @@ type Phieuchidinhcanlamsang {
   bacsi: BacSi!
   phieuxacnhan: PhieuXacNhan!
   bhyt: Boolean!
+  truoc: Boolean!
   ngaytao: DateTime!
   trangthai: TrangThaiCLS!
   ketquacanlamsangs: [KetQuaCanLamSang!]!
@@ -473,6 +474,7 @@ type Mutation {
   createPhieuchidinhcanlamsang(createPhieuchidinhcanlamsangInput: CreatePhieuchidinhcanlamsangInput!, createKetQuaCLSList: [CreateKetquacanlamsangInput!]!): Phieuchidinhcanlamsang!
   updateTrangThaiCanLamSang(id: String!, trangthai: String!): Phieuchidinhcanlamsang!
   updatePhieuchidinhcanlamsang(updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput!): Phieuchidinhcanlamsang!
+  updateUuTien(id: String!): Phieuchidinhcanlamsang!
   deletePhieuchidinhcanlamsang(id: String!): Phieuchidinhcanlamsang!
   createKetquacanlamsang(createKetquacanlamsangInput: CreateKetquacanlamsangInput!): KetQuaCanLamSang!
   updateKetquacanlamsang(updateKetquacanlamsangInput: UpdateKetquacanlamsangInput!): KetQuaCanLamSang!
@@ -818,6 +820,7 @@ input CreatePhieuchidinhcanlamsangInput {
   bacsi: String!
   phieuxacnhan: String!
   bhyt: Boolean!
+  truoc: Boolean!
   ngaytao: DateTime!
 }
 
@@ -830,6 +833,7 @@ input UpdatePhieuchidinhcanlamsangInput {
   bacsi: String
   phieuxacnhan: String
   bhyt: Boolean
+  truoc: Boolean
   ngaytao: DateTime
   id: String!
 }

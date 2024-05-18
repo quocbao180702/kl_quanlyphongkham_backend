@@ -65,7 +65,6 @@ export class FileUploadController {
         }),
     )
     async uploadImage(@UploadedFiles() files: Express.Multer.File[]) {
-        console.log(files)
         const response = []
         files.forEach((file) => {
             const fileResponse = {
@@ -74,7 +73,6 @@ export class FileUploadController {
             }
             response.push(fileResponse)
         })
-        console.log(response)
         return response
     }
 

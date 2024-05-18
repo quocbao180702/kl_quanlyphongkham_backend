@@ -93,7 +93,7 @@ export class PhieuchidinhcanlamsangService {
         populate: {
           path: 'loaicanlamsang'
         }
-      })
+      }).sort({truoc: 1, ngaytao: 1})
       .exec();
   }
 
@@ -160,6 +160,20 @@ export class PhieuchidinhcanlamsangService {
       console.error("Lỗi khi cập nhật trạng thái:", error);
       return null;
     }
+  }
+
+  async updateUuTien(id: string): Promise<Phieuchidinhcanlamsang | null>{
+    try{
+      const phieucls = await this.phieuCLSModel.findById(id).exec();
+      if(!phieucls){
+        throw new Error('Error');
+      }
+      phieucls.truoc = !phieucls.truoc;
+      return await phieucls.save();
+    }catch(error){
+      throw new Error('Error xử lý khóa bị lỗi: ' + error.message)
+    }
+
   }
 
 

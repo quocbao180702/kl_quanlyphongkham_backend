@@ -73,6 +73,13 @@ export class PhieuchidinhcanlamsangResolver {
     return this.phieuchidinhcanlamsangService.updatePhieuCLS(updatePhieuchidinhcanlamsangInput);
   }
 
+
+  @Mutation(() => Phieuchidinhcanlamsang)
+  async updateUuTien(@Args('id') id: string): Promise<Phieuchidinhcanlamsang | null>{
+    const phieuCls = await this.phieuchidinhcanlamsangService.updateUuTien(id);
+    return phieuCls;
+  }
+
   @Mutation(() => Phieuchidinhcanlamsang)
   deletePhieuchidinhcanlamsang(@Args('id', { type: () => String }) id: string) {
     return this.phieuchidinhcanlamsangService.deletePhieuCLS(id);
