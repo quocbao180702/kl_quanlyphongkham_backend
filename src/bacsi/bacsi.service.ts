@@ -58,6 +58,11 @@ export class BacsiService {
         return bacsi;
     }
 
+    async getBacSibyId(id: string): Promise<BacSi | null> {
+        const bacsi = await this.bacsiModel.findOne({_id: id}).populate('user').populate('phongs').populate('chuyenkhoa').exec();
+        return bacsi
+    }
+
     async createBacSi(createBacSiDto: NewBacSiInput, createLichKham: CreateLichkhamInput): Promise<BacSi | null> {
         try {
             if (createBacSiDto.username == "") {

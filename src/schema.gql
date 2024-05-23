@@ -341,7 +341,7 @@ type Query {
   getAllUsers(fetchUsersArgs: FetchUsersArgs!): [Users!]!
   getUserByUsername(username: String!): Users
   getUserByEmail(email: String!): Users!
-  getUserById(_id: String!): Users!
+  getUserById(_id: String!): Users
   getBenhNhanbyHoten(hoten: String!): [BenhNhan!]
   CountBenhNhan: Float!
   getAllBenhNhan(fetchPagination: FetchPagination!): [BenhNhan!]!
@@ -354,9 +354,11 @@ type Query {
   CountNhanVien: Float!
   getAllNhanVien(fetchPagination: FetchPagination!): [NhanVien!]!
   getNhanVienbyUserId(user: String!): NhanVien
+  getNhanVienbyId(id: String!): NhanVien
   CountBacSi: Float!
   getAllBacSi(fetchPagination: FetchPagination!): [BacSi!]!
   getBacSibyUserId(user: String!): BacSi
+  getBacSibyId(id: String!): BacSi
   getAllLich: [Lichkham!]!
   getLichKham(id: String!): Lichkham!
   getAllBenh: [Benh!]!

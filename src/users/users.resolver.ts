@@ -47,7 +47,7 @@ export class UsersResolver {
     }
 
 
-    @Query(() => Users)
+    @Query(() => Users, {nullable: true})
     @HasRoles(UserRole.ADMIN, UserRole.STAFF)
     @UseGuards(JwtAuthGuard, RolesGuard)
     async getUserById(@Args('_id') _id: string): Promise<Users> {

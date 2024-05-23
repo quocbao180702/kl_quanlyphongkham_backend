@@ -48,6 +48,11 @@ export class BacsiResolver {
         return await this.bacsiService.getBacSibyUserId(user)
     }
 
+    @Query(() => BacSi, {nullable: true})
+    async getBacSibyId(@Args('id') id: string):Promise<BacSi | null>{
+        return await this.bacsiService.getBacSibyId(id);
+    }
+
     @HasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Mutation(() => BacSi)

@@ -27,6 +27,11 @@ export class NhanvienResolver {
         return await this.nhanVienService.getNhanVienbyUserId(user)
     }
 
+    @Query(() => NhanVien, {nullable: true})
+    async getNhanVienbyId(@Args('id') id: string):Promise<NhanVien | null>{
+        return await this.nhanVienService.getNhanVienbyId(id);
+    }
+
     @Mutation(() => NhanVien)
     async createNhanVien(@Args('newNhanVienInput') newNhanVienInput: NewNhanVienInput): Promise<NhanVien> {
         const newNhanVien = await this.nhanVienService.createNhanVien(newNhanVienInput);

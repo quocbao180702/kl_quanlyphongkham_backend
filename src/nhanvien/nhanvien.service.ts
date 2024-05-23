@@ -38,6 +38,11 @@ export class NhanvienService {
         return nhanVien;
     }
 
+    async getNhanVienbyId(id: string): Promise<NhanVien| null>{
+        const nhanvien =  await this.nhanVienModel.findOne({_id: id}).populate('phongs').populate('user').exec();
+        return nhanvien;
+    }
+
     async createNhanVien(newNhanVien: NewNhanVienInput): Promise<NhanVien | null> {
         try {
             const user = await this.userService.getUserByUsername(newNhanVien.username);
