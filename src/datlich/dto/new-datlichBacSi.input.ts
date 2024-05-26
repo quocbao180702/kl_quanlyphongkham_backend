@@ -1,5 +1,6 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { PhienInput } from "src/types/phiens.input";
+import { TrangThaiDatKham } from "src/types/trangthai-datkham-types";
 
 @InputType()
 export class NewDatLichBacSiInput{
@@ -38,5 +39,7 @@ export class NewDatLichBacSiInput{
     @Field(() => PhienInput)
     phien: PhienInput;
 
+    @Field(() => String, {nullable: true})
+    trangthai: string
 
 }

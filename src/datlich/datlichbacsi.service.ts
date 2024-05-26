@@ -31,7 +31,7 @@ export class DatLichBacSiService {
         }).exec();
     }
 
-    async getAllLichBacSibyBacSi(bacsi: string): Promise<DatLichBacSi[] | null>{
+    async getAllLichBacSibyBacSi(bacsi: string): Promise<DatLichBacSi[] | null> {
         return await this.datlichBacSiModel.find({ bacsi: bacsi }).populate({
             path: 'benhnhan',
             populate: {
@@ -65,8 +65,8 @@ export class DatLichBacSiService {
 
 
     async createDatlichBacSi(createDatLichBacSi: NewDatLichBacSiInput): Promise<DatLichBacSi | null> {
-        
-        try{
+
+        try {
             const getBenhNhan = await this.benhNhanService.getBenhNhanbySoDienThoai(createDatLichBacSi.sodienthoai);
             if (getBenhNhan?._id) {
                 const createdDatlicBacSi = (await (await this.datlichBacSiModel.create({ ...createDatLichBacSi, benhnhan: getBenhNhan?._id })).populate('benhnhan')).populate('bacsi');
@@ -84,16 +84,16 @@ export class DatLichBacSiService {
                     username: ""
                 }
                 const createBenhNhan = await this.benhNhanService.createBenhNhan(data);
-                if(createBenhNhan?._id){
+                if (createBenhNhan?._id) {
                     const createdDatlicBacSi = (await (await this.datlichBacSiModel.create({ ...createDatLichBacSi, benhnhan: createBenhNhan?._id })).populate('benhnhan')).populate('bacsi');
                     return createdDatlicBacSi;
                 }
-                else{
+                else {
                     return null
                 }
             }
-        }catch(error){
-            throw new Error("Create not now")
+        } catch (error) {
+            throw new Error(`Create not now: ${error}`)
         }
     }
 
@@ -126,4 +126,26 @@ export class DatLichBacSiService {
         return result.deletedCount > 0
     }
 
+
+    async CountPhieuDatLichbyNgayAndBatDau(idBacSi: string, ngaykham: Date, batdau: string): Promise<number> {
+        try {
+            const startOfDay = new Date(ngaykham);
+            startOfDay.setHours(0, 0, 0, 0);
+
+            const endOfDay = new Date(ngaykham);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            const count = await this.datlichBacSiModel.countDocuments({
+                bacsi: idBacSi,
+                ngaykham: { $gte: startOfDay, $lte: endOfDay },
+                'phien.batdau': batdau,
+                trangthai: { $in: [TrangThaiDatKham.DANGXET, TrangThaiDatKham.XACNHAN] },
+            }).exec();
+
+            return count;
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0; 
+        }
+    }
 }

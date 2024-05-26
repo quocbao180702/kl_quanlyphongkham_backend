@@ -26,6 +26,11 @@ export class DatlichBacSiResolver {
         return await this.datlichBacSiService.getAllDatLichBacSiByTrangThai(trangthai);
     }
 
+    @Query(() => Number, {nullable: true})
+    async CountPhieuDatLichbyNgayAndBatDau(@Args('idBacSi')idBacSi: string, @Args('ngaykham') ngaykham: Date, @Args('batdau') batdau: string): Promise<number>{
+        return await this.datlichBacSiService.CountPhieuDatLichbyNgayAndBatDau(idBacSi,ngaykham, batdau);
+    }
+
     @Mutation(() => DatLichBacSi)
     async createDatlichBacSi(@Args('createDatlichBacSi') createDatlichBacSi: NewDatLichBacSiInput): Promise<DatLichBacSi | null> {
         return await this.datlichBacSiService.createDatlichBacSi(createDatlichBacSi);

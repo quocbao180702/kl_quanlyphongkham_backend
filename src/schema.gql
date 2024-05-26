@@ -367,6 +367,7 @@ type Query {
   getAllDatlichBacSi: [DatLichBacSi!]
   getAllDatLichBacSiByBacSi(bacsi: String!): [DatLichBacSi!]
   getAllDatLichBacSiByTrangThai(trangthai: String!): [DatLichBacSi!]
+  CountPhieuDatLichbyNgayAndBatDau(idBacSi: String!, ngaykham: DateTime!, batdau: String!): Float
   getAllLoaiCLS: [LoaiCanLamSang!]!
   getAllChuyenKhoa: [ChuyenKhoa!]!
   CountChuyenKhoa: Float!
@@ -716,6 +717,7 @@ input NewDatLichBacSiInput {
   ngaykham: DateTime!
   email: String!
   phien: PhienInput!
+  trangthai: String
 }
 
 input UpdateDatLichBacSiInput {
@@ -730,6 +732,7 @@ input UpdateDatLichBacSiInput {
   ngaykham: DateTime
   email: String
   phien: PhienInput
+  trangthai: String
   id: String!
 }
 
