@@ -384,10 +384,12 @@ type Query {
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
   getPhieuCanLamSangbyPhieuXacNhanId(phieuxacnhan: String!): Phieuchidinhcanlamsang
   getAllPhieuCLSbyNgay(ngaytao: DateTime!, trangthai: String!): [Phieuchidinhcanlamsang!]!
+  CountPhieuCLS: Float!
   findAllRelatedKetQuaCanLamSang(ketQuaIds: [String!]!): [KetQuaCanLamSang!]
   getAllToaThuoc: [Toathuoc!]!
   getAllToaThuocbyBenhNhan(benhnhanId: String!): [Toathuoc!]!
-  getAllToaThuocbyBacSi(bacsiId: String!): [Toathuoc!]!
+  CountToaThuocbyBacSi(bacsiId: String!): Float!
+  getAllToaThuocbyBacSi(bacsiId: String!, fetchPagination: FetchPagination!): [Toathuoc!]!
   getAllDichVu: [Dichvu!]!
   getTotalThanhTienByDate(start: DateTime!, end: DateTime!): Float!
   getAllHoadonByBenhNhan(benhnhanId: String!): [Hoadon!]!
@@ -400,6 +402,7 @@ type Query {
   get(id: String!): Test!
   getAllVatTuYTe: [Vattuyte!]!
   getTongTienbyMonthCLS(year: Float!): [MonthRangeCLS!]!
+  getHoaDonCLSbyBenhNhan(idbenhnhan: String!): [Hoadonchidinhcanlamsang!]!
   CountHoadonchidinhcanlamsang: Float!
   getAllHoaDonPhieuCanLamSang(fetchPagination: FetchPagination!): [Hoadonchidinhcanlamsang!]!
   getTotalThanhTienCLSByDate(start: DateTime!, end: DateTime!): Float!

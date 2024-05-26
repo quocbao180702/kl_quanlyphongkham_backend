@@ -39,6 +39,12 @@ export class HoadonchidinhcanlamsangResolver {
     return this.hoadonchidinhcanlamsangService.getTongTienbyMonthCLS(year);
   }
 
+
+  @Query(() => [Hoadonchidinhcanlamsang])
+  async getHoaDonCLSbyBenhNhan(@Args('idbenhnhan') idbenhnhan: string): Promise<Hoadonchidinhcanlamsang[]|null>{
+    return await this.hoadonchidinhcanlamsangService.getHoaDonCLSbyIdBenhNhan(idbenhnhan);
+  }
+
   @Query(() => Number, {name: 'CountHoadonchidinhcanlamsang'})
   async getCount(): Promise<number>{
     return this.hoadonchidinhcanlamsangService.getCount();

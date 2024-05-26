@@ -20,6 +20,12 @@ export class PhieuchidinhcanlamsangService {
     @Inject(forwardRef(() => PhieuXacNhanService))
     private PhieuXacNhanService: PhieuXacNhanService,) { }
 
+
+  async getCount(): Promise<number>{
+    const count = await this.phieuCLSModel.countDocuments();
+    return count
+  }
+
   async getAllPhieuCLS(): Promise<Phieuchidinhcanlamsang[] | null> {
     return await this.phieuCLSModel.find()
       .populate({

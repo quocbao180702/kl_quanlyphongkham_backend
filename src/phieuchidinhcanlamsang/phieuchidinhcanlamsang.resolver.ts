@@ -24,8 +24,8 @@ export class PhieuchidinhcanlamsangResolver {
 
 
   @Query(() => [Phieuchidinhcanlamsang])
-  getAllPhieuCLS() {
-    return this.phieuchidinhcanlamsangService.getAllPhieuCLS();
+  async getAllPhieuCLS(): Promise<Phieuchidinhcanlamsang[] | null> {
+    return await this.phieuchidinhcanlamsangService.getAllPhieuCLS();
   }
 
   @Query(() => Phieuchidinhcanlamsang, {nullable: true})
@@ -71,6 +71,11 @@ export class PhieuchidinhcanlamsangResolver {
   @Mutation(() => Phieuchidinhcanlamsang)
   updatePhieuchidinhcanlamsang(@Args('updatePhieuchidinhcanlamsangInput') updatePhieuchidinhcanlamsangInput: UpdatePhieuchidinhcanlamsangInput) {
     return this.phieuchidinhcanlamsangService.updatePhieuCLS(updatePhieuchidinhcanlamsangInput);
+  }
+
+  @Query(() => Number, {name: "CountPhieuCLS"})
+  async getCountPhieuCLS(): Promise<number>{
+    return this.phieuchidinhcanlamsangService.getCount();
   }
 
 

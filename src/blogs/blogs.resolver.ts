@@ -4,6 +4,11 @@ import { Blog } from './entities/blog.entity';
 import { CreateBlogInput } from './dto/create-blog.input';
 import { UpdateBlogInput } from './dto/update-blog.input';
 import { FetchPagination } from 'src/types/fetchPagination.input';
+import { HasRoles } from 'src/auth/dto/has-roles.decorator';
+import { UserRole } from 'src/types/Users.types';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Resolver()
 export class BlogsResolver {
@@ -26,15 +31,17 @@ export class BlogsResolver {
   }
 
   @Query(() => [Blog])
-  async getLastestBlog(@Args('limit') limit: number): Promise<Blog[] | null>{
+  async getLastestBlog(@Args('limit') limit: number): Promise<Blog[] | null> {
     return await this.blogsService.getLastestBlog(limit);
   }
 
   @Query(() => Blog)
-  async getBlogbyId(@Args('id') id: string): Promise<Blog | null>{
+  async getBlogbyId(@Args('id') id: string): Promise<Blog | null> {
     return await this.blogsService.getBlogbyId(id);
   }
 
+  @HasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Mutation(() => Boolean)
   async updateKichHoat(@Args('_id') _id: string): Promise<boolean> {
     await this.blogsService.updateKichHoat(_id)

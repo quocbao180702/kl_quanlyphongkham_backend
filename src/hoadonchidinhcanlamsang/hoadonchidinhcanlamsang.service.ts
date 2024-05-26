@@ -106,7 +106,7 @@ export class HoadonchidinhcanlamsangService {
       if (idBenhNhan.length > 0) {
         query = query.find({ benhnhan: { $in: idBenhNhan } });
       }
-      else{
+      else {
         return []
       }
     }
@@ -116,6 +116,15 @@ export class HoadonchidinhcanlamsangService {
     return hoadoncanlamsangs;
   }
 
+
+  async getHoaDonCLSbyIdBenhNhan(id: string): Promise<Hoadonchidinhcanlamsang[] | null> {
+    return await this.hoadonchidinhcanlamsanModel.find({ benhnhan: id }).populate({
+      path: 'benhnhan',
+      populate: {
+        path: 'user'
+      }
+    }).sort({ ngaytao: -1 });
+  }
 
   async getCount(): Promise<number> {
     const count = await this.hoadonchidinhcanlamsanModel.countDocuments();
