@@ -59,7 +59,7 @@ export class BacsiService {
     }
 
     async getBacSibyId(id: string): Promise<BacSi | null> {
-        const bacsi = await this.bacsiModel.findOne({_id: id}).populate('user').populate('phongs').populate('chuyenkhoa').exec();
+        const bacsi = await this.bacsiModel.findOne({ _id: id }).populate('user').populate('phongs').populate('chuyenkhoa').exec();
         return bacsi
     }
 
@@ -109,31 +109,35 @@ export class BacsiService {
 
 
     async updateBacSi(updateBacSi: UpdateBacSiInput): Promise<BacSi | null> {
-        if (updateBacSi.username == "") {
-            return await this.bacsiModel.findByIdAndUpdate(
-                updateBacSi.id,
-                {
-                    $set: {
-                        ...updateBacSi
-                    }
-                },
-                { new: true }
-            ).exec();
-        }
-        else {
-            const user = await this.usersService.getUserByUsername(updateBacSi.username);
-            if (!user) {
-                throw new Error('Không Tìm Thấy Thông Tin Tài Khoản');
+        try {
+            if (!updateBacSi.username) {
+                return await this.bacsiModel.findByIdAndUpdate(
+                    updateBacSi.id,
+                    {
+                        $set: {
+                            ...updateBacSi
+                        }
+                    },
+                    { new: true }
+                ).exec();
             }
-            return await this.bacsiModel.findByIdAndUpdate(
-                updateBacSi.id,
-                {
-                    $set: {
-                        ...updateBacSi, user: user?._id
-                    }
-                },
-                { new: true }
-            ).exec();
+            else {
+                const user = await this.usersService.getUserByUsername(updateBacSi.username);
+                if (!user) {
+                    throw new Error('Không Tìm Thấy Thông Tin Tài Khoản');
+                }
+                return await this.bacsiModel.findByIdAndUpdate(
+                    updateBacSi.id,
+                    {
+                        $set: {
+                            ...updateBacSi, user: user?._id
+                        }
+                    },
+                    { new: true }
+                ).exec();
+            }
+        }catch(error){
+            console.log(error)
         }
     }
 

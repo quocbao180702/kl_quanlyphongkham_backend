@@ -94,10 +94,10 @@ export class HoadonService {
     async createHoaDon(createHoadonInput: CreateHoadonInput): Promise<Hoadon | null> {
         let thanhtien = 0;
         if (createHoadonInput.bhyt == true) {
-            thanhtien = thanhtien + 12000;
+            thanhtien = thanhtien + 150000;
         }
         else {
-            thanhtien = thanhtien + 20000
+            thanhtien = thanhtien + 150000
         }
         const createHoaDon = (await this.hoadonModel.create({ ...createHoadonInput, thanhtien })).populate('benhnhan');
         return createHoaDon;

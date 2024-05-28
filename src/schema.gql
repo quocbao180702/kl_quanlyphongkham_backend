@@ -623,8 +623,8 @@ input NewBacSiInput {
   sodienthoai: String!
   cccd: String!
   ngayBD: DateTime!
-  username: String!
-  phongs: [ID!]!
+  username: String
+  phongs: [String!]!
   chuyenkhoa: ID!
 }
 
@@ -654,7 +654,7 @@ input UpdateBacSiInput {
   cccd: String
   ngayBD: DateTime
   username: String
-  phongs: [ID!]
+  phongs: [String!]
   chuyenkhoa: ID
   id: String!
 }

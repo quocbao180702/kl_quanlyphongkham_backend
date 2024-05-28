@@ -29,10 +29,10 @@ export class NewBacSiInput {
     @Field()
     ngayBD: Date;
 
-    @Field(() => String)
+    @Field(() => String, {nullable: true})
     username: string
 
-    @Field(() => [ID])
+    @Field(() => [String])
     phongs: string[];
 
     @Field(() => ID)

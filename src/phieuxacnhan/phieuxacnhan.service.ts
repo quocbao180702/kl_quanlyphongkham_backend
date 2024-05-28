@@ -26,7 +26,7 @@ export class PhieuXacNhanService {
         }
       })
       .populate('phongs')
-      .sort({'phien.batdau': 1})
+      .sort({ 'phien.batdau': 1 })
       .exec();
   }
 
@@ -90,14 +90,14 @@ export class PhieuXacNhanService {
         populate: {
           path: 'user'
         }
-      }).sort({'phien.batdau': 1});
+      }).sort({ 'phien.batdau': 1 });
 
       // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
       if (phong && phong.length > 0) {
         query = query.populate('phongs');
       }
 
-      const phieuXacNhanDaXetNgiem = await query.sort({'phien.batdau': 1}).exec();
+      const phieuXacNhanDaXetNgiem = await query.sort({ 'phien.batdau': 1 }).exec();
       return phieuXacNhanDaXetNgiem;
     } catch (error) {
       console.error("Lỗi khi lấy tất cả các phiếu xác nhận đã xét nghiệm:", error);
@@ -124,7 +124,7 @@ export class PhieuXacNhanService {
       nextDay.setUTCDate(ngayKhamDate.getUTCDate() + 1);
       return this.phieuxacnhanModel.find({
         ngaykham: { $gte: ngayKhamDate, $lt: nextDay }
-      }).sort({'phien.batdau': 1}).exec();
+      }).sort({ 'phien.batdau': 1 }).exec();
     } catch (error) {
       console.log(error);
       return null;
@@ -153,15 +153,20 @@ export class PhieuXacNhanService {
   async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
     const ngayKhamDate = new Date(ngaykham);
 
+    if (phong === "") {
+      return [];
+    }
+    
     let query = this.phieuxacnhanModel.find({
       ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) },
+      phongs: { $in: phong },
       trangthai: trangthai
     }).populate({
       path: 'benhnhan',
       populate: {
         path: 'user'
       }
-    }).sort({'phien.batdau': 1});
+    }).sort({ 'phien.batdau': 1 });
 
     // Kiểm tra xem phong có tồn tại và không phải là chuỗi rỗng
     if (phong && phong.length > 0) {
