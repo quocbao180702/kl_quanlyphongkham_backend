@@ -67,6 +67,11 @@ export class PhieuXacNhanResolver {
     return await this.phieuxacnhanService.getAllByNgayVaPhong(ngaykham, phongIds, trangthai);
   }
 
+  @Query(() => [PhieuXacNhan])
+  async getAllPhieuXacNhanbyIdBenhNhan(@Args('idBenhNhan') idBenhNhan: string): Promise<PhieuXacNhan[]| null>{
+    return await this.phieuxacnhanService.getAllPhieuXacNhanbyIdBenhNhan(idBenhNhan);
+  }
+
   @Mutation(() => PhieuXacNhan)
   async createPhieuXacNhan(@Args('newPhieuXacNhanInput') newPhieuXacNhanInput: CreatePhieuXacNhanInput): Promise<PhieuXacNhan | null> {
     const newPhieuXacNhan = await this.phieuxacnhanService.createPhieuXacNhan(newPhieuXacNhanInput);

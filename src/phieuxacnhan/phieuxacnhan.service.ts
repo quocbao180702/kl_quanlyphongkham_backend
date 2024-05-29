@@ -131,6 +131,19 @@ export class PhieuXacNhanService {
     }
   }
 
+  async getAllPhieuXacNhanbyIdBenhNhan(idBenhNhan: string): Promise<PhieuXacNhan[] | null> {
+    return await this.phieuxacnhanModel.find({ benhnhan: idBenhNhan })
+      .populate({
+        path: 'benhnhan',
+        populate: {
+          path: 'user'
+        }
+      })
+      .populate('phongs')
+      .sort({ 'ngaykham': -1 })
+      .exec();
+  }
+
   /* async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
     const ngayKhamDate = new Date(ngaykham);
 
@@ -156,7 +169,7 @@ export class PhieuXacNhanService {
     if (phong === "") {
       return [];
     }
-    
+
     let query = this.phieuxacnhanModel.find({
       ngaykham: { $gte: ngayKhamDate, $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000) },
       phongs: { $in: phong },
@@ -192,7 +205,7 @@ export class PhieuXacNhanService {
           subject: "Phiếu Xác Nhận Đặt Thành Công",
           template: "./phieuxacnhan_mail",
           name: "Phòng Khám Đa Khoa",
-          content: sothutu.toString()
+          content: createPhieuXacNhan.phien.batdau.toString()
         });
       }
       return createdPhieuXacNhan;

@@ -382,6 +382,7 @@ type Query {
   getStartAndEndOfMonth(year: Float!): [MonthRange!]!
   getAllPhieuXacNhanDaXetNgiem(ngaykham: String!, phongIds: String!): [PhieuXacNhan!]
   getAllByNgayVaPhong(ngaykham: String!, phongIds: String!, trangthai: String!): [PhieuXacNhan!]!
+  getAllPhieuXacNhanbyIdBenhNhan(idBenhNhan: String!): [PhieuXacNhan!]!
   getAllPhieuCLS: [Phieuchidinhcanlamsang!]!
   getPhieuCanLamSangbyPhieuXacNhanId(phieuxacnhan: String!): Phieuchidinhcanlamsang
   getAllPhieuCLSbyNgay(ngaytao: DateTime!, trangthai: String!): [Phieuchidinhcanlamsang!]!
