@@ -163,7 +163,7 @@ export class PhieuXacNhanService {
       .exec();
   } */
 
-  async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
+  /* async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
     const ngayKhamDate = new Date(ngaykham);
 
     if (phong === "") {
@@ -187,7 +187,42 @@ export class PhieuXacNhanService {
     }
 
     return query.exec();
-  }
+  } */
+
+  async getAllByNgayVaPhong(ngaykham: string, phong: string, trangthai: string): Promise<PhieuXacNhan[]> {
+    const ngayKhamDate = new Date(ngaykham);
+
+    if (!phong) {
+      return [];
+    }
+
+    let query = this.phieuxacnhanModel.find({
+      ngaykham: {
+        $gte: ngayKhamDate,
+        $lt: new Date(ngayKhamDate.getTime() + 24 * 60 * 60 * 1000)
+      },
+      phongs: {
+        $in: [phong]
+      },
+      trangthai: trangthai
+    })
+    .populate({
+      path: 'benhnhan',
+      populate: {
+        path: 'user'
+      }
+    })
+    .sort({
+      'phien.batdau': 1
+    });
+
+    if (phong && phong.length > 0) {
+      query = query.populate('phongs');
+    }
+
+    const results = await query.exec();
+    return results.filter(phieu => phieu.benhnhan !== null);
+}
 
 
   async createPhieuXacNhan(createPhieuXacNhan: CreatePhieuXacNhanInput): Promise<PhieuXacNhan | null> {
